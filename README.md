@@ -86,9 +86,9 @@ This predictes the ncRNA fragments using the combination of the data and puts th
 ### Authors ###
 The people who have contributed to this project are:
 
- - MSc. Youri Hoogstrate
- - Dr. Elena S. Martens-Uzunova
- - Prof. Dr. Guido Jenster
+ - Youri Hoogstrate
+ - Elena S. Martens-Uzunova
+ - Dr. Guido Jenster
 
 ### Citing ###
 
