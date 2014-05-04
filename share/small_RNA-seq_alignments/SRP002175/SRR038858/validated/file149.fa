@@ -1,0 +1,12 @@
+>HGNC=33685&HUGO-SYMBOL=MIR941-2&HUGO-NAME=MICRORNA_941-2&LOCI=[CHR20:62551187-62551323:STRAND=+&CHR20:62551075-62551211:STRAND=+]&SOURCE=REFSEQ&SOURCE-ACCESSION=NR_030638&GENOME=HG19&MERGED=[HGNC=33687]
+GGGACAGCGCCATGGAAGAGGACGCACCCGGCTGTGTGCACATGTGCCCAGGGCCCGGGACAGCGCCACGGAAGAGGACGCACCCGGCTGTGTGCACATGTGCCCAGGGCCCGGGACAGCGCCACGGAAGAGGATGC
+>SOLEXA_READ_3_OF_3_CACCCGGCTGTGTGCACCTGTGC_HITS4
+--------------------------------------------------------------------------------CACCCGGCTGTGTGCACCTGTGC----------------------------------
+>SOLEXA_READ_3_OF_3_CACCCGGCTGTTTGCACATGTGC_HITS4
+--------------------------------------------------------------------------------CACCCGGCTGTTTGCACATGTGC----------------------------------
+>SOLEXA_READ_3_OF_3_CACCCGGCTGTGTGCACATGTGC_HITS58
+--------------------------------------------------------------------------------CACCCGGCTGTGTGCACATGTGC----------------------------------
+>SOLEXA_READ_3_OF_3_CCACGGAAGAGGACG_HITS10
+-----------------------------------------------------------------CCACGGAAGAGGACG---------------------------------------------------------
+>SOLEXA_READ_3_OF_3_CACCCGGCTGTGTGCACATGTG_HITS6
+--------------------------------------------------------------------------------CACCCGGCTGTGTGCACATGTG-----------------------------------

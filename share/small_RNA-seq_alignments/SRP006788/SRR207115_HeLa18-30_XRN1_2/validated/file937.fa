@@ -1,0 +1,14 @@
+>HGNC=10212&HUGO-SYMBOL=RNU5B-1&HUGO-NAME=RNA,_U5B_SMALL_NUCLEAR_1&LOCI=[CHR15:65597005-65597141:STRAND=+]&SOURCE=REFSEQ&SOURCE-ACCESSION=NR_002757&GENOME=HG19
+ATTAACAAGCATACTCTGGTTTCTCTTCAGATCGTATAAATCTTTCGCCTTTTACTAAAGATTTCCGTGGAGAGGAACAACTCTGAGTCTTAAGCTAATTTTTTGAGGCCTTGTTCCGACAAGGCTATATAAAGCTG
+>SOLEXA_READ_3_OF_5_TTTACTAAAGATTTCCGTGGATC_HITS5
+--------------------------------------------------TTTACTAAAGATTTCCGTGGATC----------------------------------------------------------------
+>SOLEXA_READ_ATACTCTGGTTTCTCTTCAGATCGTATC_HITS4
+----------ATACTCTGGTTTCTCTTCAGATCGTATC---------------------------------------------------------------------------------------------------
+>SOLEXA_READ_1_OF_2_TACTAAAGATTTCCGTGGAGAGGATC_HITS4
+----------------------------------------------------TACTAAAGATTTCCGTGGAGAGGATC-----------------------------------------------------------
+>SOLEXA_READ_1_OF_2_GTGGAGAGGAATAATTCTGAGTC_HITS4
+------------------------------------------------------------------GTGGAGAGGAATAATTCTGAGTC------------------------------------------------
+>SOLEXA_READ_1_OF_2_ATTTCCGTGGAGAGGAACAACTCTGAGTATC_HITS4
+------------------------------------------------------------ATTTCCGTGGAGAGGAACAACTCTGAGTATC----------------------------------------------
+>SOLEXA_READ_1_OF_2_ATACTCTGGTTTCTCTTCAGATC_HITS5
+----------ATACTCTGGTTTCTCTTCAGATC--------------------------------------------------------------------------------------------------------

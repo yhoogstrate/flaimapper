@@ -1,0 +1,16 @@
+>NAME=TRNAARGTCT&LOCI=[CHR6:27529963-27530049:STRAND=+]&SOURCE=UCSC&SOURCE-ACCESSION=CHR6.TRNA52-ARGTCT&GENOME=HG19
+GGCTCTGTGGCGCAATGGATAGCGCATTGGACTTCTAATTCAAAGGTTGCGGGTTCGAGTCCCTCCAGAGTCGCCA
+>SOLEXA_READ_2_OF_4_TGGATAGCGCATTGGA_HITS26
+---------------TGGATAGCGCATTGGA---------------------------------------------
+>SOLEXA_READ_2_OF_4_GGATAGCGCATTGGA_HITS10
+----------------GGATAGCGCATTGGA---------------------------------------------
+>SOLEXA_READ_2_OF_4_AATGGATAGCGCATT_HITS4
+-------------AATGGATAGCGCATT------------------------------------------------
+>SOLEXA_READ_2_OF_4_TGGATAGCGCATTGG_HITS4
+---------------TGGATAGCGCATTGG----------------------------------------------
+>SOLEXA_READ_2_OF_4_ATGGATAGCGCATTGG_HITS4
+--------------ATGGATAGCGCATTGG----------------------------------------------
+>SOLEXA_READ_2_OF_4_ATGGATAGCGCATTGGA_HITS12
+--------------ATGGATAGCGCATTGGA---------------------------------------------
+>SOLEXA_READ_2_OF_4_TGGATAGCGCATTGGAC_HITS6
+---------------TGGATAGCGCATTGGAC--------------------------------------------

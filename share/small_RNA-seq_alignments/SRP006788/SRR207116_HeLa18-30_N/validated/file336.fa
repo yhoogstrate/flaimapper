@@ -1,0 +1,12 @@
+>HGNC=32662&HUGO-SYMBOL=SNORA76&HUGO-NAME=SMALL_NUCLEOLAR_RNA,_H/ACA_BOX_76&LOCI=[CHR17:62223689-62223841:STRAND=+]&SOURCE=REFSEQ&SOURCE-ACCESSION=NR_002995&GENOME=HG19
+CGTTGGCGACGCGCTGTCTTTGAGCCCCCGCCGAGCTTCCTCGTGGCGCCGGGGGTCAATCTGCAGCGCTAGAGCATGTGCTTGCGCATAACTGGGGCCGCCTGGCCTCCCGCGGGCGGCCTTTTTAACCGCGAGCGACAAGAAGTAACCTGA
+>SOLEXA_READ_GCCTTTTTAACCGCGAGCGACAAGAATC_HITS7
+----------------------------------------------------------------------------------------------------------------------GCCTTTTTAACCGCGAGCGACAAGAATC-------
+>SOLEXA_READ_ACGCGCTGTCTTTGAGCCCCATC_HITS4
+--------ACGCGCTGTCTTTGAGCCCCATC--------------------------------------------------------------------------------------------------------------------------
+>SOLEXA_READ_CGCGCTGTCTTTGAGCCCCCGCCGAGCATC_HITS4
+---------CGCGCTGTCTTTGAGCCCCCGCCGAGCATC------------------------------------------------------------------------------------------------------------------
+>SOLEXA_READ_ACGCGCTGTCTTTGAGCCCCCGCCGAGCATC_HITS7
+--------ACGCGCTGTCTTTGAGCCCCCGCCGAGCATC------------------------------------------------------------------------------------------------------------------
+>SOLEXA_READ_ACGCGCTGTCTTTGAGCCCCCGCCGATC_HITS8
+--------ACGCGCTGTCTTTGAGCCCCCGCCGATC---------------------------------------------------------------------------------------------------------------------

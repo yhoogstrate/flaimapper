@@ -1,0 +1,14 @@
+>HGNC=32570&HUGO-SYMBOL=SCARNA13&HUGO-NAME=SMALL_CAJAL_BODY-SPECIFIC_RNA_13&LOCI=[CHR14:95999682-95999976:STRAND=-]&SOURCE=REFSEQ&SOURCE-ACCESSION=NR_003002&GENOME=HG19
+CTTGCTACATAATCTGTAGTCTTGGAGCCGCACAGGGTTGGTGGTACCCTCGAGCACACCAGACTTGCAGAAAAAGCATACTCCAGAGGAAGCTGAGGCATGCCTGCTCGAGAGCCAGCTGTTCCATGTGCAATTTTCCTCTGATAGTTTCTGGTCACTGTTGCCACGGTGATAATGACTGGGCTATGTCATTATCTATCCGCCAACAGTAAGAGAAGCTTTGCAGTCGAGATATTGTTTAGCAGATGGAGTGTTTTCTGTTGAACACTAAGTACTGCCACAAGTTACTTTTTTT
+>SOLEXA_READ_ATCTGTAGTCTTGGAGCCGCATC_HITS19
+-----------ATCTGTAGTCTTGGAGCCGCATC---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+>SOLEXA_READ_AATCTGTAGTCTTGGAGCCGCATC_HITS35
+----------AATCTGTAGTCTTGGAGCCGCATC---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+>SOLEXA_READ_ATCTGTAGTCTTGGAGCCGCACAGGGTTGATC_HITS4
+-----------ATCTGTAGTCTTGGAGCCGCACAGGGTTGATC------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+>SOLEXA_READ_ACCAGACTTGCAGAAAAAGCATC_HITS5
+---------------------------------------------------------ACCAGACTTGCAGAAAAAGCATC-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+>SOLEXA_READ_TGCAGTCGAGATATTGTTTAGCAGATC_HITS7
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------TGCAGTCGAGATATTGTTTAGCAGATC-----------------------------------------------
+>SOLEXA_READ_TGAACACTAAGTACTGCCACAAGTATC_HITS9
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------TGAACACTAAGTACTGCCACAAGTATC-------

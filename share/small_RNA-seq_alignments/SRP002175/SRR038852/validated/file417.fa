@@ -1,0 +1,10 @@
+>HGNC=33068&HUGO-SYMBOL=SNORD116-2&HUGO-NAME=SMALL_NUCLEOLAR_RNA,_C/D_BOX_116-2&LOCI=[CHR15:25299346-25299462:STRAND=+]&SOURCE=REFSEQ&SOURCE-ACCESSION=NR_003317&GENOME=HG19
+CAAATGTGCTTGGATCGATGATGAGTCCCCAAAAAAAACATTCCTTGGAAAAGCTGAACAAAATGAGTGAAAACTCATACCGTCATTCTCATCGGAACTGAGGTCCAGCACGTTGCC
+>SOLEXA_READ_5_OF_5_CATCGGAACTGAGGTCC_HITS4
+-----------------------------------------------------------------------------------------CATCGGAACTGAGGTCC-----------
+>SOLEXA_READ_5_OF_5_TCGGAACTGAGGTCC_HITS4
+-------------------------------------------------------------------------------------------TCGGAACTGAGGTCC-----------
+>SOLEXA_READ_5_OF_5_ATCGGAACTGAGGTC_HITS20
+------------------------------------------------------------------------------------------ATCGGAACTGAGGTC------------
+>SOLEXA_READ_5_OF_5_ATCGGAACTGAGGTCC_HITS22
+------------------------------------------------------------------------------------------ATCGGAACTGAGGTCC-----------

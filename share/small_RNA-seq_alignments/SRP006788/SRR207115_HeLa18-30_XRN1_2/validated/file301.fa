@@ -1,0 +1,14 @@
+>HGNC=35306&HUGO-SYMBOL=MIR548F2&HUGO-NAME=MICRORNA_548F-2&LOCI=[CHR2:213290977-213291094:STRAND=-]&SOURCE=REFSEQ&SOURCE-ACCESSION=NR_031643&GENOME=HG19
+ACCATCTTTCTAATAACTATTAGGTTGGTGCGAACATAATTGCAGTTTTTATCATTACTTTTAATGGCAAAAACTGTAATTACTTTTGCACCAACCTAATATTTTAGTGTGCATTTGG
+>SOLEXA_READ_1_OF_3_CAAAAACTGTGATTACTTTTGCATC_HITS255
+-------------------------------------------------------------------CAAAAACTGTGATTACTTTTGCATC--------------------------
+>SOLEXA_READ_1_OF_2_CAAAAACTGTAATTACTTTTGCATC_HITS94
+-------------------------------------------------------------------CAAAAACTGTAATTACTTTTGCATC--------------------------
+>SOLEXA_READ_1_OF_3_AAAAACTGTGATTACTTTTGCATC_HITS241
+--------------------------------------------------------------------AAAAACTGTGATTACTTTTGCATC--------------------------
+>SOLEXA_READ_1_OF_3_AAAAACTGTGATTACTTTTGCAC_HITS4
+--------------------------------------------------------------------AAAAACTGTGATTACTTTTGCAC---------------------------
+>SOLEXA_READ_1_OF_3_CAAAAACTGGAATTACTTTTGCATC_HITS20
+-------------------------------------------------------------------CAAAAACTGGAATTACTTTTGCATC--------------------------
+>SOLEXA_READ_1_OF_2_CAAAGACTGTAATTACTTTTGCATC_HITS20
+-------------------------------------------------------------------CAAAGACTGTAATTACTTTTGCATC--------------------------

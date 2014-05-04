@@ -1,0 +1,16 @@
+>HGNC=31617&HUGO-SYMBOL=MIR296&HUGO-NAME=MICRORNA_296&LOCI=[CHR20:57392660-57392759:STRAND=-]&SOURCE=REFSEQ&SOURCE-ACCESSION=NR_029844&GENOME=HG19
+GTGAGGAGAAAGGACCCTTCCAGAGGGCCCCCCCTCAATCCTGTTGTGCCTAATTCAGAGGGTTGGGTGGAGGCTCTCCTGAAGGGCTCTGAAGAGCGCT
+>SOLEXA_READ_GAGGGTTGGGTGGAGGCTAT_HITS4
+---------------------------------------------------------GAGGGTTGGGTGGAGGCTAT-----------------------
+>SOLEXA_READ_GAGGGTTGGGTGGAGGCTA_HITS7
+---------------------------------------------------------GAGGGTTGGGTGGAGGCTA------------------------
+>SOLEXA_READ_AGGGTTGGGTGGAGGCT_HITS17
+----------------------------------------------------------AGGGTTGGGTGGAGGCT-------------------------
+>SOLEXA_READ_AGGGTTGGGTGGAGGCTAT_HITS4
+----------------------------------------------------------AGGGTTGGGTGGAGGCTAT-----------------------
+>SOLEXA_READ_AGGGCCCCCCCTCAATCCTGT_HITS10
+-----------------------AGGGCCCCCCCTCAATCCTGT--------------------------------------------------------
+>SOLEXA_READ_GAGGGTTGGGTGGAGGCTC_HITS4
+---------------------------------------------------------GAGGGTTGGGTGGAGGCTC------------------------
+>SOLEXA_READ_GAGGGTTGGGTGGAGGCT_HITS18
+---------------------------------------------------------GAGGGTTGGGTGGAGGCT-------------------------

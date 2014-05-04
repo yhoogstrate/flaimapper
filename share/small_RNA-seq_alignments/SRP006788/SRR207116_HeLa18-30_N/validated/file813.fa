@@ -1,0 +1,14 @@
+>HGNC=34304&HUGO-SYMBOL=SNAR-A1&HUGO-NAME=SMALL_ILF3/NF90-ASSOCIATED_RNA_A1&LOCI=[CHR19:48437438-48437559:STRAND=+&CHR19:48421686-48421807:STRAND=+]&SOURCE=REFSEQ&SOURCE-ACCESSION=NR_004435&GENOME=HG19&MERGED=[HGNC=34305]
+CCGGAGCCATTGTGGCTCAGGCCGGTTGCGCCTGCCCTCGGGCCCTCACGGAGGCGGGGGTTCCAGGGCACGAGTTCGAGGCCAGCCTGGTCCACATGGGTCGGAAAAAAGGACTTTTTTTT
+>SOLEXA_READ_1_OF_2_CGGAAAAAAGGACTTTTTATC_HITS4
+-----------------------------------------------------------------------------------------------------CGGAAAAAAGGACTTTTTATC
+>SOLEXA_READ_1_OF_2_TCGGAAAAAAGGACTTTTTATC_HITS4
+----------------------------------------------------------------------------------------------------TCGGAAAAAAGGACTTTTTATC
+>SOLEXA_READ_1_OF_2_GTCGGAAAAAAGGACTTTTTATC_HITS7
+---------------------------------------------------------------------------------------------------GTCGGAAAAAAGGACTTTTTATC
+>SOLEXA_READ_1_OF_2_GTCGGAAAAAAGGACTTTTTTATC_HITS8
+---------------------------------------------------------------------------------------------------GTCGGAAAAAAGGACTTTTTTATC
+>SOLEXA_READ_2_OF_3_AGCCTGGTCCACATGGGTCGGAATC_HITS15
+-----------------------------------------------------------------------------------AGCCTGGTCCACATGGGTCGGAATC--------------
+>SOLEXA_READ_2_OF_3_AGCCTGGTCCACATGGGTCGGATC_HITS54
+-----------------------------------------------------------------------------------AGCCTGGTCCACATGGGTCGGATC---------------

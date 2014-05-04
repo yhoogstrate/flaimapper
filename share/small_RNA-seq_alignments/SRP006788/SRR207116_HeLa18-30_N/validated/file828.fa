@@ -1,0 +1,16 @@
+>HGNC=10192&HUGO-SYMBOL=RNU4-1&HUGO-NAME=RNA,_U4_SMALL_NUCLEAR_1&LOCI=[CHR12:120730887-120731050:STRAND=-]&SOURCE=REFSEQ&SOURCE-ACCESSION=NR_003925&GENOME=HG19
+GTAACAAATTAGCTTTGCGCAGTGGCAGTATCGTAGCCAATGAGGTCTATCCGAGGCGCGATTATTGCTAATTGAAAACTTTTCCCAATACCCCGCCGTGACGACTTGCAATATAGTCGGCACTGGCAATTTTTGACAGTCTCTACGGAGACTGAATTTTCTTG
+>SOLEXA_READ_CAATATAGTCGGCACTGGCAATATC_HITS6
+------------------------------------------------------------------------------------------------------------CAATATAGTCGGCACTGGCAATATC-------------------------------
+>SOLEXA_READ_GCCAATGAGGTCTATCCGAGGATC_HITS22
+-----------------------------------GCCAATGAGGTCTATCCGAGGATC---------------------------------------------------------------------------------------------------------
+>SOLEXA_READ_CGGCACTGGCAATTTTTGACATC_HITS8
+---------------------------------------------------------------------------------------------------------------------CGGCACTGGCAATTTTTGACATC------------------------
+>SOLEXA_READ_1_OF_2_ATTTTTGACAGTCTCTACGGAGAATC_HITS23
+--------------------------------------------------------------------------------------------------------------------------------ATTTTTGACAGTCTCTACGGAGAATC----------
+>SOLEXA_READ_1_OF_2_AATTTTTGACAGTCTCTACGGATC_HITS4
+-------------------------------------------------------------------------------------------------------------------------------AATTTTTGACAGTCTCTACGGATC-------------
+>SOLEXA_READ_1_OF_2_CAATTTTTGACAGTCTCTACGGAGACTGATC_HITS4
+------------------------------------------------------------------------------------------------------------------------------CAATTTTTGACAGTCTCTACGGAGACTGATC-------
+>SOLEXA_READ_1_OF_2_ATTTTTGACAGTCTCTACGGAATC_HITS5
+--------------------------------------------------------------------------------------------------------------------------------ATTTTTGACAGTCTCTACGGAATC------------

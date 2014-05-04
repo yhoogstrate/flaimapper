@@ -1,0 +1,12 @@
+>HGNC=19380&HUGO-SYMBOL=RNU12&HUGO-NAME=RNA,_U12_SMALL_NUCLEAR&LOCI=[CHR22:43011240-43011409:STRAND=+]&SOURCE=REFSEQ&SOURCE-ACCESSION=NR_029422&GENOME=HG19
+AAACGTCCTTATGCCTTAAACTTATGAGTAAGGAAAATAACGATTCGGGGTGACGCCCGAATCCTCACTGCTAATGTGAGACGAATTTTTGAGCGGGTAAAGGTCGCCCTCAAGGTGACCCGCCTACTTTGCGGGATGCCTGGGAGTTGCGATCTGCCCGACCTTATTCA
+>SOLEXA_READ_GAGACGAATTTTTGAGCGGGTA_HITS4
+-----------------------------------------------------------------------------GAGACGAATTTTTGAGCGGGTA-----------------------------------------------------------------------
+>SOLEXA_READ_GATGCCTGGGAGTTGCGATCTGC_HITS5
+--------------------------------------------------------------------------------------------------------------------------------------GATGCCTGGGAGTTGCGATCTGC-------------
+>SOLEXA_READ_AGACGAATTTTTGAGCGGGTA_HITS4
+------------------------------------------------------------------------------AGACGAATTTTTGAGCGGGTA-----------------------------------------------------------------------
+>SOLEXA_READ_GATGCCTGGGAGTTGCGATCTGCC_HITS7
+--------------------------------------------------------------------------------------------------------------------------------------GATGCCTGGGAGTTGCGATCTGCC------------
+>SOLEXA_READ_AGACGAATTTTTGAGCGGGT_HITS4
+------------------------------------------------------------------------------AGACGAATTTTTGAGCGGGT------------------------------------------------------------------------

@@ -1,0 +1,16 @@
+>HGNC=10119&HUGO-SYMBOL=SNORA74A&HUGO-NAME=SMALL_NUCLEOLAR_RNA,_H/ACA_BOX_74A&LOCI=[CHR5:138614459-138614678:STRAND=+]&SOURCE=REFSEQ&SOURCE-ACCESSION=NR_002915&GENOME=HG19
+TTCAGGAATCATCCAGCGGTTGTCAGCTATCCAGGCTCATGTGGTGCCTGTGATGGTGTTACACTGTTGGAAGAGCAAACACTGTCTTTATTGAGGTTTGGCTCCAAGCACTGTTTTGGTGTTGTAGCTGAGTACCTTTGGGCAGTGTTTTGCACCTCTGAGAGTGGAATGACTCCTGTGGAGTTGATCCTAGTCTGGGTGCAAACAATTTTTTTCTGTT
+>SOLEXA_READ_ATCCAGCGGTTGTCAGCTATCCAGGCTTC_HITS4
+----------ATCCAGCGGTTGTCAGCTATCCAGGCTTC-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+>SOLEXA_READ_ATCCAGCGGTTGTCAGCTATCCAGGCTCCTC_HITS9
+----------ATCCAGCGGTTGTCAGCTATCCAGGCTCCTC-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+>SOLEXA_READ_ATCCAGCGGTTGTCAGCTATCCCGGCTCATC_HITS12
+----------ATCCAGCGGTTGTCAGCTATCCCGGCTCATC-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+>SOLEXA_READ_ATCCAGCGGTTGTCAGCTATCCAGGCTATT_HITS7
+----------ATCCAGCGGTTGTCAGCTATCCAGGCTATT------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+>SOLEXA_READ_ATCCAGCGGTTGTCAGCTATCCAGGCTCATC_HITS47
+----------ATCCAGCGGTTGTCAGCTATCCAGGCTCATC-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+>SOLEXA_READ_CATCCAGCGGTTGTCAGCTATCCAGGATC_HITS4
+---------CATCCAGCGGTTGTCAGCTATCCAGGATC--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+>SOLEXA_READ_ATCCAGCGGTTGTCAGCTATCCAGGATC_HITS16
+----------ATCCAGCGGTTGTCAGCTATCCAGGATC--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

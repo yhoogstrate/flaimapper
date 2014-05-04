@@ -1,0 +1,14 @@
+>NAME=TRNALEUCAA&LOCI=[CHR1:161581736-161581819:STRAND=-]&SOURCE=UCSC&SOURCE-ACCESSION=CHR1.TRNA66-LEUCAA&GENOME=HG19
+GTCAGGATGGCCGAGCAGTCTTAAGGCGCTGCGTTCAAATCGCACCCTCCGCTGGAGGCGTGGGTTCGAATCCCACTTTTGACACCA
+>SOLEXA_READ_14_OF_19_GTGGGTTCGAATCCCA_HITS15
+-----------------------------------------------------------GTGGGTTCGAATCCCA------------
+>SOLEXA_READ_ATCCCACTTTTGACACCA_HITS6
+---------------------------------------------------------------------ATCCCACTTTTGACACCA
+>SOLEXA_READ_10_OF_14_CGTGGGTTCGAATCCCAC_HITS4
+----------------------------------------------------------CGTGGGTTCGAATCCCAC-----------
+>SOLEXA_READ_2_OF_3_GTCAGGATGGCCGAGC_HITS241
+GTCAGGATGGCCGAGC-----------------------------------------------------------------------
+>SOLEXA_READ_6_OF_7_TGGAGGCGTGGGTTC_HITS8
+----------------------------------------------------TGGAGGCGTGGGTTC--------------------
+>SOLEXA_READ_6_OF_7_GTCAGGATGGCCGAG_HITS289
+GTCAGGATGGCCGAG------------------------------------------------------------------------

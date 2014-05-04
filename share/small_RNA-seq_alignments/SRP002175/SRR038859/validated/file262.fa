@@ -1,0 +1,14 @@
+>HGNC=32564&HUGO-SYMBOL=SCARNA8&HUGO-NAME=SMALL_CAJAL_BODY-SPECIFIC_RNA_8&LOCI=[CHR9:19063644-19063794:STRAND=-]&SOURCE=REFSEQ&SOURCE-ACCESSION=NR_003009&GENOME=HG19
+TCTTCATAATTGGGAGGCTGATACACAAATTGGGCTGAAATACTGCTCTACTTGTCACCATGCCTCCCTAGAATAAACTGCCTTTTGATGACCGGGACGAATTGAGTGAAATCGTAACGGACAGATACGGGGCAGACAGATTTTAGAATAG
+>SOLEXA_READ_TAACGGACAGATACGGGGCAGA_HITS5
+------------------------------------------------------------------------------------------------------------------TAACGGACAGATACGGGGCAGA---------------
+>SOLEXA_READ_TTGGGAGGCTGATACACAAA_HITS10
+---------TTGGGAGGCTGATACACAAA--------------------------------------------------------------------------------------------------------------------------
+>SOLEXA_READ_TAACGGACAGATACGGGGCAGAC_HITS12
+------------------------------------------------------------------------------------------------------------------TAACGGACAGATACGGGGCAGAC--------------
+>SOLEXA_READ_TAACGGACAGATACGGGGCAGACA_HITS16
+------------------------------------------------------------------------------------------------------------------TAACGGACAGATACGGGGCAGACA-------------
+>SOLEXA_READ_TAACGGACAGATACGGGGCAGACT_HITS6
+------------------------------------------------------------------------------------------------------------------TAACGGACAGATACGGGGCAGACT-------------
+>SOLEXA_READ_TAACGGACAGATACGGGGCAGACAT_HITS4
+------------------------------------------------------------------------------------------------------------------TAACGGACAGATACGGGGCAGACAT------------

@@ -1,0 +1,12 @@
+>HGNC=23027&HUGO-SYMBOL=VTRNA3-1P&HUGO-NAME=VAULT_RNA_3-1,_PSEUDOGENE&LOCI=[CHRX:53489141-53489261:STRAND=+]&SOURCE=REFSEQ&SOURCE-ACCESSION=NG_007501&GENOME=HG19
+TGCCTCTAGGGGCTGGCTTTAGCTCAGCGGTTACTTCGACAATGCTTTCCATGGTTAGGAAACCAACCTCTCTGGGTGGTTTGAGACCCGTGGGCCCTCTCCAGTCCTTTTGTGGTCGCCA
+>SOLEXA_READ_4_OF_4_GGGCTGGCTTTAGCTCAGCGGTT_HITS6
+---------GGGCTGGCTTTAGCTCAGCGGTT-----------------------------------------------------------------------------------------
+>SOLEXA_READ_GGGGCTGGCTTTAGCTCAGCGGTTA_HITS6
+--------GGGGCTGGCTTTAGCTCAGCGGTTA----------------------------------------------------------------------------------------
+>SOLEXA_READ_2_OF_2_TTTAGCTCAGCGGTTACTTCGACA_HITS6
+-----------------TTTAGCTCAGCGGTTACTTCGACA--------------------------------------------------------------------------------
+>SOLEXA_READ_2_OF_2_GCGGTTACTTCGACA_HITS4
+--------------------------GCGGTTACTTCGACA--------------------------------------------------------------------------------
+>SOLEXA_READ_2_OF_2_CTTTAGCTCAGCGGTTACTTCGAC_HITS4
+----------------CTTTAGCTCAGCGGTTACTTCGAC---------------------------------------------------------------------------------

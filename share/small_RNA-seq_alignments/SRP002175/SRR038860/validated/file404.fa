@@ -1,0 +1,14 @@
+>HGNC=10100&HUGO-SYMBOL=SNORD79&HUGO-NAME=SMALL_NUCLEOLAR_RNA,_C/D_BOX_79&LOCI=[CHR1:173834476-173834580:STRAND=-]&SOURCE=REFSEQ&SOURCE-ACCESSION=NR_003939&GENOME=HG19
+TTGATTGAGCTACTGTTAGTGATGATTTTAAAATTAAAGCAGATGGGAATCTCTCTGAGAAAGAAAATGGAGATTAATCTTAAACTGAAACAGTAGTTGGGAAAT
+>SOLEXA_READ_TGTTAGTGATGATTTTAAAAT_HITS5
+-------------TGTTAGTGATGATTTTAAAAT-----------------------------------------------------------------------
+>SOLEXA_READ_GTTAGTGATGATTTTAAAAT_HITS12
+--------------GTTAGTGATGATTTTAAAAT-----------------------------------------------------------------------
+>SOLEXA_READ_GTTAGTGATGATTTTAAA_HITS9
+--------------GTTAGTGATGATTTTAAA-------------------------------------------------------------------------
+>SOLEXA_READ_TGTTAGTGATGATTTTAAAA_HITS8
+-------------TGTTAGTGATGATTTTAAAA------------------------------------------------------------------------
+>SOLEXA_READ_GTTAGTGATGATTTTAAAA_HITS16
+--------------GTTAGTGATGATTTTAAAA------------------------------------------------------------------------
+>SOLEXA_READ_TGTTAGTGATGATTTTAAAATTAAAG_HITS5
+-------------TGTTAGTGATGATTTTAAAATTAAAG------------------------------------------------------------------
