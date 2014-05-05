@@ -1,0 +1,14 @@
+error	experimental_5p	experimental_3p	not_experimental_5p	not_experimental_3p	stacked_5p	stacked_3p
+<-5	5	7	0	0	5	7
+-5	2	2	0	0	2	2
+-4	0	5	0	0	0	5
+-3	5	14	0	1	5	15
+-2	10	37	0	5	10	42
+-1	25	104	1	0	26	104
+0	715	429	36	28	751	457
+1	21	131	3	6	24	137
+2	9	46	0	0	9	46
+3	1	12	1	0	2	12
+4	1	9	0	1	1	10
+5	3	3	0	0	3	3
+>5	9	7	0	0	9	7
