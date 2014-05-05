@@ -1,0 +1,4 @@
+factor	experimental	not_experimental	stacked
+predicted	505	18	523
+not_predicted_with_reads	65	7	72
+not_predicted_no_reads	84	6	90
