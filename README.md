@@ -81,7 +81,7 @@ Given that we have two samples ('[SRR038853](https://github.com/yhoogstrate/flai
 	                        ../share/small_RNA-seq_alignments/SRP002175/SRR038853 \
 	                        ../share/small_RNA-seq_alignments/SRP002175/SRR038855 \
 
-This predictes the ncRNA fragments using the combination of the data and puts the "_table; per fragment_" type of output in directory '[../output/SRP002175/01_output_flaimapper.txt](https://github.com/yhoogstrate/flaimapper/output/SRP002175/01_output_flaimapper.txt)'.
+This predictes the ncRNA fragments using the combination of the data and puts the "_table; per fragment_" type of output in directory '[../output/SRP002175/01_output_flaimapper.txt](https://github.com/yhoogstrate/flaimapper/blob/master/output/FlaiMapper/SRP002175/01_output_flaimapper.txt)'.
 
 ### Authors ###
 The people who have contributed to this project are:
