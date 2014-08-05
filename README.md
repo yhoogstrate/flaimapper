@@ -269,14 +269,14 @@ It is very important to understand this, because the reference sequences may hav
 
 The consequence of this is that FlaiMapper must know where in which Reference sequence the ncRNAs are located. In FlaiMapper these so called MASK locations are given as GTF/GFF files with the "<CODE>\-m</CODE>" or "<CODE>\-\-mask</CODE>" argument. For alignment to reference genome hg19, you have to provide the following argument:
 
-	flaimapper -m ncrnadb09_hg19.gtf [\.\.\.]
+	flaimapper -m ncrnadb09_hg19.gtf [...]
 
 In ncRNAdb09 each Reference sequence represent exactly single ncRNA.
 Therefore, the provided MASK for ncRNAdb09, describes per ncRNA one (entire) reference sequence.
 
 For alignment to ncRNAdb09, you have to provide the following argument:
 
-	flaimapper -m ncrnadb09.gtf [\.\.\.]
+	flaimapper -m ncrnadb09.gtf [...]
 
 Currently we serve the ncRNAdb09 MASK as a GTF/GFF file for the following reference genomes:
 
@@ -291,9 +291,9 @@ In contrast to formats that only contrain genomic coordines, like BED and GTF, t
 It is important to understand is that within the BAM/SAM format no sequences of the reference genome are stored. Therefore it is not possible (feasible) to extract the sequence of a fragment from a BAM file.
 To ensure FlaiMapper has access to the reference sequence(s), you can provide the reference genome as a single indexed FASTA file using the "<CODE>\-\-fasta</CODE>" argument as follows:
 
-	flaimapper -r ncrnadb09.fa [\.\.\.]
+	flaimapper -r ncrnadb09.fa [...]
 
-	flaimapper -r hg19_full.fa [\.\.\.]
+	flaimapper -r hg19_full.fa [...]
 
 For ncRNAdb09, the FASTA file (and corresponding index) are available at the following url:
 
