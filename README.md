@@ -65,7 +65,7 @@ If you have downloaded FlaiMapper, you should read the GNU General Public Licens
 *	[https://github.com/yhoogstrate/flaimapper/raw/master/LICENSE](https://github.com/yhoogstrate/flaimapper/raw/master/LICENSE)
 
 ### Compile & Install
-Browse into the directory you have just created: 
+Browse into the directory you just have created: 
 
 	cd flaimapper
 
