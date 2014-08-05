@@ -19,24 +19,23 @@
     - [Uninstall FlaiMapper](#uninstall-flaimapper)
 - [Alignment](#alignment)
     - [Obtain reference](#obtain-reference)
-         - [Full genome alignment](#full-genome-alignment)
+         - [**Full genome alignment](#full-genome-alignment)
          - [ncRNAdb09 alignment](#ncrnadb09-alignment)
          - [Combination](#combination)
     - [Choose-aligner](#choose-aligner)
-         - [Full genome alignment](#full-genome-alignment-1)
+         - [**Full genome alignment](#full-genome-alignment-1)
          - [ncRNAdb09 alignment](#ncrnadb09-alignment-1)
     - [Alignment indexing](#alignment-indexing)
-- [Run-FlaiMapper](#run-flaimapper)
+- [Run FlaiMapper](#run-flaimapper)
     - [Usage](#usage)
     - [Input: BAM](#input-bam)
          - [The "\-\-mask"-argument](#the---mask-argument)
          - [The "\-\-fasta"-argument](#the---fasta-argument)
     - [Input: SSLM](#input-sslm)
-    - [Input: single-alignment](#input-single-alignment)
-    - [Input: multiple-alignments](#input-multiple-alignments)
+    - [Input: multiple alignments](#input-multiple-alignments)
     - [Output: formats](#output-formats)
 - [Reproduce article data](#reproduce article data)
-- [Authors & Citation](#authors--citation)
+- [Authors & Citing](#authors--citing)
 
 ## Download & Installation
 ### Install dependencies
@@ -48,7 +47,7 @@ Make sure you have *python2*, *pip* and the *pysam* library installed. Pysam is 
 
 The easiest way to install the latest version of pysam is via pip using the following terminal command:
 
-	sudo pip install \-\-upgrade pysam
+	sudo pip install --upgrade pysam
 
 ### Download FlaiMapper
 #### Latest version from GitHub <IMG SRC="GitHub-Mark-Light-32px.png">
@@ -80,7 +79,7 @@ The installation procedure of FlaiMapper first converts the python code into byt
 
 Last but not least, please check if FlaiMapper runs. You can do this by running either a full analysis or just run the following terminal command: 
 
-	flaimapper \-\-help
+	flaimapper --help
 
 If FlaiMapper givers errors, warnings or doesn't install, please don't hazitate and either submit the bug or send a fix to the GitHub repository at the following url: <A HREF='https://github.com/yhoogstrate/flaimapper' TARGET='_new'>https://github.com/yhoogstrate/flaimapper</A>
 
@@ -100,12 +99,16 @@ You have to remove the downloaded source files manually. Be aware that reference
 
 We propose multiple reference strategies for alignment, but we let it up to the researcher to decide which strategy is preferred.
 
-#### Full genome alignment (e.g. hg19)
+#### Full genome alignment
+
+In this strategy reads are aligned to an enitre reference genome (e.g hg19).
 
 *	Pro's: because you take into account the entire reference genome you will also align to previously unannotated ncRNAs (those that are not present in ncRNAdb09).
 *	Con's: because small RNA-seq reads are relatively small, the chance to finding a read somewhere else in the genome by chance is relatively large. In such a case, reads may also align to places in the genome where they are not derived from.
 
-#### Annotated ncRNAs alignment
+#### ncRNAdb09 alignment
+
+In this strategy reads are aligned to a list of all annotated ncRNAs.
 
 *	Pro's: alignment is fast and shouldn't be aware of splicing if mature ncRNAs are included.
 *	Con's: you restrict yourself to a limited part of the genome and therefore you will miss any ncRNA that is not within this database.
@@ -118,6 +121,7 @@ In the first phase, align to targeted regions withing the genome (the ncRNAdb09 
 *	Con's: the alignment will take more time the and methodology is more complex which will require advanced scripting.
 
 ### Choose aligner
+
 The main complexity in RNA-Seq is splicing. There are several widely used free alignment programs for RNA-Seq. We are (at the moment) not aware of splicing events in ncRNAs other than tRNAs. The splice junctions in tRNAs are small. Therefore, if you align reads to pre-tRNAs, you want your aligner to understand splicing. If you want to use a non-splicing-aware aligner that is not aware of splicing, you want your introns to be removed prior to alignment. If your not focussing on tRNAs at all, you also don't need your aligner to be aware of splicing.
 
 #### Full genome alignment (e.g. hg19)
@@ -224,9 +228,9 @@ optional arguments:
 
 From this follows that you can find the version of your installed flaimapper with the following commands:
 
-	flaimapper \-\-version
+	flaimapper --version
 
-	flaimapper-sslm \-\-version
+	flaimapper-sslm --version
 
 The "<CODE>\-\-verbose</CODE>" and "<CODE>\-\-quiet</CODE>" arguments change the level of verbosity. If "<CODE>\-\-verbose</CODE>" is enabled, FlaiMapper will give more details about progress.
 
@@ -412,12 +416,12 @@ The output format can be chosen with the "<CODE>\-f</CODE>" or the "<CODE>\-\-fo
 
 The location of the output is defined with the "<CODE>\-o</CODE>" or "<CODE>\-\-output</CODE>" argument. If the argument is left empty or equal to "<CODE>\-</CODE>", FlaiMapper will write directly to stdout.
 
-## Reproduce data article
+## Reproduce article data
 
 All documents used for the publication can be (re-)generated by running the scripts in the '[../scripts](https://github.com/yhoogstrate/flaimapper/tree/master/scripts/)' directory.
 The master script "[../scripts/analysis.sh](https://github.com/yhoogstrate/flaimapper/blob/master/scripts/analysis.sh)" should run all analysis sequentially and make the directory structure within FlaiMapper's "[../output](https://github.com/yhoogstrate/flaimapper/tree/master/output)" directory.
 
-## Authors & Citation
+## Authors & Citing
 
 The people who have contributed to this project are:
 
