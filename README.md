@@ -54,7 +54,7 @@ The easiest way to install the latest version of pysam is via pip using the foll
 
 To get the latest version of FlaiMapper please download with Git (make sure it's installed) from GitHub using the following terminal command:
 
-	git clone https://github.com/yhoogstrate/flaimapper.git
+	git clone --recursive https://github.com/yhoogstrate/flaimapper.git
 
 Or you can download and extract the latest source as ZIP package from the following url: [here (right mouse click; save as)](https://github.com/yhoogstrate/flaimapper/archive/master.zip).
 
@@ -346,13 +346,15 @@ An individual alignment file in the FASTA (_*.fa_) format corresponds to an alig
 
 The "<CODE>_hits</CODE>" suffix is an indicator for the number of indentical copies of the read.
 
-Using sample ('[SRR207111_HeLa18-30](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788/SRR207111_HeLa18-30)' of experiment '[SRP006788](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788)' we run FlaiMapper (SSLM) as follows:
+To run flaimapper using SSLM data, we provide the paths of the directories that contain the SSLM data.
+In the article experiment "* [SRP006788](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788)*" was analysed.
+To analyse 1 of its 6 SSLM experiments "*[SRR207111_HeLa18-30](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788/SRR207111_HeLa18-30), *", we run FlaiMapper (SSLM) as follows:
 
 	flaimapper-sslm \
-	    -o ../output/FlaiMapper/SRP002175/01_output_flaimapper.txt \
+	    -o ../output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt \
 	    ../share/small_RNA-seq_alignments/SRP006788/SRR207111_HeLa18-30
 
-This predicts the ncRNA fragments using the combination of the data and puts the table "*[01_output_flaimapper.txt](https://github.com/yhoogstrate/flaimapper/raw/master/output/FlaiMapper/SRP002175/01_output_flaimapper.txt)*" output in directory "*[../output/FlaiMapper/SRP002175/](https://github.com/yhoogstrate/flaimapper/blob/master/output/FlaiMapper/SRP002175/)*".
+FlaiMapper will export the results as table into "*[../output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt](https://github.com/yhoogstrate/flaimapper/raw/master/output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt)*".
 
 *The SSLM version of FlaiMapper doesn't support entire reference genome alignment.*
 
