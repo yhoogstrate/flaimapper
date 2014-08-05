@@ -347,8 +347,8 @@ An individual alignment file in the FASTA (_*.fa_) format corresponds to an alig
 The "<CODE>_hits</CODE>" suffix is an indicator for the number of indentical copies of the read.
 
 To run flaimapper using SSLM data, we provide the paths of the directories that contain the SSLM data.
-In the article experiment "* [SRP006788](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788)*" was analysed.
-To analyse 1 of its 6 SSLM experiments*"[SRR207111_HeLa18-30](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788/SRR207111_HeLa18-30)*", we run FlaiMapper (SSLM) as follows:
+In the article experiment "*[SRP006788](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788)*" was analysed.
+To analyse 1 of its 6 SSLM experiments "*[SRR207111_HeLa18-30](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788/SRR207111_HeLa18-30)*", we run FlaiMapper (SSLM) as follows:
 
 	flaimapper-sslm \
 	    -o ../output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt \
