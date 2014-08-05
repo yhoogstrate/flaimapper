@@ -329,7 +329,9 @@ The directory structure of an SSLM experiment is as follows:
 
 The _idreable.txt_ is a tab-delimted file and links the name of a ncRNA to its alignment (as a "validated/*.fa" file). The _idreadable.txt_ has a syntax comparable to:
 
-<CODE>sequence&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; filename<BR />>NAME=TRNAValAAC&LOCI=\[chr1:180184276-180184348:strand=-\]&SOURCE=UCSC&SOURCE-ACCESSION=chr1.tRNA63-ValAAC&GENOME=hg19&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; file100<BR />>HGNC=38236&HUGO-Symbol=MIR3198-1&HUGO-Name=microRNA_3198-1&LOCI=\[chr22:18246936-18247035:strand=-\]&SOURCE=RefSeq&SOURCE-ACCESSION=NR_036168&GENOME=hg19&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; file101</CODE>
+	sequence  »  filename
+	>NAME=TRNAValAAC&LOCI=[chr1:180184276-180184348:strand=-]&SOURCE=UCSC&SOURCE-ACCESSION=chr1.tRNA63-ValAAC&GENOME=hg19  »  file100
+	>HGNC=38236&HUGO-Symbol=MIR3198-1&HUGO-Name=microRNA_3198-1&LOCI=[chr22:18246936-18247035:strand=-]&SOURCE=RefSeq&SOURCE-ACCESSION=NR_036168&GENOME=hg19  »  file101
 
 An individual alignment file in the FASTA (_*.fa_) format corresponds to an alignment of one ncRNA sequence, is located in a directory valled "**validated**" and has a sytax comparable to:
 
@@ -347,8 +349,8 @@ The "<CODE>_hits</CODE>" suffix is an indicator for the number of indentical cop
 Using sample ('[SRR207111_HeLa18-30](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788/SRR207111_HeLa18-30)' of experiment '[SRP006788](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788)' we run FlaiMapper (SSLM) as follows:
 
 	flaimapper-sslm \
-    -o "SRP006788/01.a_output_flaimapper.txt" \
-    SRP006788/SRR207111_HeLa18-30
+	    -o "SRP006788/01.a_output_flaimapper.txt" \
+	    SRP006788/SRR207111_HeLa18-30
 
 This predicts the ncRNA fragments using the combination of the data and puts the "_table; per fragment_" type of output in directory '[../output/SRP006788/01_output_flaimapper.txt](https://github.com/yhoogstrate/flaimapper/blob/master/output/FlaiMapper/SRP006788/01_output_flaimapper.txt)'.
 
@@ -361,38 +363,38 @@ FlaiMapper is able to deal with multiple input files. In certain situations you 
 The last argument of FlaiMapper is simply a 1-to-many argument. You can run FlaiMapper on multiple files by separating all desired files with a space:
 
 	flaimapper \
-	-f 1 \
-	-o output/FlaiMapper/SRP002175/01_output_flaimapper.txt \
-	-m share/annotations/ncRNA_annotation/ncrnadb09.gtf \
-	-r share/annotations/ncRNA_annotation/ncrnadb09.fasta \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038852.bam \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038853.bam \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038854.bam \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038855.bam \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038856.bam \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038857.bam \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038858.bam \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038859.bam \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038860.bam \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038861.bam \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038862.bam \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038863.bam
+	    -f 1 \
+	    -o output/FlaiMapper/SRP002175/01_output_flaimapper.txt \
+	    -m share/annotations/ncRNA_annotation/ncrnadb09.gtf \
+	    -r share/annotations/ncRNA_annotation/ncrnadb09.fasta \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038852.bam \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038853.bam \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038854.bam \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038855.bam \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038856.bam \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038857.bam \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038858.bam \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038859.bam \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038860.bam \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038861.bam \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038862.bam \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038863.bam
 
 	flaimapper-sslm \
-	-f 1 \
-	-o output/FlaiMapper/SRP002175/01_output_flaimapper.txt \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038852 \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038853 \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038854 \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038855 \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038856 \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038857 \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038858 \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038859 \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038860 \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038861 \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038862 \
-	   share/small_RNA-seq_alignments/SRP002175/SRR038863
+	    -f 1 \
+	    -o output/FlaiMapper/SRP002175/01_output_flaimapper.txt \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038852 \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038853 \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038854 \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038855 \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038856 \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038857 \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038858 \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038859 \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038860 \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038861 \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038862 \
+	        share/small_RNA-seq_alignments/SRP002175/SRR038863
 
 Remark that the backslashes are used to continue at the next line and can be removed when the command is written on a single line.
 
@@ -411,8 +413,8 @@ The implementation of the following formats is under development:
 
 The output format can be chosen with the "<CODE>\-f</CODE>" or the "<CODE>\-\-format</CODE>" argument, where the following argument have the following meaning:
 
-- <CODE>\-f 1</CODE>&nbsp; &nbsp; &nbsp; &nbsp; Tabular #1:&nbsp; &nbsp; &nbsp; &nbsp; Fragment&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Precursor&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-start&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-stop&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Sequence&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Corresponding-reads
-- <CODE>\-f 2</CODE>&nbsp; &nbsp; &nbsp; &nbsp; Tabular #2:&nbsp; &nbsp; &nbsp; &nbsp; Precursor&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Curated&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-1-start&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-1-stop&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-1-sequence&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-2-...
+- <CODE>\-f 1</CODE>&nbsp; &nbsp; &nbsp; &nbsp; Tabular #1:&nbsp; &nbsp; &nbsp; &nbsp; <CODE>Fragment&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Precursor&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-start&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-stop&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Sequence&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Corresponding-reads</CODE>
+- <CODE>\-f 2</CODE>&nbsp; &nbsp; &nbsp; &nbsp; Tabular #2:&nbsp; &nbsp; &nbsp; &nbsp; <CODE>Precursor&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Curated&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-1-start&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-1-stop&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-1-sequence&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-2-...</CODE>
 - <CODE>\-f 3</CODE>&nbsp; &nbsp; &nbsp; &nbsp; GenBank
 
 The location of the output is defined with the "<CODE>\-o</CODE>" or "<CODE>\-\-output</CODE>" argument. If the argument is left empty or equal to "<CODE>\-</CODE>", FlaiMapper will write directly to stdout.
