@@ -185,26 +185,26 @@ After you have aligned your reads, you can proceed with FlaiFapper. Here we will
 The usage of FlaiMapper (using BAM formatted files as input) is as follows:
 
 	usage: flaimapper [-h] [-V] [-v | -q] [-o OUTPUT] [-f FORMAT] -m MASK
-                  [-r FASTA]
-                  alignment_files [alignment_files ...]
-&nbsp;
-positional arguments:
-  alignment_files       indexed SAM or BAM files compatible with pysam
-&nbsp;
-optional arguments:
-  -h, \-\-help            show this help message and exit
-  -V, \-\-version         show program's version number and exit
-  -v, \-\-verbose
-  -q, \-\-quiet
-  -o OUTPUT, \-\-output OUTPUT
-                        output filename; '-' for stdout
-  -f FORMAT, \-\-format FORMAT
-                        file format of the output: [1: table; per fragment],
-                        [2: table; per ncRNA], [3: genbank]
-  -m MASK, \-\-mask MASK  GTF/GFF3 mask file (precursors)
-  -r FASTA, \-\-fasta FASTA
-                        Single reference FASTA file (+faid index) containing
-                        all genomic reference sequences
+	                  [-r FASTA]
+	                  alignment_files [alignment_files ...]
+	
+	positional arguments:
+	  alignment_files       indexed SAM or BAM files compatible with pysam
+	
+	optional arguments:
+	  -h, --help            show this help message and exit
+	  -V, --version         show program's version number and exit
+	  -v, --verbose
+	  -q, --quiet
+	  -o OUTPUT, --output OUTPUT
+	                        output filename; '-' for stdout
+	  -f FORMAT, --format FORMAT
+	                        file format of the output: [1: table; per fragment],
+	                        [2: table; per ncRNA], [3: genbank]
+	  -m MASK, --mask MASK  GTF/GFF3 mask file (precursors)
+	  -r FASTA, --fasta FASTA
+	                        Single reference FASTA file (+faid index) containing
+	                        all genomic reference sequences
 
 The usage of FlaiMapper (using SSLM formatted data as input) is as follows:
 
@@ -216,13 +216,13 @@ The usage of FlaiMapper (using SSLM formatted data as input) is as follows:
 	                        SSLM formatted output directories
 	
 	optional arguments:
-	  -h, \-\-help            show this help message and exit
-	  -V, \-\-version         show program's version number and exit
-	  -v, \-\-verbose
-	  -q, \-\-quiet
-	  -o OUTPUT, \-\-output OUTPUT
+	  -h, --help            show this help message and exit
+	  -V, --version         show program's version number and exit
+	  -v, --verbose
+	  -q, --quiet
+	  -o OUTPUT, --output OUTPUT
 	                        output filename; '-' for stdout
-	  -f FORMAT, \-\-format FORMAT
+	  -f FORMAT, --format FORMAT
 	                        file format of the output: [1: table; per fragment],
 	                        [2: table; per ncRNA], [3: genbank]
 
