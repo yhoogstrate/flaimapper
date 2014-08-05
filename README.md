@@ -349,10 +349,10 @@ The "<CODE>_hits</CODE>" suffix is an indicator for the number of indentical cop
 Using sample ('[SRR207111_HeLa18-30](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788/SRR207111_HeLa18-30)' of experiment '[SRP006788](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788)' we run FlaiMapper (SSLM) as follows:
 
 	flaimapper-sslm \
-	    -o "SRP006788/01.a_output_flaimapper.txt" \
-	    SRP006788/SRR207111_HeLa18-30
+	    -o ../output/FlaiMapper/SRP002175/01_output_flaimapper.txt \
+	    ../share/small_RNA-seq_alignments/SRP006788/SRR207111_HeLa18-30
 
-This predicts the ncRNA fragments using the combination of the data and puts the "_table; per fragment_" type of output in directory '[../output/SRP006788/01_output_flaimapper.txt](https://github.com/yhoogstrate/flaimapper/blob/master/output/FlaiMapper/SRP006788/01_output_flaimapper.txt)'.
+This predicts the ncRNA fragments using the combination of the data and puts the table "*[01_output_flaimapper.txt](https://github.com/yhoogstrate/flaimapper/raw/master/output/FlaiMapper/SRP002175/01_output_flaimapper.txt)*" output in directory "*[../output/FlaiMapper/SRP002175/](https://github.com/yhoogstrate/flaimapper/blob/master/output/FlaiMapper/SRP002175/)*".
 
 *The SSLM version of FlaiMapper doesn't support entire reference genome alignment.*
 
