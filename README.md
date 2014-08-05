@@ -402,8 +402,8 @@ Remark that the backslashes are used to continue at the next line and can be rem
 
 FlaiMapper can export results into the following formats:
 
-- Tabular (type #1)
-- Tabular (type #2)
+- Tabular #1, per fragment
+- Tabular #2, per ncRNA
 - GenBank
 
 The implementation of the following formats is under development:
@@ -413,8 +413,8 @@ The implementation of the following formats is under development:
 
 The output format can be chosen with the "<CODE>\-f</CODE>" or the "<CODE>\-\-format</CODE>" argument, where the following argument have the following meaning:
 
-- <CODE>\-f 1</CODE>&nbsp; &nbsp; &nbsp; &nbsp; Tabular #1:&nbsp; &nbsp; &nbsp; &nbsp; <CODE>Fragment&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Precursor&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-start&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-stop&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Sequence&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Corresponding-reads</CODE>
-- <CODE>\-f 2</CODE>&nbsp; &nbsp; &nbsp; &nbsp; Tabular #2:&nbsp; &nbsp; &nbsp; &nbsp; <CODE>Precursor&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Curated&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-1-start&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-1-stop&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-1-sequence&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-2-...</CODE>
+- <CODE>\-f 1</CODE>&nbsp; &nbsp; &nbsp; &nbsp; Tabular #1: <CODE>Fragment&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Precursor&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-start&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-stop&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Sequence&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Corresponding-reads</CODE>
+- <CODE>\-f 2</CODE>&nbsp; &nbsp; &nbsp; &nbsp; Tabular #2: <CODE>Precursor&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Curated&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-1-start&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-1-stop&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-1-sequence&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-2-...</CODE>
 - <CODE>\-f 3</CODE>&nbsp; &nbsp; &nbsp; &nbsp; GenBank
 
 The location of the output is defined with the "<CODE>\-o</CODE>" or "<CODE>\-\-output</CODE>" argument. If the argument is left empty or equal to "<CODE>\-</CODE>", FlaiMapper will write directly to stdout.
