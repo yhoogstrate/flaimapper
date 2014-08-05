@@ -19,11 +19,11 @@
     - [Uninstall FlaiMapper](#uninstall-flaimapper)
 - [Alignment](#alignment)
     - [Obtain reference](#obtain-reference)
-         - [**Full genome alignment](#full-genome-alignment)
+         - [Full genome alignment](#full-genome-alignment)
          - [ncRNAdb09 alignment](#ncrnadb09-alignment)
          - [Combination](#combination)
     - [Choose-aligner](#choose-aligner)
-         - [**Full genome alignment](#full-genome-alignment-1)
+         - [Full genome alignment](#full-genome-alignment-1)
          - [ncRNAdb09 alignment](#ncrnadb09-alignment-1)
     - [Alignment indexing](#alignment-indexing)
 - [Run FlaiMapper](#run-flaimapper)
@@ -124,7 +124,7 @@ In the first phase, align to targeted regions withing the genome (the ncRNAdb09 
 
 The main complexity in RNA-Seq is splicing. There are several widely used free alignment programs for RNA-Seq. We are (at the moment) not aware of splicing events in ncRNAs other than tRNAs. The splice junctions in tRNAs are small. Therefore, if you align reads to pre-tRNAs, you want your aligner to understand splicing. If you want to use a non-splicing-aware aligner that is not aware of splicing, you want your introns to be removed prior to alignment. If your not focussing on tRNAs at all, you also don't need your aligner to be aware of splicing.
 
-#### Full genome alignment (e.g. hg19)
+#### Full genome alignment
 
 If you want to include results from ncRNAs that undergo splicing (e.g. tRNAs) you should use a splicing-aware aligner. The following aligners are popular and should have sufficient documentation:
 
