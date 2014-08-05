@@ -186,7 +186,7 @@ The usage of FlaiMapper (using BAM formatted files as input) is as follows:
 
 	usage: flaimapper [-h] [-V] [-v | -q] [-o OUTPUT] [-f FORMAT] -m MASK
                   [-r FASTA]
-                  alignment_files [alignment_files \...]
+                  alignment_files [alignment_files ...]
 &nbsp;
 positional arguments:
   alignment_files       indexed SAM or BAM files compatible with pysam
@@ -209,22 +209,22 @@ optional arguments:
 The usage of FlaiMapper (using SSLM formatted data as input) is as follows:
 
 	usage: flaimapper-sslm [-h] [-V] [-v | -q] [-o OUTPUT] [-f FORMAT]
-                       alignment_directories [alignment_directories \...]
-&nbsp;
-positional arguments:
-  alignment_directories
-                        SSLM formatted output directories
-&nbsp;
-optional arguments:
-  -h, \-\-help            show this help message and exit
-  -V, \-\-version         show program's version number and exit
-  -v, \-\-verbose
-  -q, \-\-quiet
-  -o OUTPUT, \-\-output OUTPUT
-                        output filename; '-' for stdout
-  -f FORMAT, \-\-format FORMAT
-                        file format of the output: [1: table; per fragment],
-                        [2: table; per ncRNA], [3: genbank]
+	                       alignment_directories [alignment_directories ...]
+	
+	positional arguments:
+	  alignment_directories
+	                        SSLM formatted output directories
+	
+	optional arguments:
+	  -h, \-\-help            show this help message and exit
+	  -V, \-\-version         show program's version number and exit
+	  -v, \-\-verbose
+	  -q, \-\-quiet
+	  -o OUTPUT, \-\-output OUTPUT
+	                        output filename; '-' for stdout
+	  -f FORMAT, \-\-format FORMAT
+	                        file format of the output: [1: table; per fragment],
+	                        [2: table; per ncRNA], [3: genbank]
 
 From this follows that you can find the version of your installed flaimapper with the following commands:
 
@@ -241,18 +241,18 @@ The FlaiMapper binary that corresponds to BAM files is called "*flaimapper*" and
 - For alignment to reference genomes (e.g. hg19):
 
 	flaimapper \
-   \-m ncrnadb09_hg19.gtf \
-   \-r hg19_full.fasta \
-   -o results_flaimapper.tabular.txt \
-   alignment_01.bam
+	    \-m ncrnadb09_hg19.gtf \
+	    \-r hg19_full.fasta \
+	    -o results_flaimapper.tabular.txt \
+	    alignment_01.bam
 
 - For alignment to ncRNAdb09:
 
 	flaimapper \
-   -m ncrnadb09.gtf \
-   -r ncrnadb09.fasta \
-   -o results_flaimapper.tabular.txt \
-   alignment_02.bam
+	    -m ncrnadb09.gtf \
+	    -r ncrnadb09.fasta \
+	    -o results_flaimapper.tabular.txt \
+	    alignment_02.bam
 
 Remark that the backslashes are used to continue at the next line and can be removed when the command is written on a single line.
 
