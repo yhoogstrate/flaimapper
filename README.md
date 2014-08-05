@@ -12,7 +12,7 @@
 - [Download & Installation](#download--installation)
     - [Install dependencies](#install-dependencies)
     - [Download-FlaiMapper](#download-flaimapper)
-        - [Latest version from GitHub](#latest-version-from-github-)
+        - [Latest version from GitHub](#latest-version-from-github)
         - [Read & agree with GPL3 free software license](#read--agree-with-gpl3-free-software-license)
     - [Compile & Install](#compile--install)
     - [Check if it works!](#check-if-it-works)
@@ -50,7 +50,7 @@ The easiest way to install the latest version of pysam is via pip using the foll
 	sudo pip install --upgrade pysam
 
 ### Download FlaiMapper
-#### Latest version from GitHub <IMG SRC="GitHub-Mark-Light-32px.png">
+#### Latest version from GitHub
 
 To get the latest version of FlaiMapper please download with Git (make sure it's installed) from GitHub using the following terminal command:
 
@@ -431,4 +431,3 @@ The people who have contributed to this project are:
  - Youri Hoogstrate
  - Elena S. Martens-Uzunova
  - Guido Jenster
- 
