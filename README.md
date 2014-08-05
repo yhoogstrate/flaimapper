@@ -9,37 +9,37 @@
 
 ---
 
-- [Download & Installation](#download-&-installation)
-  1. [Install-dependencies](#install-dependencies)
-  2. [Download-FlaiMapper](#download-flaimapper)
-     a. [Latest version from GitHub](#latest-version-from-github)
-     b. [Read & agree with GPL3 free software license](#read-&-agree-with-gpl3-free-software-license)
-  3. [Compile & Install](#compile-&-install)
-  4. [Check-if-it works!](#check-if-it-works!)
-  5. [Uninstall-FlaiMapper](#uninstall-flaimapper)
+- [Download & Installation](#download--installation)
+    - [Install dependencies](#install-dependencies)
+    - [Download-FlaiMapper](#download-flaimapper)
+        - [Latest version from GitHub](#latest-version-from-github-)
+        - [Read & agree with GPL3 free software license](#read--agree-with-gpl3-free-software-license)
+    - [Compile & Install](#compile--install)
+    - [Check if it works!](#check-if-it-works)
+    - [Uninstall FlaiMapper](#uninstall-flaimapper)
 - [Alignment](#alignment)
-  1. [obtain-reference](#obtain-reference)
-     a. [Full genome alignment](#a-full-genome-alignment)
-     b. [ncRNAdb09 alignment](#b-annotated-ncrnas-alignment)
-     c. [Combination](#c-combination)
-  2. [Choose-aligner](#choose-aligner)
-     a. [Full genome alignment](#a-full-genome-alignment)
-     b. [ncRNAdb09 alignment](#b-annotated-ncrnas-alignment)
-  3. [Alignment indexing](#3-reference-index)
+    - [Obtain reference](#obtain-reference)
+         - [Full genome alignment](#full-genome-alignment)
+         - [ncRNAdb09 alignment](#ncrnadb09-alignment)
+         - [Combination](#combination)
+    - [Choose-aligner](#choose-aligner)
+         - [Full genome alignment](#full-genome-alignment-1)
+         - [ncRNAdb09 alignment](#ncrnadb09-alignment-1)
+    - [Alignment indexing](#alignment-indexing)
 - [Run-FlaiMapper](#run-flaimapper)
-  1. [Usage](#usage)
-  2. [Input: BAM](#input:-bam)
-     a. [The "\-\-mask"-argument](#the-mask-argument)
-     b. [The "\-\-fasta"-argument](#the-fasta-argument)
-  3. [Input: SSLM](#input:-sslm)
-  4. [Input: single-alignment](#input:-single-alignment)
-  5. [Input: multiple-alignments](#input:-multiple-alignments)
-  6. [output: formats](#output:-formats)
-- [Reproduce data article](#Reproduce-data-article)
-- [authors & Citation](#authors-&-citation)
+    - [Usage](#usage)
+    - [Input: BAM](#input-bam)
+         - [The "\-\-mask"-argument](#the---mask-argument)
+         - [The "\-\-fasta"-argument](#the---fasta-argument)
+    - [Input: SSLM](#input-sslm)
+    - [Input: single-alignment](#input-single-alignment)
+    - [Input: multiple-alignments](#input-multiple-alignments)
+    - [Output: formats](#output-formats)
+- [Reproduce article data](#reproduce article data)
+- [Authors & Citation](#authors--citation)
 
 ## Download & Installation
-### 1. Install dependencies
+### Install dependencies
 
 Make sure you have *python2*, *pip* and the *pysam* library installed. Pysam is not by default installed on many systems. You can find installation details on at the following urls:
 
@@ -48,79 +48,79 @@ Make sure you have *python2*, *pip* and the *pysam* library installed. Pysam is 
 
 The easiest way to install the latest version of pysam is via pip using the following terminal command:
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:24px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 500px;text-align:left;height:24px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>sudo pip install \-\-upgrade pysam</TEXTAREA>
+	sudo pip install \-\-upgrade pysam
 
-### 2. Download FlaiMapper
-#### a. Latest version from GitHub <IMG SRC="GitHub-Mark-Light-32px.png">
+### Download FlaiMapper
+#### Latest version from GitHub <IMG SRC="GitHub-Mark-Light-32px.png">
 
 To get the latest version of FlaiMapper please download with Git (make sure it's installed) from GitHub using the following terminal command:
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:24px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 500px;text-align:left;height:24px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>git clone https://github.com/yhoogstrate/flaimapper.git</TEXTAREA>
+	git clone https://github.com/yhoogstrate/flaimapper.git
 
 Or you can download and extract the latest source as ZIP package from the following url: [here (right mouse click; save as)](https://github.com/yhoogstrate/flaimapper/archive/master.zip).
 
-#### b. Read & agree with GPL3 free software license
+#### Read & agree with GPL3 free software license
 
 If you have downloaded FlaiMapper, you should read the GNU General Public License v3.0 to make sure you understand what you are allowed to do with the source files and what free software means. It also states that the software is distributed in the hope to be useful but without any warranty. The license can be accessed directly at the following url:
 
 *	[https://github.com/yhoogstrate/flaimapper/raw/master/LICENSE](https://github.com/yhoogstrate/flaimapper/raw/master/LICENSE)
 
-### 3. Compile & Install
+### Compile & Install
 Browse into the directory you have just created: 
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:24px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 500px;text-align:left;height:24px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>cd flaimapper</TEXTAREA>
+	cd flaimapper
 
 The installation procedure of FlaiMapper first converts the python code into byte code, followed by a mechanism that installs flaimapper in the system directories. You can achieve this by running the following two commands: 
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:24px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 500px;text-align:left;height:24px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>python setup.py build</TEXTAREA>
+	python setup.py build
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:24px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 500px;text-align:left;height:24px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>sudo python setup.py install</TEXTAREA>
+	sudo python setup.py install
 
-### 4. Check if it works!
+### Check if it works!
 
 Last but not least, please check if FlaiMapper runs. You can do this by running either a full analysis or just run the following terminal command: 
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:24px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 500px;text-align:left;height:24px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>flaimapper \-\-help</TEXTAREA>
+	flaimapper \-\-help
 
 If FlaiMapper givers errors, warnings or doesn't install, please don't hazitate and either submit the bug or send a fix to the GitHub repository at the following url: <A HREF='https://github.com/yhoogstrate/flaimapper' TARGET='_new'>https://github.com/yhoogstrate/flaimapper</A>
 
 Otherwise: congratulations, you have just installed FlaiMapper!
 
-### 5. Uninstall FlaiMapper
+### Uninstall FlaiMapper
 
 To remove FlaiMapper automatically from your system directories (without removing your data files), proceed with the following command into your terminal:
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:24px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 500px;text-align:left;height:24px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>sudo pip uninstall flaimapper</TEXTAREA>
+	sudo pip uninstall flaimapper
 
 You have to remove the downloaded source files manually. Be aware that references files for *ncRNAdb09* and the data of the analysis as demonstrated in the corresponding article are also located within this directory.
 
 ## Alignment
 
-### 1. Obtain reference
+### Obtain reference
 
 We propose multiple reference strategies for alignment, but we let it up to the researcher to decide which strategy is preferred.
 
-#### a. Full genome alignment (e.g. hg19)
+#### Full genome alignment (e.g. hg19)
 
 *	Pro's: because you take into account the entire reference genome you will also align to previously unannotated ncRNAs (those that are not present in ncRNAdb09).
 *	Con's: because small RNA-seq reads are relatively small, the chance to finding a read somewhere else in the genome by chance is relatively large. In such a case, reads may also align to places in the genome where they are not derived from.
 
-#### b. Annotated ncRNAs alignment
+#### Annotated ncRNAs alignment
 
 *	Pro's: alignment is fast and shouldn't be aware of splicing if mature ncRNAs are included.
 *	Con's: you restrict yourself to a limited part of the genome and therefore you will miss any ncRNA that is not within this database.
 
-#### c. Combination
+#### Combination
 
 In the first phase, align to targeted regions withing the genome (the ncRNAdb09 for example). In the second phase align all previously unmapped reads without any restriction to the full reference genome.
 
 *	Pro's: you solve the issues addressed above.
 *	Con's: the alignment will take more time the and methodology is more complex which will require advanced scripting.
 
-### 2. Choose aligner
+### Choose aligner
 The main complexity in RNA-Seq is splicing. There are several widely used free alignment programs for RNA-Seq. We are (at the moment) not aware of splicing events in ncRNAs other than tRNAs. The splice junctions in tRNAs are small. Therefore, if you align reads to pre-tRNAs, you want your aligner to understand splicing. If you want to use a non-splicing-aware aligner that is not aware of splicing, you want your introns to be removed prior to alignment. If your not focussing on tRNAs at all, you also don't need your aligner to be aware of splicing.
 
-#### a. Full genome alignment (e.g. hg19)
+#### Full genome alignment (e.g. hg19)
 
 If you want to include results from ncRNAs that undergo splicing (e.g. tRNAs) you should use a splicing-aware aligner. The following aligners are popular and should have sufficient documentation:
 
@@ -130,7 +130,7 @@ If you want to include results from ncRNAs that undergo splicing (e.g. tRNAs) yo
 *	SubRead: [http://subread.sourceforge.net/](http://subread.sourceforge.net/)
 *	HISAT: [http://ccb.jhu.edu/software/hisat/index.shtml](http://ccb.jhu.edu/software/hisat/index.shtml)
 
-#### b. ncRNAdb09 alignment
+#### ncRNAdb09 alignment
 
 If your reference consists of mature ncRNAs or you are sure you don't take results of ncRNAs that undergo alternative splicing (tRNAs) into account you can use the following aligners:
 
@@ -142,13 +142,13 @@ If your reference consists of mature ncRNAs or you are sure you don't take resul
 	*	Although we have used CLC for ouranalysis we **advise you not to use it** prior to FlaiMapper. The export function to SAM/BAM file aggregates all reads with an identical sequence. This aggregation cannot be undone and affects the peak-detection of FlaiMapper tramendously. We have solved this issue by writing a converter from CLC's tabular output into the SSLM format. 
 	Upon this SSLM format we wrote a separate coverter that at its turn is able to convert SSLM to BAM. To convert CLC's "*Annotated*" tabular files to BAM, export the "*Annotated*" tables and run the following commands:
 
-		<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:24px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 420px;text-align:left;height:24px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>clc2sslm "clc_table.txt" "output_sslm"</TEXTAREA>
+			clc2sslm "clc_table.txt" "output_sslm"
 		
-		<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:24px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 420px;text-align:left;height:24px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>sslm2bam "output_sslm" output_unsorted.bam</TEXTAREA>
+			sslm2bam "output_sslm" output_unsorted.bam
 		
-		<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:24px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 420px;text-align:left;height:24px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>samtools sort output_unsorted.bam output</TEXTAREA>
+			samtools sort output_unsorted.bam output
 		
-		<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:24px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 420px;text-align:left;height:24px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>rm -r output_sslm; rm output_unsorted.bam</TEXTAREA>
+			rm -r output_sslm; rm output_unsorted.bam
 
 Some tools require specific reference files. You can find the ncRNAdb09 reference for the following aligners:
 
@@ -162,25 +162,25 @@ If you think installing, configuring and creating references takes too long, you
 *	[http://galaxy-sandbox.trait-ctmm.cloudlet.sara.nl/](http://galaxy-sandbox.trait-ctmm.cloudlet.sara.nl/)
 
 
-### 3. Alignment indexing
+### Alignment indexing
 
 The pysam library requires (position) sorted bam-files with a corresponding index file. Although the described alignment methods should by default produce (position) sorted bam-files, you can accomplish this by running the following command (notice that the second parameter has **no** *.bam* suffix):
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:24px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 500px;text-align:left;height:24px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>samtools sort output_unsorted.bam output</TEXTAREA>
+	samtools sort output_unsorted.bam output
 
 Only if a bam-file is position sorted it can be indexed. This is done using the following command:
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:24px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 500px;text-align:left;height:24px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>samtools index output.bam</TEXTAREA>
+	samtools index output.bam
 
 ## Run FlaiMapper
 
 After you have aligned your reads, you can proceed with FlaiFapper. Here we will explain which commands you need to type in your terminal to analyse your data using FlaiMapper.
 
-### 1. Usage
+### Usage
 
 The usage of FlaiMapper (using BAM formatted files as input) is as follows:
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:345px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 620px;text-align:left;height:345px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>usage: flaimapper [-h] [-V] [-v | -q] [-o OUTPUT] [-f FORMAT] -m MASK
+	usage: flaimapper [-h] [-V] [-v | -q] [-o OUTPUT] [-f FORMAT] -m MASK
                   [-r FASTA]
                   alignment_files [alignment_files \...]
 &nbsp;
@@ -200,11 +200,11 @@ optional arguments:
   -m MASK, \-\-mask MASK  GTF/GFF3 mask file (precursors)
   -r FASTA, \-\-fasta FASTA
                         Single reference FASTA file (+faid index) containing
-                        all genomic reference sequences</TEXTAREA>
+                        all genomic reference sequences
 
 The usage of FlaiMapper (using SSLM formatted data as input) is as follows:
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:285px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 620px;text-align:left;height:285px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>usage: flaimapper-sslm [-h] [-V] [-v | -q] [-o OUTPUT] [-f FORMAT]
+	usage: flaimapper-sslm [-h] [-V] [-v | -q] [-o OUTPUT] [-f FORMAT]
                        alignment_directories [alignment_directories \...]
 &nbsp;
 positional arguments:
@@ -220,41 +220,41 @@ optional arguments:
                         output filename; '-' for stdout
   -f FORMAT, \-\-format FORMAT
                         file format of the output: [1: table; per fragment],
-                        [2: table; per ncRNA], [3: genbank]</TEXTAREA>
+                        [2: table; per ncRNA], [3: genbank]
 
 From this follows that you can find the version of your installed flaimapper with the following commands:
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:24px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 420px;text-align:left;height:24px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>flaimapper \-\-version</TEXTAREA>
+	flaimapper \-\-version
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:24px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 420px;text-align:left;height:24px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>flaimapper-sslm \-\-version</TEXTAREA>
+	flaimapper-sslm \-\-version
 
 The "<CODE>\-\-verbose</CODE>" and "<CODE>\-\-quiet</CODE>" arguments change the level of verbosity. If "<CODE>\-\-verbose</CODE>" is enabled, FlaiMapper will give more details about progress.
 
-### 2. Input: BAM
+### Input: BAM
 
 The FlaiMapper binary that corresponds to BAM files is called "*flaimapper*" and can be executed as follows:
 
 - For alignment to reference genomes (e.g. hg19):
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:90px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 420px;text-align:left;height:90px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>flaimapper \
+	flaimapper \
    \-m ncrnadb09_hg19.gtf \
    \-r hg19_full.fasta \
    -o results_flaimapper.tabular.txt \
-   alignment_01.bam</TEXTAREA>
+   alignment_01.bam
 
 - For alignment to ncRNAdb09:
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:90px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 420px;text-align:left;height:90px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>flaimapper \
+	flaimapper \
    -m ncrnadb09.gtf \
    -r ncrnadb09.fasta \
    -o results_flaimapper.tabular.txt \
-   alignment_02.bam</TEXTAREA>
+   alignment_02.bam
 
 Remark that the backslashes are used to continue at the next line and can be removed when the command is written on a single line.
 
 The BAM (and SAM) alignment formats are tabular file formats that store a reads absolute start position, and a formal description of how the alignment proceeds. This also includes the reads sequence and can be provided with a quality score.
 
-#### a. The "<CODE>\-\-mask</CODE>"-argument
+#### The "<CODE>\-\-mask</CODE>"-argument
 
 The BAM/SAM format describes the alignment of a read to a so called *Reference sequence*.
 It is very important to understand this, because the reference sequences may have a different meaning in the two proposed types of experiments.
@@ -264,31 +264,31 @@ It is very important to understand this, because the reference sequences may hav
 
 The consequence of this is that FlaiMapper must know where in which Reference sequence the ncRNAs are located. In FlaiMapper these so called MASK locations are given as GTF/GFF files with the "<CODE>\-m</CODE>" or "<CODE>\-\-mask</CODE>" argument. For alignment to reference genome hg19, you have to provide the following argument:
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:24px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 420px;text-align:left;height:24px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>flaimapper -m ncrnadb09_hg19.gtf [\.\.\.]</TEXTAREA>
+	flaimapper -m ncrnadb09_hg19.gtf [\.\.\.]
 
 In ncRNAdb09 each Reference sequence represent exactly single ncRNA.
 Therefore, the provided MASK for ncRNAdb09, describes per ncRNA one (entire) reference sequence.
 
 For alignment to ncRNAdb09, you have to provide the following argument:
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:24px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 420px;text-align:left;height:24px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>flaimapper -m ncrnadb09.gtf [\.\.\.]</TEXTAREA>
+	flaimapper -m ncrnadb09.gtf [\.\.\.]
 
 Currently we serve the ncRNAdb09 MASK as a GTF/GFF file for the following reference genomes:
 
-| **Ref. Genome** | **Ref. Genome ID ** | **GTF file ** | ** GTF index ** |
+| **Ref. Genome** | **Ref. Genome ID** | **GTF file** | **GTF index** |
 |:----------------|:--------------------|:--------------|:----------------|
 | ncRNAdb09 | ncrnadb09 | [ncrnadb09.gtf](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncrna_annotation/ncrnadb09.gtf) | [ncrnadb09.gtf.tbi](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncrna_annotation/ncrnadb09.gtf.tbi) |
 | Human Feb. 2009 \(GRCh37/hg19\) | hg19 | [ncrnadb09_hg19.gtf](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncrna_annotation/ncrnadb09_hg19.gtf) | [ncrnadb09_hg19.gtf.tbi](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncrna_annotation/ncrnadb09_hg19.gtf.tbi) |
 
-#### b. The "<CODE>\-\-fasta</CODE>"-argument
+#### The "<CODE>\-\-fasta</CODE>"-argument
 
 In contrast to formats that only contrain genomic coordines, like BED and GTF, the tabular output formats and GenBank also provide the fragments sequences.
 It is important to understand is that within the BAM/SAM format no sequences of the reference genome are stored. Therefore it is not possible (feasible) to extract the sequence of a fragment from a BAM file.
 To ensure FlaiMapper has access to the reference sequence(s), you can provide the reference genome as a single indexed FASTA file using the "<CODE>\-\-fasta</CODE>" argument as follows:
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:24px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 420px;text-align:left;height:24px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>flaimapper -r ncrnadb09.fa [\.\.\.]</TEXTAREA>
+	flaimapper -r ncrnadb09.fa [\.\.\.]
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:24px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 420px;text-align:left;height:24px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>flaimapper -r hg19_full.fa [\.\.\.]</TEXTAREA>
+	flaimapper -r hg19_full.fa [\.\.\.]
 
 For ncRNAdb09, the FASTA file (and corresponding index) are available at the following url:
 
@@ -300,7 +300,7 @@ Besides the FASTA file, you need the FASTA file to have a <U>corresponding index
 
 *We don't provide any other reference genome than ncRNAdb09.*
 
-### 3. Input: SSLM
+### Input: SSLM
 
 The SSLM format is the output format of Short Sequence Locaiton Mapper:
 
@@ -341,57 +341,57 @@ The "<CODE>_hits</CODE>" suffix is an indicator for the number of indentical cop
 
 Using sample ('[SRR207111_HeLa18-30](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788/SRR207111_HeLa18-30)' of experiment '[SRP006788](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788)' we run FlaiMapper (SSLM) as follows:
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:56px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: 420px;text-align:left;height:56px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>flaimapper-sslm \
+	flaimapper-sslm \
     -o "SRP006788/01.a_output_flaimapper.txt" \
-    SRP006788/SRR207111_HeLa18-30</TEXTAREA>
+    SRP006788/SRR207111_HeLa18-30
 
 This predicts the ncRNA fragments using the combination of the data and puts the "_table; per fragment_" type of output in directory '[../output/SRP006788/01_output_flaimapper.txt](https://github.com/yhoogstrate/flaimapper/blob/master/output/FlaiMapper/SRP006788/01_output_flaimapper.txt)'.
 
 *The SSLM version of FlaiMapper doesn't support entire reference genome alignment.*
 
-### 4. Input: multiple alignments
+### Input: multiple alignments
 
 FlaiMapper is able to deal with multiple input files. In certain situations you want to enhance your resulotion by combining datasets. Imagine you have multiple runs from the same sample, you can simply enhance your resolution by using a stacked alignment. You can tell FlaiMapper to use multiple alignments and it simply reads through these alignments as if they were one alignment. So, if you provide multiple input files you will get only one output file based on the concatenated data. If you want to get **individual outputs for any of your samples**, you have to **run FlaiMapper separately on each sample!**
 
 The last argument of FlaiMapper is simply a 1-to-many argument. You can run FlaiMapper on multiple files by separating all desired files with a space:
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:280px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: -moz-calc(100% - 16px);width: -webkit-calc(100% - 16px);width: calc(100% - 16px);text-align:left;height:280px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>flaimapper \
-    -f 1 \
-    -o output/FlaiMapper/SRP002175/01_output_flaimapper.txt \
-    -m share/annotations/ncRNA_annotation/ncrnadb09.gtf \
-    -r share/annotations/ncRNA_annotation/ncrnadb09.fasta \
-       share/small_RNA-seq_alignments/SRP002175/SRR038852.bam \
-       share/small_RNA-seq_alignments/SRP002175/SRR038853.bam \
-       share/small_RNA-seq_alignments/SRP002175/SRR038854.bam \
-       share/small_RNA-seq_alignments/SRP002175/SRR038855.bam \
-       share/small_RNA-seq_alignments/SRP002175/SRR038856.bam \
-       share/small_RNA-seq_alignments/SRP002175/SRR038857.bam \
-       share/small_RNA-seq_alignments/SRP002175/SRR038858.bam \
-       share/small_RNA-seq_alignments/SRP002175/SRR038859.bam \
-       share/small_RNA-seq_alignments/SRP002175/SRR038860.bam \
-       share/small_RNA-seq_alignments/SRP002175/SRR038861.bam \
-       share/small_RNA-seq_alignments/SRP002175/SRR038862.bam \
-       share/small_RNA-seq_alignments/SRP002175/SRR038863.bam</TEXTAREA>
+	flaimapper \
+	-f 1 \
+	-o output/FlaiMapper/SRP002175/01_output_flaimapper.txt \
+	-m share/annotations/ncRNA_annotation/ncrnadb09.gtf \
+	-r share/annotations/ncRNA_annotation/ncrnadb09.fasta \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038852.bam \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038853.bam \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038854.bam \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038855.bam \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038856.bam \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038857.bam \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038858.bam \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038859.bam \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038860.bam \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038861.bam \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038862.bam \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038863.bam
 
-<TEXTAREA DISABLED='disabled' ROWS=1 STYLE='width: 16px;text-align:right;height:250px;border-right:none;resize: none;color:#75507b;font-family: "DejaVu Sans Mono";' READONLY='readonly'>$</TEXTAREA><TEXTAREA ROWS=1 DISABLED='disabled' READONLY='readonly' STYLE='width: -moz-calc(100% - 16px);width: -webkit-calc(100% - 16px);width: calc(100% - 16px);text-align:left;height:250px;border-left:none;resize: none;font-family: "DejaVu Sans Mono";' WRAP='hard'>flaimapper-sslm \
-    -f 1 \
-    -o output/FlaiMapper/SRP002175/01_output_flaimapper.txt \
-       share/small_RNA-seq_alignments/SRP002175/SRR038852 \
-       share/small_RNA-seq_alignments/SRP002175/SRR038853 \
-       share/small_RNA-seq_alignments/SRP002175/SRR038854 \
-       share/small_RNA-seq_alignments/SRP002175/SRR038855 \
-       share/small_RNA-seq_alignments/SRP002175/SRR038856 \
-       share/small_RNA-seq_alignments/SRP002175/SRR038857 \
-       share/small_RNA-seq_alignments/SRP002175/SRR038858 \
-       share/small_RNA-seq_alignments/SRP002175/SRR038859 \
-       share/small_RNA-seq_alignments/SRP002175/SRR038860 \
-       share/small_RNA-seq_alignments/SRP002175/SRR038861 \
-       share/small_RNA-seq_alignments/SRP002175/SRR038862 \
-       share/small_RNA-seq_alignments/SRP002175/SRR038863</TEXTAREA>
+	flaimapper-sslm \
+	-f 1 \
+	-o output/FlaiMapper/SRP002175/01_output_flaimapper.txt \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038852 \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038853 \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038854 \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038855 \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038856 \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038857 \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038858 \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038859 \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038860 \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038861 \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038862 \
+	   share/small_RNA-seq_alignments/SRP002175/SRR038863
 
 Remark that the backslashes are used to continue at the next line and can be removed when the command is written on a single line.
 
-### 5. Output: formats
+### Output: formats
 
 FlaiMapper can export results into the following formats:
 
