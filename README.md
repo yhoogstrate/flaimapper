@@ -144,7 +144,7 @@ If your reference consists of mature ncRNAs or you are sure you don't take resul
 *	NovoAlign (<FONT COLOR='red'>commercial</FONT>): [http://www.novocraft.com/](http://www.novocraft.com/)
 *	CLC Bio (miRNA-seq module; <FONT COLOR='red'>commercial</FONT>):	 [http://www.clcbio.com/](http://www.clcbio.com/)
 	*	Although we have used CLC for ouranalysis we **advise you not to use it** prior to FlaiMapper. The export function to SAM/BAM file aggregates all reads with an identical sequence. This aggregation cannot be undone and affects the peak-detection of FlaiMapper tramendously. We have solved this issue by writing a converter from CLC's tabular output into the SSLM format. 
-	Upon this SSLM format we wrote a separate coverter that at its turn is able to convert SSLM to BAM. To convert CLC's "*Annotated*" tabular files to BAM, export the "*Annotated*" tables and run the following commands:
+	Upon this SSLM format we wrote a separate coverter that at its turn is able to convert SSLM to BAM. To convert CLC's '*Annotated*' tabular files to BAM, export the '*Annotated*' tables and run the following commands:
 
 			clc2sslm "clc_table.txt" "output_sslm"
 		
@@ -232,11 +232,11 @@ From this follows that you can find the version of your installed flaimapper wit
 
 	flaimapper-sslm --version
 
-The "<CODE>\-\-verbose</CODE>" and "<CODE>\-\-quiet</CODE>" arguments change the level of verbosity. If "<CODE>\-\-verbose</CODE>" is enabled, FlaiMapper will give more details about progress.
+The '<CODE>\-\-verbose</CODE>' and '<CODE>\-\-quiet</CODE>' arguments change the level of verbosity. If '<CODE>\-\-verbose</CODE>' is enabled, FlaiMapper will give more details about progress.
 
 ### Input: BAM
 
-The FlaiMapper binary that corresponds to BAM files is called "*flaimapper*" and can be executed as follows:
+The FlaiMapper binary that corresponds to BAM files is called '*flaimapper*' and can be executed as follows:
 
 For alignment **to reference genomes (e.g. hg19):**
 
@@ -267,7 +267,7 @@ It is very important to understand this, because the reference sequences may hav
  - In case you <U>align to a reference genome</U> (e.g. hg19), each *Reference sequence* represents a chromsome (or a contig). Within this chromosome, multiple ncRNAs can be located.
  - In case you <U>align to ncRNAdb09</U>, each *Reference sequence* represents exactly one mature ncRNA.
 
-The consequence of this is that FlaiMapper must know where in which Reference sequence the ncRNAs are located. In FlaiMapper these so called MASK locations are given as GTF/GFF files with the "<CODE>\-m</CODE>" or "<CODE>\-\-mask</CODE>" argument. For alignment to reference genome hg19, you have to provide the following argument:
+The consequence of this is that FlaiMapper must know where in which Reference sequence the ncRNAs are located. In FlaiMapper these so called MASK locations are given as GTF/GFF files with the '<CODE>\-m</CODE>' or '<CODE>\-\-mask</CODE>' argument. For alignment to reference genome hg19, you have to provide the following argument:
 
 	flaimapper -m ncrnadb09_hg19.gtf [...]
 
@@ -289,7 +289,7 @@ Currently we serve the ncRNAdb09 MASK as a GTF/GFF file for the following refere
 
 In contrast to formats that only contrain genomic coordines, like BED and GTF, the tabular output formats and GenBank also provide the fragments sequences.
 It is important to understand is that within the BAM/SAM format no sequences of the reference genome are stored. Therefore it is not possible (feasible) to extract the sequence of a fragment from a BAM file.
-To ensure FlaiMapper has access to the reference sequence(s), you can provide the reference genome as a single indexed FASTA file using the "<CODE>\-\-fasta</CODE>" argument as follows:
+To ensure FlaiMapper has access to the reference sequence(s), you can provide the reference genome as a single indexed FASTA file using the '<CODE>\-\-fasta</CODE>' argument as follows:
 
 	flaimapper -r ncrnadb09.fa [...]
 
@@ -301,7 +301,7 @@ For ncRNAdb09, the FASTA file (and corresponding index) are available at the fol
 
 [ncRNAdb09\_with\_tRNAs\_and\_Pseudogenes\_\_21\_oct\_2011\_\_hg19.fasta.fai](https://raw.github.com/yhoogstrate/flaimapper/master/share/annotations/ncRNA\_annotation/ncRNA\_annotation/ncRNAdb09\_with\_tRNAs\_and\_Pseudogenes\_\_21\_oct\_2011\_\_hg19.fasta.fai)
 
-Besides the FASTA file, you need the FASTA file to have a <U>corresponding index file</U> under the name "*<prefix>.fa.fai*".
+Besides the FASTA file, you need the FASTA file to have a <U>corresponding index file</U> under the name '*<prefix>.fa.fai*'.
 
 *We don't provide any other reference genome than ncRNAdb09.*
 
@@ -327,13 +327,13 @@ The directory structure of an SSLM experiment is as follows:
 	    ├── file105.fa
 	    └── file106.fa
 
-The _idreable.txt_ is a tab-delimted file and links the name of a ncRNA to its alignment (as a "validated/*.fa" file). The _idreadable.txt_ has a syntax comparable to:
+The _idreable.txt_ is a tab-delimted file and links the name of a ncRNA to its alignment (as a 'validated/*.fa' file). The _idreadable.txt_ has a syntax comparable to:
 
 	sequence  »  filename
 	>NAME=TRNAValAAC&LOCI=[chr1:180184276-180184348:strand=-]&SOURCE=UCSC&SOURCE-ACCESSION=chr1.tRNA63-ValAAC&GENOME=hg19  »  file100
 	>HGNC=38236&HUGO-Symbol=MIR3198-1&HUGO-Name=microRNA_3198-1&LOCI=[chr22:18246936-18247035:strand=-]&SOURCE=RefSeq&SOURCE-ACCESSION=NR_036168&GENOME=hg19  »  file101
 
-An individual alignment file in the FASTA (_*.fa_) format corresponds to an alignment of one ncRNA sequence, is located in a directory valled "**validated**" and has a sytax comparable to:
+An individual alignment file in the FASTA (_*.fa_) format corresponds to an alignment of one ncRNA sequence, is located in a directory valled '**validated**' and has a sytax comparable to:
 
 	>NAME=TRNAVALAAC&LOCI=[CHR1:180184276-180184348:STRAND=-]&SOURCE=UCSC&SOURCE-ACCESSION=CHR1.TRNA63-VALAAC&GENOME=HG19
 	GTTTCCATAGTGTACTGGTTATCACATTCACCTAACACGCGAAAGGTCCTTGGTTTGAAACCAGGCAGAAACACCA
@@ -344,17 +344,17 @@ An individual alignment file in the FASTA (_*.fa_) format corresponds to an alig
 	>ReadID#3_GTTTCCATAGTGTAGTGGTTAT_HITS6
 	GTTTCCATAGTGTAGTGGTTAT------------------------------------------------------
 
-The "<CODE>_hits</CODE>" suffix is an indicator for the number of indentical copies of the read.
+The '<CODE>_hits</CODE>' suffix is an indicator for the number of indentical copies of the read.
 
 To run flaimapper using SSLM data, we provide the paths of the directories that contain the SSLM data.
-In the article experiment "*[SRP006788](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788)*" was analysed.
-To analyse 1 of its 6 SSLM experiments "*[SRR207111_HeLa18-30](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788/SRR207111_HeLa18-30)*", we run FlaiMapper (SSLM) as follows:
+In the article experiment '*[SRP006788](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788)*' was analysed.
+To analyse 1 of its 6 SSLM experiments '*[SRR207111_HeLa18-30](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788/SRR207111_HeLa18-30)*', we run FlaiMapper (SSLM) as follows:
 
 	flaimapper-sslm \
 	    -o ../output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt \
 	    ../share/small_RNA-seq_alignments/SRP006788/SRR207111_HeLa18-30
 
-FlaiMapper will export the results as table into "*[../output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt](https://github.com/yhoogstrate/flaimapper/raw/master/output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt)*".
+FlaiMapper will export the results as table into '*[../output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt](https://github.com/yhoogstrate/flaimapper/raw/master/output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt)*'.
 
 *The SSLM version of FlaiMapper doesn't support entire reference genome alignment.*
 
@@ -413,18 +413,18 @@ The implementation of the following formats is under development:
 - BED
 - GTF/GFF
 
-The output format can be chosen with the "<CODE>\-f</CODE>" or the "<CODE>\-\-format</CODE>" argument, where the following argument have the following meaning:
+The output format can be chosen with the '<CODE>\-f</CODE>' or the '<CODE>\-\-format</CODE>' argument, where the following argument have the following meaning:
 
 - <CODE>\-f 1</CODE>&nbsp; &nbsp; &nbsp; &nbsp; Tabular #1: <CODE>Fragment&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Precursor&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-start&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-stop&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Sequence&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Corresponding-reads</CODE>
 - <CODE>\-f 2</CODE>&nbsp; &nbsp; &nbsp; &nbsp; Tabular #2: <CODE>Precursor&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Curated&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-1-start&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-1-stop&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-1-sequence&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-2-...</CODE>
 - <CODE>\-f 3</CODE>&nbsp; &nbsp; &nbsp; &nbsp; GenBank
 
-The location of the output is defined with the "<CODE>\-o</CODE>" or "<CODE>\-\-output</CODE>" argument. If the argument is left empty or equal to "<CODE>\-</CODE>", FlaiMapper will write directly to stdout.
+The location of the output is defined with the '<CODE>\-o</CODE>' or '<CODE>\-\-output</CODE>' argument. If the argument is left empty or equal to '<CODE>\-</CODE>', FlaiMapper will write directly to stdout.
 
 ## Reproduce article data
 
-All documents used for the publication can be (re-)generated by running the scripts in the '[../scripts](https://github.com/yhoogstrate/flaimapper/tree/master/scripts/)' directory.
-The master script "[../scripts/analysis.sh](https://github.com/yhoogstrate/flaimapper/blob/master/scripts/analysis.sh)" should run all analysis sequentially and make the directory structure within FlaiMapper's "[../output](https://github.com/yhoogstrate/flaimapper/tree/master/output)" directory.
+All documents used for the publication can be (re-)generated by running the scripts in the '*[../scripts](https://github.com/yhoogstrate/flaimapper/tree/master/scripts/)*' directory.
+The master script '*[../scripts/analysis.sh](https://github.com/yhoogstrate/flaimapper/blob/master/scripts/analysis.sh)*' should run all analysis sequentially and make the directory structure within FlaiMapper's '*[../output](https://github.com/yhoogstrate/flaimapper/tree/master/output)*' directory.
 
 ## Authors & Citing
 
