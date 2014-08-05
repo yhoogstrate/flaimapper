@@ -238,15 +238,16 @@ The "<CODE>\-\-verbose</CODE>" and "<CODE>\-\-quiet</CODE>" arguments change the
 
 The FlaiMapper binary that corresponds to BAM files is called "*flaimapper*" and can be executed as follows:
 
-- For alignment to reference genomes (e.g. hg19):
+For alignment **to reference genomes (e.g. hg19):**
 
 	flaimapper \
-	    \-m ncrnadb09_hg19.gtf \
-	    \-r hg19_full.fasta \
+	    -m ncrnadb09_hg19.gtf \
+	    -r hg19_full.fasta \
 	    -o results_flaimapper.tabular.txt \
 	    alignment_01.bam
 
-- For alignment to ncRNAdb09:
+For alignment **to ncRNAdb09:**
+
 
 	flaimapper \
 	    -m ncrnadb09.gtf \
