@@ -11,7 +11,7 @@
 
 - [Download & Installation](#download--installation)
     - [Install dependencies](#install-dependencies)
-    - [Download-FlaiMapper](#download-flaimapper)
+    - [Download FlaiMapper](#download-flaimapper)
         - [Latest version from GitHub](#latest-version-from-github)
         - [Read & agree with GPL3 free software license](#read--agree-with-gpl3-free-software-license)
     - [Compile & Install](#compile--install)
