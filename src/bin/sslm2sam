@@ -46,7 +46,7 @@ from flaimapper.utils import parse_gff
 def main():
 	"""
 	This program converts the alignments of the used format used in the
-	article (SSLM) to BED format.
+	article (SSLM) to the SAM format.
 	"""
 	parser = argparse.ArgumentParser()
 	
