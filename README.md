@@ -22,7 +22,8 @@
          - [Full genome alignment](#full-genome-alignment)
          - [ncRNAdb09 alignment](#ncrnadb09-alignment)
          - [Combination](#combination)
-    - [Choose-aligner](#choose-aligner)
+    - [Trim adapters](#trim-adapters)
+    - [Choose aligner](#choose-aligner)
          - [Full genome alignment](#full-genome-alignment-1)
          - [ncRNAdb09 alignment](#ncrnadb09-alignment-1)
     - [Alignment indexing](#alignment-indexing)
@@ -120,9 +121,18 @@ In the first phase, align to targeted regions withing the genome (the ncRNAdb09 
 *	Pro's: you solve the issues addressed above.
 *	Con's: the alignment will take more time the and methodology is more complex which will require advanced scripting.
 
+### Trim adapters
+
+Small RNA-Seq protocols usually provide reads that are contaminated with so called adapter sequences. These sequences were manually added in the library during preparation. There are several tools that can remove them. Please be aware that the adapters can be specific per protocol or machine. The following tools can be used to remove adapters:
+
+*	CLC Bio (<FONT COLOR='red'>commercial</FONT>):	[http://www.clcbio.com/](http://www.clcbio.com/)
+	*	Has a list of commonly used adapters as preset.
+*	FASTX toolkit:	[http://hannonlab.cshl.edu/fastx_toolkit/](http://hannonlab.cshl.edu/fastx_toolkit/)
+*	Scythe: [https://github.com/vsbuffalo/scythe](https://github.com/vsbuffalo/scythe)
+
 ### Choose aligner
 
-The main complexity in RNA-Seq is splicing. There are several widely used free alignment programs for RNA-Seq. We are (at the moment) not aware of splicing events in ncRNAs other than tRNAs. The splice junctions in tRNAs are small. Therefore, if you align reads to pre-tRNAs, you want your aligner to understand splicing. If you want to use a non-splicing-aware aligner that is not aware of splicing, you want your introns to be removed prior to alignment. If your not focussing on tRNAs at all, you also don't need your aligner to be aware of splicing.
+The main complexity in RNA-Seq is splicing. There are several widely used free alignment programs for RNA-Seq. The same principle holds for small RNA-Seq, However, we are (at the moment) not aware of splicing events in ncRNAs other than tRNAs. The splice junctions in tRNAs are small (~10bp) but might be too long to be aligned using classicial alignment without adjusted settings. Therefore, if you want to align reads to pre-tRNAs, you want your aligner to understand splicing. Otherwise, if you want to use a 'classical' (non-splicing-aware) aligner, you want your introns to be removed prior to alignment. If your not focussing on tRNAs at all, you probably also don't need your aligner to be aware of splicing.
 
 #### Full genome alignment
 
@@ -142,13 +152,12 @@ If your reference consists of mature ncRNAs or you are sure you don't take resul
 *	bowtie: [http://bowtie-bio.sourceforge.net/bowtie2/index.shtml](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml)
 *	SubRead: [http://subread.sourceforge.net/](http://subread.sourceforge.net/)
 *	NovoAlign (<FONT COLOR='red'>commercial</FONT>): [http://www.novocraft.com/](http://www.novocraft.com/)
-*	CLC Bio (miRNA-seq module; <FONT COLOR='red'>commercial</FONT>):	 [http://www.clcbio.com/](http://www.clcbio.com/)
-	*	Although we have used CLC for ouranalysis we **advise you not to use it** prior to FlaiMapper. The export function to SAM/BAM file aggregates all reads with an identical sequence. This aggregation cannot be undone and affects the peak-detection of FlaiMapper tramendously. We have solved this issue by writing a converter from CLC's tabular output into the SSLM format. 
-	Upon this SSLM format we wrote a separate coverter that at its turn is able to convert SSLM to BAM. To convert CLC's '*Annotated*' tabular files to BAM, export the '*Annotated*' tables and run the following commands:
+*	CLC Bio (small RNA-Seq module; <FONT COLOR='red'>commercial</FONT>):	 [http://www.clcbio.com/](http://www.clcbio.com/)
+	*	Although we have used CLC for our analysis, we **advise you not to use it** prior to FlaiMapper. Exporting to SAM/BAM file aggregates all reads with an identical sequence and exporting the tables doesn't provide the relative positions of the aligned reads. The SAM/BAM aggregation cannot be undone and affects the peak-detection of FlaiMapper tramendously. We have solved this issue by doing a first alignment round in CLC, to link the reads to their corresponding pre-cursor ncRNAs. We then apply a second alignment using MUSCLE (http://nar.oxfordjournals.org/content/32/5/1792.long), wrapped by a program called SSLM, to find the exact coordinates of the reads linked to their precursor. We wrote a program to converts the SSLM format into BAM to ensure compatibility with other tools. To convert MUSCLE's output as wrapped by SSLM (http://nar.oxfordjournals.org/content/32/5/1792.long) into BAM proceed with the following command(s):
 
-			clc2sslm "clc_table.txt" "output_sslm"
+			sslm2sam "output_sslm" -m ncrnadb09.gtf -o output_unsorted.sam
 		
-			sslm2bam "output_sslm" output_unsorted.bam
+			samtools view -h -bS output_unsorted.sam > output_unsorted.bam
 		
 			samtools sort output_unsorted.bam output
 		
@@ -247,7 +256,6 @@ For alignment **to reference genomes (e.g. hg19):**
 	    alignment_01.bam
 
 For alignment **to ncRNAdb09:**
-
 
 	flaimapper \
 	    -m ncrnadb09.gtf \
@@ -351,6 +359,8 @@ In the article experiment '*[SRP006788](https://github.com/yhoogstrate/flaimappe
 To analyse 1 of its 6 SSLM experiments '*[SRR207111_HeLa18-30](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788/SRR207111_HeLa18-30)*', we run FlaiMapper (SSLM) as follows:
 
 	flaimapper-sslm \
+	    -m share/annotations/ncRNA_annotation/ncrnadb09.gtf
+	    -r share/annotations/ncRNA_annotation/ncrnadb09.fa
 	    -o output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt \
 	    share/small_RNA-seq_alignments/SRP006788/SRR207111_HeLa18-30
 
@@ -368,7 +378,7 @@ The last argument of FlaiMapper is simply a 1-to-many argument. You can run Flai
 	    -f 1 \
 	    -o output/FlaiMapper/SRP002175/01_output_flaimapper.txt \
 	    -m share/annotations/ncRNA_annotation/ncrnadb09.gtf \
-	    -r share/annotations/ncRNA_annotation/ncrnadb09.fasta \
+	    -r share/annotations/ncRNA_annotation/ncrnadb09.fa \
 	        share/small_RNA-seq_alignments/SRP002175/SRR038852.bam \
 	        share/small_RNA-seq_alignments/SRP002175/SRR038853.bam \
 	        share/small_RNA-seq_alignments/SRP002175/SRR038854.bam \
@@ -384,6 +394,8 @@ The last argument of FlaiMapper is simply a 1-to-many argument. You can run Flai
 
 	flaimapper-sslm \
 	    -f 1 \
+	    -m share/annotations/ncRNA_annotation/ncrnadb09.gtf \
+	    -r share/annotations/ncRNA_annotation/ncrnadb09.fa \
 	    -o output/FlaiMapper/SRP002175/01_output_flaimapper.txt \
 	        share/small_RNA-seq_alignments/SRP002175/SRR038852 \
 	        share/small_RNA-seq_alignments/SRP002175/SRR038853 \
