@@ -315,14 +315,14 @@ Besides the FASTA file, you need the FASTA file to have a <U>corresponding index
 
 ### Input: SSLM
 
-The SSLM format is the output format of Short Sequence Locaiton Mapper:
+**<FONT COLOR="red">The SSLM format is deprecated. If possible, proceed with BAM/SAM files.</FONT>**
+
+The SSLM format is the output format of Short Sequence Location Mapper:
 
 [http://www.gatcplatform.nl/SSLM/index.html](http://www.gatcplatform.nl/SSLM/index.html)
 
-Earlier analysis made use of SSLM, and we proceeded with its format because it provided all neccesairy information. Remark that it includes both the alignment as well as reference information (in contrast to BAM).
-Furher analysis made FlaiMapper evolve into a tool, but it was still specific for SSLM data. Since the structure of SSLM is sub-optimal and non-standerd, support for the BAM format was implemented.
-
-The directory structure of an SSLM experiment is as follows:
+Earlier analysis made use of the ncRNA analysis program SSLM which wraps the aligner MUSCLE ([http://dx.doi.org/10.1093/nar/gkh340](http://dx.doi.org/10.1093/nar/gkh340)). We initially proceeded with SSLM's corresponding data format, because it provided all neccesairy information. Remark that it includes both the alignment and the reference sequence (in contrast to BAM).
+Furher analysis made FlaiMapper evolve into a tool, still specific for SSLM data. Because the BAM and SAM format have become the de facto standards for alignment data it was inevitable to add support for the BAM/SAM format. Because we still want to keep our software backwards compatible with the initial analysis (in order to reproduce the results), we also want to keep the SSLM format supported. The directory structure of an SSLM experiment is as follows:
 
 	.
 	├── idreadable.txt
