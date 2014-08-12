@@ -10,7 +10,7 @@
  fragments primarily by peak-detection on the start and  end position
  densities followed by filtering and a reconstruction processes.
  Copyright (C) 2011-2014:
- - MSc. Youri Hoogstrate
+ - Youri Hoogstrate
  - Elena S. Martens-Uzunova
  - Guido Jenster
  
@@ -37,72 +37,55 @@
 """
 
 
-__version_info__ = ('1', '0', '0')
-__version__ = '.'.join(__version_info__)
-__author__ = 'Youri Hoogstrate'
-__homepage__ = 'https://github.com/yhoogstrate/flaimapper'
-__license__ = 'GPL3'
-
-
-
 import os,re,random,operator,argparse,sys
 
 
-
-from FragmentContainer import FragmentContainer
-from FragmentFinder import FragmentFinder
-from AlignmentParser import AlignmentParser
-from AlignmentDirectory import AlignmentDirectory
-
+from flaimapper.BAMParser import BAMParser
+from flaimapper.SSLMParser import SSLMParser
+from flaimapper.FragmentContainer import FragmentContainer
+from flaimapper.FragmentFinder import FragmentFinder
 
 
 class FlaiMapperObject(FragmentContainer):
-	def __init__(self,verbosity):
+	def __init__(self,input_format,verbosity):
 		self.verbosity = verbosity
 		
-		self.alignment_directories = []
-		self.alignment_directories_indexed = {}
+		self.input_format = input_format
+		self.alignments = []
 		
 		self.sequences = {}
 		
 		if(self.verbosity == "verbose"):
 			print " - Initiated FlaiMapper Object"
 	
-	def add_alignment_directory(self,alignment_directory):
-		if(alignment_directory.__class__.__name__ != AlignmentDirectory.__name__):
-			raise TypeError, "alignment_directory is not of class type " + AlignmentDirectory.__name__ + " but of class type: " + alignment_directory.__class__.__name__
-		else:
-			self.alignment_directories.append(alignment_directory)
+	def add_alignment(self,alignment_file):
+		self.alignments.append(alignment_file)
 	
-	def index(self):
-		if(self.verbosity == "verbose"):
-			print " - Indexing alignment files"
-		
-		for alignment_directory in self.alignment_directories:
-			if(self.verbosity == "verbose"):
-				print "   - Indexing "+alignment_directory.path
-			for ncRNA in alignment_directory.index.keys():
-				if(not self.alignment_directories_indexed.has_key(ncRNA)):
-					self.alignment_directories_indexed[ncRNA] = []
-				self.alignment_directories_indexed[ncRNA].append(alignment_directory.index[ncRNA])
-	
-	def run(self):
-		self.index()
-		
+	def run(self,regions,fasta_file):
 		if(self.verbosity == "verbose"):
 			print " - Running fragment detection"
 		
-		for ncRNA in self.alignment_directories_indexed.keys():
+		self.fasta_file = fasta_file
+		
+		for region in regions:
 			if(self.verbosity == "verbose"):
-				print "   - Analysing: "+ncRNA
+				print "   - Masked region: "+region[0]+":"+str(region[1])+"-"+str(region[2])
+				print "     * Acquiring statistics"
 			
-			aligned_reads = AlignmentParser(ncRNA,self.alignment_directories_indexed[ncRNA],self.verbosity)
+			if(self.input_format == 'bam'):
+				aligned_reads = BAMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
+			elif(self.input_format == 'sslm'):
+				aligned_reads = SSLMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
+			
 			aligned_reads.parse_stats()
 			
-			predicted_fragments = FragmentFinder(ncRNA,aligned_reads)#,True)
+			if(self.verbosity == "verbose"):
+				print "     * Detecting fragments"
+			
+			predicted_fragments = FragmentFinder(region[0],aligned_reads)
 			predicted_fragments.run()
 			
-			self.add_fragments(predicted_fragments)
+			self.add_fragments(predicted_fragments,self.fasta_file)
 	
 	def count_reads_per_region_custom_table(self,regions,links,all_predicted_fragments,reference_offset=0):
 		"""
@@ -243,11 +226,10 @@ class FlaiMapperObject(FragmentContainer):
 		
 		return [err_5p,err_3p]
 	
-	def count_reads_per_region(self,regions,links,reference_offset=0):
+	def count_reads_per_region(self,regions,links,masked_regions,reference_offset=0):
 		"""
 		All sequences in our library of ncRNAs have been extended with 10 bases.
 		"""
-		self.index()
 		
 		stats_table = {}
 		stats_table['experimental']     = {'error_5p':{"<-5":0,-5:0,-4:0,-3:0,-2:0,-1:0,0:0,1:0,2:0,3:0,4:0,5:0,">5":0},'error_3p':{"<-5":0,-5:0,-4:0,-3:0,-2:0,-1:0,0:0,1:0,2:0,3:0,4:0,5:0,">5":0},'predicted':0,'not_predicted_no_reads':0,'not_predicted_with_reads':0}
@@ -259,19 +241,25 @@ class FlaiMapperObject(FragmentContainer):
 		i = 0
 		j = 0
 		
-		for ncRNA in self.alignment_directories_indexed.keys():
+		#for ncRNA in self.alignment_directories_indexed.keys():
+		for region in masked_regions:
+			ncRNA = region[0]
 			if(links.has_key(ncRNA)):
 				if(self.verbosity == "verbose"):
 					print "   - Analysing: "+ncRNA
 				
 				annotations = regions.index[links[ncRNA]]
 				
-				aligned_reads = AlignmentParser(ncRNA,self.alignment_directories_indexed[ncRNA],self.verbosity)
-				aligned_reads.count_reads_per_region(annotations)
+				if(self.input_format == 'bam'):
+					aligned_reads = BAMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
+				elif(self.input_format == 'sslm'):
+					aligned_reads = SSLMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
+				
 				aligned_reads.parse_stats()
 				
 				predicted_fragments_obj = FragmentFinder(ncRNA,aligned_reads)
 				predicted_fragments_obj.run()
+				
 				predicted_fragments = predicted_fragments_obj.getResults()
 				
 				i += 1
@@ -325,41 +313,48 @@ class FlaiMapperObject(FragmentContainer):
 		
 		return stats_table
 	
-	def count_error_with_intensity(self,regions,links,reference_offset=0):
+	def count_error_with_intensity(self,regions,links,masked_regions,reference_offset=0):
 		"""
 		All sequences in our library of ncRNAs have been extended with 10 bases.
 		"""
-		self.index()
-		
 		out = []
 		
 		if(self.verbosity == "verbose"):
 			print " - Running fragment detection"
 		
-		for ncRNA in self.alignment_directories_indexed.keys():
+		
+		
+		for region in masked_regions:
+			ncRNA = region[0]
 			if(links.has_key(ncRNA)):
 				if(self.verbosity == "verbose"):
 					print "   - Analysing: "+ncRNA
 				
 				annotations = regions.index[links[ncRNA]]
 				
-				aligned_reads = AlignmentParser(ncRNA,self.alignment_directories_indexed[ncRNA],self.verbosity)
-				aligned_reads.count_reads_per_region(annotations)
+				if(self.input_format == 'bam'):
+					aligned_reads = BAMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
+				elif(self.input_format == 'sslm'):
+					aligned_reads = SSLMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
+				
 				aligned_reads.parse_stats()
 				
 				predicted_fragments_obj = FragmentFinder(ncRNA,aligned_reads)
 				predicted_fragments_obj.run()
 				predicted_fragments = predicted_fragments_obj.getResults()
 				
-				for annotation in annotations.fragments:
-					closest = self.find_closest_overlapping_fragment(annotation,predicted_fragments,reference_offset)
+				aligned_reads.count_reads_per_region(predicted_fragments_obj.getResults())
+				
+				for mirna_annotation in annotations.fragments:
+					closest_fragment = self.find_closest_overlapping_fragment(mirna_annotation,predicted_fragments,reference_offset)
 					
-					if(closest):
-						errors = self.find_errors(annotation,closest)
+					if(closest_fragment):
+						errors = self.find_errors(mirna_annotation,[(closest_fragment.start - reference_offset), (closest_fragment.stop - reference_offset)])
 						err_5p = errors[0]
 						err_3p = errors[1]
 						
-						out.append({'5p':[closest[2],err_5p],'3p':[closest[3],err_3p]})
+						#out.append({'5p':[closest_fragment[2],err_5p],'3p':[closest_fragment[3],err_3p]})
+						out.append({'5p':[closest_fragment.supporting_reads_start,err_5p],'3p':[closest_fragment.supporting_reads_stop,err_3p],'coverage':closest_fragment.supporting_reads})
 		
 		return out
 	
@@ -368,16 +363,12 @@ class FlaiMapperObject(FragmentContainer):
 		closest_overlapping_bases = 0
 		
 		for predicted_fragment in predicted_fragments:
-			annotated = [annotated_fragment.start,annotated_fragment.stop]
-			if(predicted_fragment.has_key('start_supporting_reads')):
-				predicted = [(predicted_fragment["start"] - reference_offset), (predicted_fragment["stop"] - reference_offset),predicted_fragment['start_supporting_reads'],predicted_fragment['stop_supporting_reads']]
-			else:
-				predicted = [(predicted_fragment["start"] - reference_offset), (predicted_fragment["stop"] - reference_offset),0,0]
+			#predicted = [(predicted_fragment["start"] - reference_offset), (predicted_fragment["stop"] - reference_offset),predicted_fragment.start_supporting_reads,predicted_fragment.stop_supporting_reads]
 			
-			overlap = self.find_overlapping_bases(annotated,predicted)
+			overlap = self.find_overlapping_bases([annotated_fragment.start,annotated_fragment.stop],[(predicted_fragment["start"] - reference_offset), (predicted_fragment["stop"] - reference_offset)])
 			if(overlap > 0 and overlap > closest_overlapping_bases):
 				closest_overlapping_bases = overlap
-				closest = predicted
+				closest = predicted_fragment
 		
 		return closest
 	
@@ -387,21 +378,101 @@ class FlaiMapperObject(FragmentContainer):
 		else:
 			return fragment_1[1] - fragment_2[0]
 	
-	"""
-	Example:
-		   [ miRNA ]
-		[ fragment* ]
-	
-	mirna: 4,12
-	fragment: 0,14
-	
-	error_5p = 0 - 4 = -4
-	error_3p = 13 - 12 = 1
-	
-	"""
 	def find_errors(self,annotated_fragment,predicted_fragment):
+		"""
+		Example:
+			   [ miRNA ]
+			[ fragment* ]
+		
+		mirna: 4,12
+		fragment: 0,14
+		
+		error_5p = 0 - 4 = -4
+		error_3p = 13 - 12 = 1
+		
+		"""
 		
 		error_5p = predicted_fragment[0] - annotated_fragment.start
 		error_3p = predicted_fragment[1] - annotated_fragment.stop
 		
 		return [error_5p,error_3p]
+	
+	def convert_to_bed(self,regions,output):
+		if(self.verbosity == "verbose"):
+			print "   - Converting to BED: "+output
+		
+		if(output == "-"):
+			fh = sys.stdout
+		else:
+			fh = open(output,"w")
+		
+		i = 0
+		
+		for region in regions:
+			if(self.verbosity == "verbose"):
+				print "   - Masked region: "+region[0]+":"+str(region[1])+"-"+str(region[2])
+			
+			if(self.input_format == 'bam'):
+				aligned_reads = BAMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
+			elif(self.input_format == 'sslm'):
+				aligned_reads = SSLMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
+			
+			for read_stacked in aligned_reads.parse_reads_stacked():
+				read = read_stacked[0]
+				numberofhits = read_stacked[1]
+				
+				if(read.name):
+					fh.write(region[0]+"\t"+str(read.start)+"\t"+str(read.stop)+"\t"+read.name+"\t"+str(numberofhits)+"\t-\n")
+				else:
+					fh.write(region[0]+"\t"+str(read.start)+"\t"+str(read.stop)+"\tunknown_read_"+str(i)+"\t"+str(numberofhits)+"\t-\n")
+					i += 1
+		
+		fh.close()
+	
+	def convert_to_sam(self,regions,output):
+		if(self.verbosity == "verbose"):
+			print "   - Converting to SAM: "+output
+		
+		if(output == "-"):
+			fh = sys.stdout
+		else:
+			fh = open(output,"w")
+		
+		i = 0
+		
+		# 1: write header
+		fh.write("@HD	VN:1.0	SO:unsorted\n")
+		for region in regions:
+			if(self.input_format == 'bam'):
+				aligned_reads = BAMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
+			elif(self.input_format == 'sslm'):
+				aligned_reads = SSLMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
+			
+			iterator = aligned_reads.parse_reads()
+			if(next(iterator,None)):
+				fh.write("@SQ	SN:"+region[0]+"	LN:"+str(region[2] - region[1] + 1)+"\n")
+			
+			del(iterator,aligned_reads)
+		fh.write("@PG	ID:0	PN:manual_conversion_script	VN:0.0\n")
+		
+		# 2: write alignment
+		for region in regions:
+			if(self.verbosity == "verbose"):
+				print "   - Masked region: "+region[0]+":"+str(region[1])+"-"+str(region[2])
+			
+			if(self.input_format == 'bam'):
+				aligned_reads = BAMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
+			elif(self.input_format == 'sslm'):
+				aligned_reads = SSLMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
+			
+			for read in aligned_reads.parse_reads():
+				if(read.name):
+					fh.write(read.name)
+				else:
+					fh.write("unknown_read_"+str(i))
+					i += 1
+				
+				strand = "60"
+				fh.write("\t0\t"+region[0]+"\t"+str(read.start+1)+"\t"+strand+"\t"+str(read.stop - read.start)+"M\t*\t0\t0\t"+read.sequence+"\t*\tNH:i:1\n")
+		
+		fh.close()
