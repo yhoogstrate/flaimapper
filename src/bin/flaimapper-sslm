@@ -10,7 +10,7 @@
  fragments primarily by peak-detection on the start and  end position
  densities followed by filtering and a reconstruction processes.
  Copyright (C) 2011-2014:
- - MSc. Youri Hoogstrate
+ - Youri Hoogstrate
  - Elena S. Martens-Uzunova
  - Guido Jenster
  
@@ -37,50 +37,51 @@
 """
 
 
-__version_info__ = ('1', '0', '0')
-__version__ = '.'.join(__version_info__)
-__author__ = 'Youri Hoogstrate'
-__homepage__ = 'https://github.com/yhoogstrate/flaimapper'
-__license__ = 'GPL3'
+
+import os,re,random,operator,argparse,sys,textwrap,datetime
+import pysam
 
 
+from flaimapper.FragmentContainer import FragmentContainer
+from flaimapper.FlaiMapperObject import FlaiMapperObject
+from flaimapper.utils import parse_gff
 
-import os,re,random,operator,argparse,sys
-
-
-
-from FragmentContainer import FragmentContainer
-from FragmentFinder import FragmentFinder
-from AlignmentParser import AlignmentParser
-from AlignmentDirectory import AlignmentDirectory
-from FlaiMapperObject import FlaiMapperObject
-
-
-
-if __name__ == "__main__":
-	parser = argparse.ArgumentParser()
+def main():
+	parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,epilog="Further details can be found in the manual:\n<https://github.com/yhoogstrate/flaimapper>")
+	
+	import flaimapper
+	parser.add_argument('-V','--version', action='version', version=textwrap.dedent("%(prog)s "+str(flaimapper.__version__)+"\nCopyright (C) 2011-"+str(datetime.datetime.now().year)+" Youri Hoogstrate.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n"))
 	
 	group = parser.add_mutually_exclusive_group()
 	group.add_argument("-v", "--verbose", action="store_true")
-	group.add_argument("-q", "--quiet", action="store_true")
+	group.add_argument("-q", "--quiet", action="store_false")
 	
 	parser.add_argument("-o","--output",help="output filename; '-' for stdout",default="-")
 	parser.add_argument("-f","--format",help="file format of the output: [1: table; per fragment], [2: table; per ncRNA], [3: genbank]",type=int,default=1)
 	
-	parser.add_argument("alignment_directories",nargs='+')
+	parser.add_argument("-m","--mask",required=True,help="GTF/GFF3 mask file (precursors)")
+	parser.add_argument("-r","--fasta",help="Single reference FASTA file (+faid index) containing all genomic reference sequences",default="/home/youri/Dropbox/Article_FlaiMapper/flaimapper_bam/ncRNdb09_with_tRNAs_and_Pseudogenes__21_oct_2011__hg19.fasta")
+	
+	parser.add_argument("alignment_directories",nargs='+',help="SSLM formatted output directories")
 	
 	args = parser.parse_args()
-	args.verbosity = "normal"
-	if(args.verbose == "verbose"):
+	if(args.verbose):
 		args.verbosity = "verbose"
 	elif(args.quiet):
 		args.verbosity = "quiet"
 	
 	
-	
-	flaimapper = FlaiMapperObject(args.verbosity)
+	flaimapper = FlaiMapperObject('sslm',args.verbosity)
 	for alignment_directory in args.alignment_directories:
-		flaimapper.add_alignment_directory(AlignmentDirectory(alignment_directory,args.verbosity))
+		flaimapper.add_alignment(alignment_directory)
 	
-	flaimapper.run()
+	# The genomic regions of the precursor sequence(s).
+	regions = parse_gff(args.mask)
+	fasta_ref = pysam.Fastafile(args.fasta)
+	
+	flaimapper.run(regions,fasta_ref)
 	flaimapper.write(args.format,args.output)
+
+
+if __name__ == "__main__":
+	sys.exit(main())
