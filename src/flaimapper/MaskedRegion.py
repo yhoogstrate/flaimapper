@@ -131,9 +131,10 @@ class MaskedRegion:
 					yield [Read(start,stop,None),index[start][stop]]
 	
 	def get_median(self,numericValues):
-		"""Finds the median of a vector"""
+		"""Finds the median of a vector"""								# @TODO move to utils and rename to 'median()'
 		theValues = sorted(numericValues)
 		count = len(theValues)
+		
 		if count == 0:
 			return None
 		elif count % 2 == 1:
@@ -145,7 +146,7 @@ class MaskedRegion:
 	
 	def count_reads_per_region(self,fragments):							# @TODO change to 'sequencing_depth()
 		for fragment in fragments:
-			fragment.supporting_reads = 0								# empties all reads
+			fragment.supporting_reads = 0
 		
 		for read in self.parse_reads():
 			for fragment in fragments:
