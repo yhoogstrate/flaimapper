@@ -37,7 +37,6 @@
 """
 
 
-
 import os,re,random,operator,argparse,sys
 
 
@@ -46,14 +45,12 @@ from flaimapper.ncRNAfragment import ncRNAfragment
 from flaimapper.MaskedRegion import MaskedRegion
 
 
-
 class SSLMParser(MaskedRegion):
 	"""parseNcRNA is a class that parses the SSLM alignment files.
 	"""
 	def parse_reads(self):
-		"""parse
-		
-		----
+		"""parse the reads from a SSLM (FASTA) file and return each read
+		as an iterator object
 		"""
 		
 		previous_line = ""
