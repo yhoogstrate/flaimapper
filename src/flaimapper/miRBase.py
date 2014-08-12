@@ -10,7 +10,7 @@
  fragments primarily by peak-detection on the start and  end position
  densities followed by filtering and a reconstruction processes.
  Copyright (C) 2011-2014:
- - MSc. Youri Hoogstrate
+ - Youri Hoogstrate
  - Elena S. Martens-Uzunova
  - Guido Jenster
  
@@ -36,14 +36,8 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-
-__version_info__ = ('1', '0', '0')
-__version__ = '.'.join(__version_info__)
-__author__ = 'Youri Hoogstrate'
-__homepage__ = 'https://github.com/yhoogstrate/flaimapper'
-__license__ = 'GPL3'
-
-
+from flaimapper.ncRNA import ncRNA
+from flaimapper.ncRNAfragment import ncRNAfragment
 
 class miRBase:
 	def __init__(self,arg_filename):
@@ -104,7 +98,8 @@ class miRBase:
 						state = 'closed'
 						ncRNAObj = ncRNA(info['name'])
 						for fragment in info['mirs']:
-							fragmentObj = ncRNAfragment(info['seq'][fragment['pos']['start']:fragment['pos']['stop']],fragment['pos']['start'],fragment['pos']['stop'])
+							fragmentObj = ncRNAfragment(fragment['pos']['start'],fragment['pos']['stop'],None)
+							fragmentObj.set_sequence(info['seq'][fragment['pos']['start']:fragment['pos']['stop']])
 							fragmentObj.set_name(fragment['name'])
 							fragmentObj.set_evidence(fragment['evidence'])
 							ncRNAObj.add_fragments(fragmentObj)
@@ -115,46 +110,3 @@ class miRBase:
 	
 	def get_miRNAs(self):
 		return self.mirs
-
-
-
-class ncRNAfragment:
-	def __init__(self,sequence='',start=None,stop=None,chrPos=None):
-		self.sequence = sequence
-		self.start = start
-		self.stop = stop
-		self.chrPos = chrPos
-		self.name = False
-		self.supporting_reads = 0
-		self.evidence = None
-	def get_sequence(self):
-		return self.sequence
-	def set_name(self,name):
-		self.name = name
-	def set_evidence(self,evidence):
-		self.evidence =   evidence
-	def get_name(self):
-		return self.name
-	def add_supporting_reads(self,number):
-		self.supporting_reads += number
-	def get_supporting_reads(self):
-		return self.supporting_reads
-
-
-
-class ncRNA:
-	def __init__(self,name):
-		self.params = {'name':name,'sequence':False,'fasta_header':'unknown','aliases':[]}
-		self.fragments = []
-	def set_parameter(self,param,value):
-		self.params[param] = value
-	def get_parameter(self,param):
-		if(self.params.has_key(param)):
-			return self.params[param]
-		return None
-	def get_name(self):
-		return self.params['name']
-	def add_fragments(self,fragment):
-		self.fragments.append(fragment)
-	def get_fragments(self):
-		return self.fragments
