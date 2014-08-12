@@ -10,7 +10,7 @@
  fragments primarily by peak-detection on the start and  end position
  densities followed by filtering and a reconstruction processes.
  Copyright (C) 2011-2014:
- - MSc. Youri Hoogstrate
+ - Youri Hoogstrate
  - Elena S. Martens-Uzunova
  - Guido Jenster
  
@@ -37,16 +37,9 @@
 """
 
 
-__version_info__ = ('1', '0', '0')
-__version__ = '.'.join(__version_info__)
-__author__ = 'Youri Hoogstrate'
-__homepage__ = 'https://github.com/yhoogstrate/flaimapper'
-__license__ = 'GPL3'
-
-
-
 import os,re,random,operator,argparse,sys
 
+from flaimapper.ncRNAfragment import ncRNAfragment
 
 
 class FragmentFinder:
@@ -63,13 +56,11 @@ class FragmentFinder:
 		self.name = name
 		
 		if(autorun):
-			self.seq = readcount.get_sequence()
-			
 			self.positions = {}
-			self.positions['startPositions'] = readcount.get_start_positions()
-			self.positions['stopPositions'] = readcount.get_stop_postions()
-			self.positions['startAvgLengths'] = readcount.get_start_avg_lengths()
-			self.positions['stopAvgLengths'] = readcount.get_stop_avg_lengths()
+			self.positions['startPositions'] = readcount.start_positions
+			self.positions['stopPositions'] = readcount.stop_positions
+			self.positions['startAvgLengths'] = readcount.start_avg_lengths
+			self.positions['stopAvgLengths'] = readcount.stop_avg_lengths
 			
 			self.peaksStart = False
 			self.peaksStop = False
@@ -78,7 +69,7 @@ class FragmentFinder:
 			self.correctedPeaksStop = False
 			
 			self.run()
-	
+		
 	def findPeaks(self,plist,drop_cutoff=0.1):
 		"""
 		----
@@ -179,8 +170,11 @@ class FragmentFinder:
 		
 		return pnew
 	
-	def findFragments(self,pstart,pstop,pexpectedStart,pexpectedStop,prime_5_ext = 3,prime_3_ext=5):
+	def findFragments(self,pstart,pstop,pexpectedStart,pexpectedStop,prime_5_ext = 3,prime_3_ext=5,genomic_offset_masked_region=0):
 		"""Traceback:
+		
+		genomic_offset_masked_region - imagine your pre-miRNA is starts at position 400.000 in the genome; then your position should be 400.000 + start
+		
 		----
 		@return:
 		@rtype:
@@ -205,14 +199,18 @@ class FragmentFinder:
 					score = pstart[item]*penalty 
 					if(score >= highest):
 						highest = pstart[item]
-						fragment = {'start':item,'stop':pos,'sequence':''}
 						
-						fragment['start_supporting_reads'] = pstart[fragment['start']]
-						fragment['stop_supporting_reads']  = pstop[fragment['stop']]
+						#fragment = {'start':item,'stop':pos,'sequence':None}
+						#fragment['start_supporting_reads'] = pstart[fragment['start']]
+						#fragment['stop_supporting_reads']  = pstop[fragment['stop']]
+						
+						fragment = ncRNAfragment(item,pos,None,genomic_offset_masked_region)
+						fragment.supporting_reads_start = pstart[fragment.start]
+						fragment.supporting_reads_stop = pstop[fragment.stop]
 				
 				if(fragment != False):
 					fragments.append(fragment)
-					del(pstart[fragment['start']])
+					del(pstart[fragment.start])
 					items = []
 		else:															# More stop than start positions
 			pstartSorted = sorted(pstart.iteritems(),key=operator.itemgetter(1))[::-1]
@@ -234,19 +232,29 @@ class FragmentFinder:
 					score = pstop[item]*penalty 
 					if(score >= highest):
 						highest = pstop[item]
-						fragment = {'start':pos,'stop':item,'sequence':''}
 						
-						fragment['start_supporting_reads'] = pstart[fragment['start']]
-						fragment['stop_supporting_reads']  = pstop[fragment['stop']]
+						#fragment = {'start':pos,'stop':item,'sequence':None}
+						#fragment['start_supporting_reads'] = pstart[fragment['start']]
+						#fragment['stop_supporting_reads']  = pstop[fragment['stop']]
+						
+						fragment = ncRNAfragment(pos,item,None,genomic_offset_masked_region)
+						fragment.supporting_reads_start = pstart[fragment.start]
+						fragment.supporting_reads_stop = pstop[fragment.stop]
+				
 				if(fragment != False):
 					fragments.append(fragment)
-					del(pstop[fragment['stop']])
+					del(pstop[fragment.stop])
 					items = []
 		#(counter >= fragment['start']) and (counter < fragment['stop'])
 		
 		for fragment in fragments:
-			fragment['sequence'] = self.seq[fragment['start']:fragment['stop']]
+			#fragment['sequence'] = self.seq[fragment['start']:fragment['stop']]
 			
+			cut5 = prime_5_ext
+			cut3 = prime_3_ext
+			
+			"""
+			@todo fix this:
 			diff = fragment['start']-prime_5_ext
 			cut5 = prime_5_ext
 			if(diff < 0):
@@ -256,8 +264,10 @@ class FragmentFinder:
 			cut3 = prime_3_ext
 			if(diff < 0):
 				cut3 = prime_3_ext + diff
+			"""
 			
-			fragment['extended'] = {'5_prime_cut':cut5,'3_prime_cut':cut3,'5_prime_pos':fragment['start']-cut5,'3_prime_pos':fragment['stop']+cut3,'sequence':self.seq[(fragment['start']-cut5):(fragment['stop']+cut3)]}
+			#fragment['extended'] = {'5_prime_cut':cut5,'3_prime_cut':cut3,'5_prime_pos':fragment['start']-cut5,'3_prime_pos':fragment['stop']+cut3,'sequence':self.seq[(fragment['start']-cut5):(fragment['stop']+cut3)]}
+			fragment.extended = {'5_prime_cut':cut5,'3_prime_cut':cut3,'5_prime_pos':fragment['start']-cut5,'3_prime_pos':fragment.stop+cut3}
 		
 		return fragments
 	
@@ -275,6 +285,7 @@ class FragmentFinder:
 		# Correct / filter noisy peaks
 		self.correctedPeaksStart = self.correctNeighbourPeaks(self.peaksStart)
 		self.correctedPeaksStop = self.correctNeighbourPeaks(self.peaksStop)
+		
 		
 		# Trace start and stop positions together and obtain actual peaks
 		self.results = self.findFragments(self.correctedPeaksStart,self.correctedPeaksStop,self.positions['startAvgLengths'],self.positions['stopAvgLengths'])
