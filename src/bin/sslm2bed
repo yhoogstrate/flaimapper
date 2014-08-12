@@ -10,7 +10,7 @@
  fragments primarily by peak-detection on the start and  end position
  densities followed by filtering and a reconstruction processes.
  Copyright (C) 2011-2014:
- - MSc. Youri Hoogstrate
+ - Youri Hoogstrate
  - Elena S. Martens-Uzunova
  - Guido Jenster
  
@@ -36,47 +36,46 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-
-__version_info__ = ('1', '0', '0')
-__version__ = '.'.join(__version_info__)
-__author__ = 'Youri Hoogstrate'
-__homepage__ = 'https://github.com/yhoogstrate/flaimapper'
-__license__ = 'GPL3'
-
-
-
 import os,re,random,operator,argparse,sys
 
 
 
-from SSLM2BED import SSLM2BED
-from AlignmentDirectory import AlignmentDirectory
+from flaimapper.FlaiMapperObject import FlaiMapperObject
+from flaimapper.utils import parse_gff
 
 
 
-if __name__ == "__main__":
+def main():
 	"""
-	This program converts the alignments of the used format in the
-	article to the BED format.
+	This program converts the alignments of the used format used in the
+	article (SSLM) to BED format.
 	"""
 	parser = argparse.ArgumentParser()
 	
 	group = parser.add_mutually_exclusive_group()
-	group.add_argument("-v", "--verbose", action="store_true")
-	group.add_argument("-q", "--quiet", action="store_true")
+	group.add_argument("-v","--verbose", action="store_true",default=False)
+	group.add_argument("-q","--quiet", action="store_false",default=True)
+	
 	parser.add_argument("-o","--output",help="output BED-filename; '-' for stdout",default="-")
-	parser.add_argument("alignment_directories",nargs='+')
+	
+	parser.add_argument("-m","--mask",required=True,help="GTF/GFF3 mask file (precursors)")
+	
+	parser.add_argument("alignment_directories",nargs='+',help="SSLM formatted output directories")
 	
 	args = parser.parse_args()
-	args.verbosity = "normal"
 	if(args.verbose):
 		args.verbosity = "verbose"
 	elif(args.quiet):
 		args.verbosity = "quiet"
 	
-	
-	sslm2bed_converter = SSLM2BED(args.verbosity)
+	sslm2bed_converter = FlaiMapperObject('sslm',args.verbosity)
 	for alignment_directory in args.alignment_directories:
-		sslm2bed_converter.add_alignment_directory(AlignmentDirectory(alignment_directory,args.verbosity))
+		sslm2bed_converter.add_alignment(alignment_directory)
 	
-	sslm2bed_converter.convert(args.output)
+	regions = parse_gff(args.mask)
+	
+	sslm2bed_converter.convert_to_bed(regions,args.output)
+
+
+if __name__ == "__main__":
+	sys.exit(main())
