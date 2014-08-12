@@ -10,7 +10,7 @@
  fragments primarily by peak-detection on the start and  end position
  densities followed by filtering and a reconstruction processes.
  Copyright (C) 2011-2014:
- - MSc. Youri Hoogstrate
+ - Youri Hoogstrate
  - Elena S. Martens-Uzunova
  - Guido Jenster
  
@@ -37,29 +37,23 @@
 """
 
 
-__version_info__ = ('1', '0', '0')
-__version__ = '.'.join(__version_info__)
-__author__ = 'Youri Hoogstrate'
-__homepage__ = 'https://github.com/yhoogstrate/flaimapper'
-__license__ = 'GPL3'
-
-
-
 import os,re,random,operator,argparse,sys
+import pysam
 
 
 
-class FragmentContainer:
+class FragmentContainer(object):
 	def __init__(self,verbosity):
 		self.verbosity = verbosity
 		
-	def add_fragments(self,flaimapperObj):
+	def add_fragments(self,flaimapperObj,fasta_file=None):
 		"""
 		
 		----
 		@param flaimapperObj: 
 		"""
 		self.sequences[flaimapperObj.name] = flaimapperObj
+		self.fasta_file = fasta_file
 	
 	def export_genbank(self,filenamePrefix,suffixes=['_grouped.gbk','_single.gbk'],loffset = -3,roffset = 5):
 		"""Write discovered fragments to genbank format (2 files). Certain arguments are created arbitrary just to make them non-empty.
@@ -205,8 +199,11 @@ class FragmentContainer:
 					for key in sorted(fragments_sorted_keys.keys()):	# Walk over i in the for-loop:
 						i += 1
 						fragment = fragments_sorted_keys[key]
-						
-						fh.write(name+'_Fragment_'+str(i)+'\t'+name+"\t"+str(fragment['start'])+"\t"+str(fragment['stop'])+"\t"+str(fragment['sequence'])+"\t"+str(fragment['stop_supporting_reads']+fragment['start_supporting_reads'])+"\n")
+						if(self.fasta_file):
+							sequence = self.fasta_file.fetch(name,fragment['start'],fragment['stop'])
+						else:
+							sequence = ""
+						fh.write(name+'_Fragment_'+str(i)+'\t'+name+"\t"+str(fragment['start'])+"\t"+str(fragment['stop'])+"\t"+str(sequence)+"\t"+str(fragment['stop_supporting_reads']+fragment['start_supporting_reads'])+"\n")
 			
 			fh.close()
 	
