@@ -116,10 +116,12 @@ In this strategy reads are aligned to a list of all annotated ncRNAs.
 
 #### Combination
 
-In the first phase, align to targeted regions withing the genome (the ncRNAdb09 for example). In the second phase align all previously unmapped reads without any restriction to the full reference genome.
+In the first phase, align to targeted regions withing the genome (the ncRNAdb09 for example). In the next phase, align all unmapped reads as a classical RNA-Seq experiment to the reference genome.
 
 *	Pro's: you solve the issues addressed above.
-*	Con's: the alignment will take more time the and methodology is more complex which will require advanced scripting.
+*	Con's: the alignment will take more time the and methodology is more complex which will probably require advanced scripting.
+
+Some aligners have a related feature implemented: an indexed transcriptome besides the indexed reference genome. You might think of tophat's "<CODE>--transcriptome-index</CODE>" and RNA-STAR's "<CODE>sjdbGTFfile</CODE>". However, idealy you want to have a three phase alignment: (1) ncRNAs, (2) transcriptome, (3) entire genome. We are not aware of a tool that is capable of doing this (yet).
 
 ### Trim adapters
 
