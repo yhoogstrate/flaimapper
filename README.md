@@ -23,9 +23,11 @@
          - [ncRNAdb09 alignment](#ncrnadb09-alignment)
          - [Combination](#combination)
     - [Trim adapters](#trim-adapters)
+         - [Quality trimming](#quality-trimming)
     - [Choose aligner](#choose-aligner)
          - [Full genome alignment](#full-genome-alignment-1)
          - [ncRNAdb09 alignment](#ncrnadb09-alignment-1)
+    - [Multi-mapping](#multi-mapping)
     - [Alignment indexing](#alignment-indexing)
 - [Run FlaiMapper](#run-flaimapper)
     - [Usage](#usage)
@@ -125,12 +127,21 @@ Some aligners have a related feature implemented: an indexed transcriptome besid
 
 ### Trim adapters
 
-Small RNA-Seq protocols usually provide reads that are contaminated with so called adapter sequences. These sequences were manually added in the library during preparation. There are several tools that can remove them. Please be aware that the adapters can be specific per protocol or machine. The following tools can be used to remove adapters:
+Small RNA-Seq protocols often provide reads that are contaminated with so called adapter sequences.
+These sequences are manually added to your small ncRNAs of interest and have to be trimmed of to align properly.
+These adapter sequences are often specific per protocol/sequencer, so please ensure you have access to the correct adapters.
+There are several tools that can remove them.
+Here a list of some of the tools that can be used to remove adapters:
 
 *	CLC Bio (<FONT COLOR='red'>commercial</FONT>):	[http://www.clcbio.com/](http://www.clcbio.com/)
-	*	Has a list of commonly used adapters as preset.
 *	FASTX toolkit:	[http://hannonlab.cshl.edu/fastx_toolkit/](http://hannonlab.cshl.edu/fastx_toolkit/)
 *	Scythe: [https://github.com/vsbuffalo/scythe](https://github.com/vsbuffalo/scythe)
+
+#### Quality trimming
+
+Although it is common in RNA-Seq to trim low quality bases from your reads, we strongly recommend you NOT to do this prior to FlaiMapper.
+This will introduce a bias; fragments will most likely become shortened.
+Instead, if you are really doubt the quality of a read, we advise you to neglect and discard the entire read!
 
 ### Choose aligner
 
@@ -155,7 +166,7 @@ If your reference consists of mature ncRNAs or you are sure you don't take resul
 *	SubRead: [http://subread.sourceforge.net/](http://subread.sourceforge.net/)
 *	NovoAlign (<FONT COLOR='red'>commercial</FONT>): [http://www.novocraft.com/](http://www.novocraft.com/)
 *	CLC Bio (small RNA-Seq module; <FONT COLOR='red'>commercial</FONT>):	 [http://www.clcbio.com/](http://www.clcbio.com/)
-	*	Although we have used CLC for our analysis, we **advise you not to use it** prior to FlaiMapper. Exporting to SAM/BAM file aggregates all reads with an identical sequence and exporting the tables doesn't provide the relative positions of the aligned reads. The SAM/BAM aggregation cannot be undone and affects the peak-detection of FlaiMapper tramendously. We have solved this issue by doing a first alignment round in CLC, to link the reads to their corresponding pre-cursor ncRNAs. We then apply a second alignment using MUSCLE (http://nar.oxfordjournals.org/content/32/5/1792.long), wrapped by a program called SSLM, to find the exact coordinates of the reads linked to their precursor. We wrote a program to converts the SSLM format into BAM to ensure compatibility with other tools. To convert MUSCLE's output as wrapped by SSLM (http://nar.oxfordjournals.org/content/32/5/1792.long) into BAM proceed with the following command(s):
+	*	Although we have used CLC for our analysis, we **do not** recommend using it prior to FlaiMapper. Exporting to SAM/BAM file aggregates all reads with an identical sequence and exporting the tables doesn't provide the coordinates of the aligned reads. The SAM/BAM aggregation affects the peak-detection of FlaiMapper. We have solved this issue by doing a first alignment round in CLC, to link the reads to their corresponding pre-cursor ncRNAs. We then apply a second alignment using MUSCLE (http://nar.oxfordjournals.org/content/32/5/1792.long), wrapped by a program called SSLM, to find the exact coordinates of the reads linked to their precursor. We wrote a program to converts the SSLM format into BAM to ensure compatibility with other tools. To convert MUSCLE's output as wrapped by SSLM (http://nar.oxfordjournals.org/content/32/5/1792.long) into BAM proceed with the following command(s):
 
 			sslm2sam "output_sslm" -m ncrnadb09.gtf -o output_unsorted.sam
 		
@@ -176,6 +187,15 @@ If you think installing, configuring and creating references takes too long, you
 
 *	[http://galaxy-sandbox.trait-ctmm.cloudlet.sara.nl/](http://galaxy-sandbox.trait-ctmm.cloudlet.sara.nl/)
 
+### Multi-mapping
+
+Some small ncRNAs have multiple genomic copies or share identical regions of their sequence with others. Reads that align to such a location(s) are called multi-map reads, since they have multiple candidate genomic origins. There are several strategies to deal with a multi-map read. Imagine we detected a read 6 times and it aligns 100% correctly to 3 different ncRNA annotations. There are several strategies to deal with this situation:
+
+1.	**All reads are assigned to only of the multi-map locations.** In this case you would have 1 location with 6 reads, and two locations with 0 reads. Disadvantage: you're (most likely) under-representing the other locations.
+2.	**All reads are mapped to all multi-map locations.** In this case you would end up with 6 aligned reads mapped to each of the 3 locations. This means that the total number of aligned reads has been multiplied with the number of multi-maps (3*6=18). Disadvantage: you're most likely over-representing most/all of the locations.
+3.	**All reads are proportionally or randomly distributed over all multi-map locations.** In you do this proportionally, you would end up with 2 aligned reads for each of the 3 locations. Disadvantage: for all locations you're (most likely) either over- or under- representing them.
+
+Each of these strategies have their own assumptions and their own disadvantages. It is difficult to state which strategy is the best, also because this may be dependent on where you want to use it for. In the case that you want to enlist all possible fragments in your experiment, we propose to use strategy 2. A single multi-map read, as measured by the sequencer, can not be unambiguously indicate its true genomic origin. Therefore, we believe that by retaining as much as possible multi-map reads, flaimapper will probably report as many as possible scenario's and annotate all possibilities rather missing some because of underrepresentation. Surely, down-stream research can still validate a fragment annotation in a multi-map region if neccesairy.
 
 ### Alignment indexing
 
