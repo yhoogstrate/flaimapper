@@ -111,7 +111,13 @@ In this strategy reads are aligned to an enitre reference genome (e.g hg19).
 
 #### ncRNAdb09 alignment
 
-In this strategy reads are aligned to a list of all annotated ncRNAs.
+In this strategy reads are aligned to a list of annotated small ncRNAs with HUGO nomenclature (http://www.genenames.org/rna).
+This list contains pre-miRNAs, snoRNAs, scRNAs, snRNAs, SNARs, vaultRNAs, miscRNAs and Y-RNAs, all with 10bp genomic extensions on both sides.
+Also, the reference contains mature tRNAs from the genomic tRNA database (http://gtrnadb.ucsc.edu/) without introns and with CCA suffix.
+The reference doesn't include Piwi- and rRNAs.
+All identical sequences have been merged into single entries, but sequences may still partially overlap with others.
+
+If you use this reference instead of a full reference genome, you have to be aware of the following:
 
 *	Pro's: alignment is simpler (and faster) because it shouldn't be aware of splicing (if mature ncRNAs are included).
 *	Con's: you restrict yourself to a limited part of the genome and therefore you will miss any ncRNA that is not within this database.
