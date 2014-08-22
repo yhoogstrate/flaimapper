@@ -90,11 +90,11 @@ Otherwise: congratulations, you have just installed FlaiMapper!
 
 ### Uninstall FlaiMapper
 
-To remove FlaiMapper automatically from your system directories (without removing your data files), proceed with the following command into your terminal:
+To remove FlaiMapper automatically from your system directories (without removing your data files), proceed with the following terminal command:
 
 	sudo pip uninstall flaimapper
 
-You have to remove the downloaded source files manually. Be aware that references files for *ncRNAdb09* and the data of the analysis as demonstrated in the corresponding article are also located within this directory.
+The downloaded source files can only be removed manually. Be aware that references files for *ncRNAdb09* and the data of the analysis as demonstrated in the corresponding article are also located within this directory.
 
 ## Alignment
 
@@ -106,14 +106,14 @@ We propose multiple reference strategies for alignment, but we let it up to the 
 
 In this strategy reads are aligned to an enitre reference genome (e.g hg19).
 
-*	Pro's: because you take into account the entire reference genome you will also align to previously unannotated ncRNAs (those that are not present in ncRNAdb09).
-*	Con's: because small RNA-seq reads are relatively small, the chance to finding a read somewhere else in the genome by chance is relatively large. In such a case, reads may also align to places in the genome where they are not derived from.
+*	Pro's: because you take into account the entire reference genome you will also align to previously unannotated ncRNAs (those that are not present in e.g. ncRNAdb09).
+*	Con's: because small RNA-seq reads are relatively small, the chance to finding a read somewhere else in the genome by chance is relatively large. In such a case, reads may also align to places in the genome where they are not derived from. Some ncRNAs undergo maturation (splicing or ligation). This requires more complex alignment strategies.
 
 #### ncRNAdb09 alignment
 
 In this strategy reads are aligned to a list of all annotated ncRNAs.
 
-*	Pro's: alignment is fast and shouldn't be aware of splicing if mature ncRNAs are included.
+*	Pro's: alignment is simpler (and faster) because it shouldn't be aware of splicing (if mature ncRNAs are included).
 *	Con's: you restrict yourself to a limited part of the genome and therefore you will miss any ncRNA that is not within this database.
 
 #### Combination
@@ -123,12 +123,12 @@ In the first phase, align to targeted regions withing the genome (the ncRNAdb09 
 *	Pro's: you solve the issues addressed above.
 *	Con's: the alignment will take more time the and methodology is more complex which will probably require advanced scripting.
 
-Some aligners have a related feature implemented: an indexed transcriptome besides the indexed reference genome. You might think of tophat's "<CODE>--transcriptome-index</CODE>" and RNA-STAR's "<CODE>sjdbGTFfile</CODE>". However, idealy you want to have a three phase alignment: (1) ncRNAs, (2) transcriptome, (3) entire genome. We are not aware of a tool that is capable of doing this (yet).
+Some aligners have a related feature implemented: an indexed transcriptome besides the indexed reference genome. You might think of tophat's "<CODE>--transcriptome-index</CODE>" and RNA-STAR's "<CODE>sjdbGTFfile</CODE>". However, idealy you want to have a three phase alignment: (1) ncRNAs, (2) transcriptome, (3) entire genome. We are not aware of software that is capable of doing this (yet?).
 
 ### Trim adapters
 
 Small RNA-Seq protocols often provide reads that are contaminated with so called adapter sequences.
-These sequences are manually added to your small ncRNAs of interest and have to be trimmed of to align properly.
+These sequences are manually added to your small ncRNAs and have to be removed in order to align properly.
 These adapter sequences are often specific per protocol/sequencer, so please ensure you have access to the correct adapters.
 There are several tools that can remove them.
 Here a list of some of the tools that can be used to remove adapters:
@@ -137,19 +137,19 @@ Here a list of some of the tools that can be used to remove adapters:
 *	FASTX toolkit:	[http://hannonlab.cshl.edu/fastx_toolkit/](http://hannonlab.cshl.edu/fastx_toolkit/)
 *	Scythe: [https://github.com/vsbuffalo/scythe](https://github.com/vsbuffalo/scythe)
 
+We are aware of samples that also have fixed-size random primers, besides their adapters (with a specific sequence). Be aware that these also have to be trimmed. This usually requires multiple trimming steps.
+
 #### Quality trimming
 
-Although it is common in RNA-Seq to trim low quality bases from your reads, we strongly recommend you NOT to do this prior to FlaiMapper.
-This will introduce a bias; fragments will most likely become shortened.
-Instead, if you are really doubt the quality of a read, we advise you to neglect and discard the entire read!
+Although it is common in RNA-Seq to trim low quality bases from your reads, we strongly recommend you NOT to do this prior to FlaiMapper. This will introduce a bias; fragments will most likely become shortened. If you really doubt the quality of a read, we advise you to neglect and discard the entire read!
 
 ### Choose aligner
 
-The main complexity in RNA-Seq is splicing. There are several widely used free alignment programs for RNA-Seq. The same principle holds for small RNA-Seq, However, we are (at the moment) not aware of splicing events in ncRNAs other than tRNAs. The splice junctions in tRNAs are small (~10bp) but might be too long to be aligned using classicial alignment without adjusted settings. Therefore, if you want to align reads to pre-tRNAs, you want your aligner to understand splicing. Otherwise, if you want to use a 'classical' (non-splicing-aware) aligner, you want your introns to be removed prior to alignment. If your not focussing on tRNAs at all, you probably also don't need your aligner to be aware of splicing.
+The main complexity in RNA-Seq is splicing. There are several widely used free alignment programs for RNA-Seq. The same principle holds for small RNA-Seq. However, we are (at the moment) not aware of splicing events in ncRNAs other than tRNAs. The splice junctions in tRNAs are small (~10bp) but might be too long to be aligned using classicial alignment without adjusted settings. Therefore, if you want to align reads to pre-tRNAs, you want your aligner to understand splicing. Otherwise, if you want to use a 'classical' (non-splicing-aware) aligner, you want your introns to be removed prior to alignment. If you're not focussing on tRNAs at all, you probably also don't need your aligner to be aware of splicing and you can continue with classical aligners.
 
 #### Full genome alignment
 
-If you want to include results from ncRNAs that undergo splicing (e.g. tRNAs) you should use a splicing-aware aligner. The following aligners are popular and should have sufficient documentation:
+In case you want to align to the entire genome, you're not making use of mature ncRNAs. Also, if you want to include results from immature ncRNAs that undergo splicing (e.g. pre-tRNAs) you should proceed with a splicing-aware aligner. The following aligners are popular and should have sufficient documentation in order to run an alignment:
 
 *	TopHat: [http://ccb.jhu.edu/software/tophat/index.shtml](http://ccb.jhu.edu/software/tophat/index.shtml)
 *	RNA STAR: [http://code.google.com/p/rna-star/](http://code.google.com/p/rna-star/)
@@ -159,14 +159,14 @@ If you want to include results from ncRNAs that undergo splicing (e.g. tRNAs) yo
 
 #### ncRNAdb09 alignment
 
-If your reference consists of mature ncRNAs or you are sure you don't take results of ncRNAs that undergo alternative splicing (tRNAs) into account you can use the following aligners:
+If your reference consists of mature ncRNAs or you are sure you don't take results of ncRNAs that undergo alternative splicing (tRNAs) into account, you can use the following 'classical' aligners:
 
 *	BWA: [http://bio-bwa.sourceforge.net/](http://bio-bwa.sourceforge.net/)
 *	bowtie: [http://bowtie-bio.sourceforge.net/bowtie2/index.shtml](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml)
 *	SubRead: [http://subread.sourceforge.net/](http://subread.sourceforge.net/)
 *	NovoAlign (<FONT COLOR='red'>commercial</FONT>): [http://www.novocraft.com/](http://www.novocraft.com/)
 *	CLC Bio (small RNA-Seq module; <FONT COLOR='red'>commercial</FONT>):	 [http://www.clcbio.com/](http://www.clcbio.com/)
-	*	Although we have used CLC for our analysis, we **do not** recommend using it prior to FlaiMapper. Exporting to SAM/BAM file aggregates all reads with an identical sequence and exporting the tables doesn't provide the coordinates of the aligned reads. The SAM/BAM aggregation affects the peak-detection of FlaiMapper. We have solved this issue by doing a first alignment round in CLC, to link the reads to their corresponding pre-cursor ncRNAs. We then apply a second alignment using MUSCLE (http://nar.oxfordjournals.org/content/32/5/1792.long), wrapped by a program called SSLM, to find the exact coordinates of the reads linked to their precursor. We wrote a program to converts the SSLM format into BAM to ensure compatibility with other tools. To convert MUSCLE's output as wrapped by SSLM (http://nar.oxfordjournals.org/content/32/5/1792.long) into BAM proceed with the following command(s):
+	*	Although we have used CLC for our analysis, we **do not** recommend using it prior to FlaiMapper. Exporting to SAM/BAM file aggregates all reads with an identical sequence and exporting the tables doesn't provide the coordinates of the aligned reads. The SAM/BAM aggregation affects the peak-detection of FlaiMapper. We have solved this issue by doing a first alignment round in CLC, to link the reads to their corresponding pre-cursor ncRNAs. We then apply a second alignment using MUSCLE (http://nar.oxfordjournals.org/content/32/5/1792.long), wrapped by a program called SSLM (http://www.gatcplatform.nl/), to find the exact coordinates of the reads linked to their precursor. We wrote a program to converts the SSLM format into BAM to ensure compatibility with other tools. To convert MUSCLE's output as wrapped by SSLM into BAM proceed with the following command(s):
 
 			sslm2sam "output_sslm" -m ncrnadb09.gtf -o output_unsorted.sam
 		
@@ -176,7 +176,7 @@ If your reference consists of mature ncRNAs or you are sure you don't take resul
 		
 			rm -r output_sslm; rm output_unsorted.bam
 
-Some tools require specific reference files. You can find the ncRNAdb09 reference for the following aligners:
+Most aligners require tool-specific reference files (indexed versions of the reference genome). You can find the ncRNAdb09 reference for the following aligners:
 
 | *Aligner* | *Reference file(s)* |
 |:----------|:--------------------|
@@ -189,13 +189,13 @@ If you think installing, configuring and creating references takes too long, you
 
 ### Multi-mapping
 
-Some small ncRNAs have multiple genomic copies or share identical regions of their sequence with others. Reads that align to such a location(s) are called multi-map reads, since they have multiple candidate genomic origins. There are several strategies to deal with a multi-map read. Imagine we detected a read 6 times and it aligns 100% correctly to 3 different ncRNA annotations. There are several strategies to deal with this situation:
+Some small ncRNAs have multiple genomic copies or share identical regions of their sequence with others. Reads that align to such a location(s) are called multi-map reads, since they have multiple candidate genomic origins. There are several strategies to deal with a multi-map read. Imagine we detected a read 6 times and it aligns 100% correctly to 3 different ncRNAs (multi-map regions). There are several strategies to deal with this situation:
 
-1.	**All reads are assigned to only of the multi-map locations.** In this case you would have 1 location with 6 reads, and two locations with 0 reads. Disadvantage: you're (most likely) under-representing the other locations.
+1.	**All reads are assigned to only one of the multi-map locations.** In this case you would have 1 location with 6 reads, and two locations with 0 reads. Disadvantage: you're (most likely) under-representing the other locations.
 2.	**All reads are mapped to all multi-map locations.** In this case you would end up with 6 aligned reads mapped to each of the 3 locations. This means that the total number of aligned reads has been multiplied with the number of multi-maps (3*6=18). Disadvantage: you're most likely over-representing most/all of the locations.
-3.	**All reads are proportionally or randomly distributed over all multi-map locations.** In you do this proportionally, you would end up with 2 aligned reads for each of the 3 locations. Disadvantage: for all locations you're (most likely) either over- or under- representing them.
+3.	**All reads are proportionally or randomly distributed over all multi-map locations.** If you do this proportionally, you would end up with 2 aligned reads for each of the 3 locations. Disadvantage: for all locations you're (most likely) either over- or under- representing them since.
 
-Each of these strategies have their own assumptions and their own disadvantages. It is difficult to state which strategy is the best, also because this may be dependent on where you want to use it for. In the case that you want to enlist all possible fragments in your experiment, we propose to use strategy 2. A single multi-map read, as measured by the sequencer, can not be unambiguously indicate its true genomic origin. Therefore, we believe that by retaining as much as possible multi-map reads, flaimapper will probably report as many as possible scenario's and annotate all possibilities rather missing some because of underrepresentation. Surely, down-stream research can still validate a fragment annotation in a multi-map region if neccesairy.
+Each of these strategies are based upon different assumptions and have their own disadvantages. It is difficult to state which strategy is the best, also because this may be dependent on where you want to use the outcome for. In case you want to enlist all possible fragments in your sample(s), we propose to use strategy 2. A single multi-map read, as measured by the sequencer, can not be unambiguously indicate its true genomic origin. Therefore, we believe that by retaining as much as possible multi-map reads, flaimapper will probably report as many as possible scenario's and annotate all possibilities. Since the intention is to enlist all possibilities, we would rather find a fragment more often due to its homology than missing some because of underrepresentation. Surely, down-stream research can still validate a fragment annotation in a multi-map region if necessary.
 
 ### Alignment indexing
 
@@ -239,12 +239,13 @@ The usage of FlaiMapper (using BAM formatted files as input) is as follows:
 
 The usage of FlaiMapper (using SSLM formatted data as input) is as follows:
 
+
+positional arguments:
+  alignment_directories
+                        SSLM formatted output directories
+
 	usage: flaimapper-sslm [-h] [-V] [-v | -q] [-o OUTPUT] [-f FORMAT]
 	                       alignment_directories [alignment_directories ...]
-	
-	positional arguments:
-	  alignment_directories
-	                        SSLM formatted output directories
 	
 	optional arguments:
 	  -h, --help            show this help message and exit
@@ -256,6 +257,10 @@ The usage of FlaiMapper (using SSLM formatted data as input) is as follows:
 	  -f FORMAT, --format FORMAT
 	                        file format of the output: [1: table; per fragment],
 	                        [2: table; per ncRNA], [3: genbank]
+	  -m MASK, --mask MASK  GTF/GFF3 mask file (precursors)
+	  -r FASTA, --fasta FASTA
+	                        Single reference FASTA file (+faid index) containing
+	                        all genomic reference sequences
 
 From this follows that you can find the version of your installed flaimapper with the following commands:
 
@@ -267,7 +272,7 @@ The '<CODE>\-\-verbose</CODE>' and '<CODE>\-\-quiet</CODE>' arguments change the
 
 ### Input: BAM
 
-The FlaiMapper binary that corresponds to BAM files is called '*flaimapper*' and can be executed as follows:
+The FlaiMapper binary that uses BAM formatted input files is called '*flaimapper*' and can be executed with the following terminal command:
 
 For alignment **to reference genomes (e.g. hg19):**
 
@@ -285,24 +290,23 @@ For alignment **to ncRNAdb09:**
 	    -o results_flaimapper.tabular.txt \
 	    alignment_02.bam
 
-Remark that the backslashes are used to continue at the next line and can be removed when the command is written on a single line.
-
-The BAM (and SAM) alignment formats are tabular file formats that store a reads absolute start position, and a formal description of how the alignment proceeds. This also includes the reads sequence and can be provided with a quality score.
+Remark that the backslashes are used to make the command continue at the next line and they can be removed when the command is written on a single line.
 
 #### The "<CODE>\-\-mask</CODE>"-argument
 
-The BAM/SAM format describes the alignment of a read to a so called *Reference sequence*.
+The BAM (and SAM) alignment formats are tabular file formats that store a reads absolute start position, and a formal description of how the alignment proceeds. This also includes the reads sequence and can be provided with a quality score.
+The BAM/SAM format describes the alignment of a read in relation to a so called *Reference sequence*.
 It is very important to understand this, because the reference sequences may have a different meaning in the two proposed types of experiments.
 
  - In case you <U>align to a reference genome</U> (e.g. hg19), each *Reference sequence* represents a chromsome (or a contig). Within this chromosome, multiple ncRNAs can be located.
  - In case you <U>align to ncRNAdb09</U>, each *Reference sequence* represents exactly one mature ncRNA.
 
-The consequence of this is that FlaiMapper must know where in which Reference sequence the ncRNAs are located. In FlaiMapper these so called MASK locations are given as GTF/GFF files with the '<CODE>\-m</CODE>' or '<CODE>\-\-mask</CODE>' argument. For alignment to reference genome hg19, you have to provide the following argument:
+The consequence of this is that FlaiMapper must know where in which Reference sequence the ncRNAs are located. In FlaiMapper these so called MASK regions are provided as GTF/GFF files with the '<CODE>\-m</CODE>' or '<CODE>\-\-mask</CODE>' argument. For alignment to reference genome hg19, you have to provide the following argument:
 
 	flaimapper -m ncrnadb09_hg19.gtf [...]
 
-In ncRNAdb09 each Reference sequence represent exactly single ncRNA.
-Therefore, the provided MASK for ncRNAdb09, describes per ncRNA one (entire) reference sequence.
+In ncRNAdb09, each Reference sequence represent exactly single ncRNA.
+Therefore, the provided MASK for ncRNAdb09 describes only one ncRNA per (entire) reference sequence.
 
 For alignment to ncRNAdb09, you have to provide the following argument:
 
@@ -312,7 +316,7 @@ Currently we serve the ncRNAdb09 MASK as a GTF/GFF file for the following refere
 
 | **Ref. Genome** | **Ref. Genome ID** | **GTF file** | **GTF index** |
 |:----------------|:--------------------|:--------------|:----------------|
-| ncRNAdb09 | ncrnadb09 | [ncrnadb09.gtf](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncrna_annotation/ncrnadb09.gtf) | [ncrnadb09.gtf.tbi](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncrna_annotation/ncrnadb09.gtf.tbi) |
+| ncRNAdb09 (Human) | ncrnadb09 | [ncrnadb09.gtf](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncrna_annotation/ncrnadb09.gtf) | [ncrnadb09.gtf.tbi](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncrna_annotation/ncrnadb09.gtf.tbi) |
 | Human Feb. 2009 \(GRCh37/hg19\) | hg19 | [ncrnadb09_hg19.gtf](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncrna_annotation/ncrnadb09_hg19.gtf) | [ncrnadb09_hg19.gtf.tbi](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncrna_annotation/ncrnadb09_hg19.gtf.tbi) |
 
 #### The "<CODE>\-\-fasta</CODE>"-argument
@@ -331,9 +335,9 @@ For ncRNAdb09, the FASTA file (and corresponding index) are available at the fol
 
 [ncRNAdb09\_with\_tRNAs\_and\_Pseudogenes\_\_21\_oct\_2011\_\_hg19.fasta.fai](https://raw.github.com/yhoogstrate/flaimapper/master/share/annotations/ncRNA\_annotation/ncRNA\_annotation/ncRNAdb09\_with\_tRNAs\_and\_Pseudogenes\_\_21\_oct\_2011\_\_hg19.fasta.fai)
 
-Besides the FASTA file, you need the FASTA file to have a <U>corresponding index file</U> under the name '*<prefix>.fa.fai*'.
+You need to have a <U>corresponding index file</U> under the name '*<prefix>.fa.fai*' besides your FASTA reference file.
 
-*We don't provide any other reference genome than ncRNAdb09.*
+*Yet we don't provide any other reference genome than the Human ncRNAdb09.*
 
 ### Input: SSLM
 
@@ -343,8 +347,7 @@ The SSLM format is the output format of Short Sequence Location Mapper:
 
 [http://www.gatcplatform.nl/SSLM/index.html](http://www.gatcplatform.nl/SSLM/index.html)
 
-Earlier analysis made use of the ncRNA analysis program SSLM which wraps the aligner MUSCLE ([http://dx.doi.org/10.1093/nar/gkh340](http://dx.doi.org/10.1093/nar/gkh340)). We initially proceeded with SSLM's corresponding data format, because it provided all neccesairy information. Remark that it includes both the alignment and the reference sequence (in contrast to BAM).
-Furher analysis made FlaiMapper evolve into a tool, still specific for SSLM data. Because the BAM and SAM format have become the de facto standards for alignment data it was inevitable to add support for the BAM/SAM format. Because we still want to keep our software backwards compatible with the initial analysis (in order to reproduce the results), we also want to keep the SSLM format supported. The directory structure of an SSLM experiment is as follows:
+Earlier analysis made use of the ncRNA analysis program SSLM which wraps the aligner MUSCLE ([http://dx.doi.org/10.1093/nar/gkh340](http://dx.doi.org/10.1093/nar/gkh340)). We initially proceeded with SSLM's corresponding data format, because it provided all neccesairy information (including reference sequence, in contrast to BAM). Furher analysis made FlaiMapper evolve into a tool, still specific for SSLM data. Because the BAM format has become the de facto standards for alignment data we have changed the input format to BAM. Because we still want to keep our software backwards compatible with the initial analysis (in order to reproduce the results), we also want to keep the deprecated SSLM format supported. The directory structure of an SSLM experiment is as follows:
 
 	.
 	├── idreadable.txt
@@ -367,14 +370,14 @@ An individual alignment file in the FASTA (_*.fa_) format corresponds to an alig
 
 	>NAME=TRNAVALAAC&LOCI=[CHR1:180184276-180184348:STRAND=-]&SOURCE=UCSC&SOURCE-ACCESSION=CHR1.TRNA63-VALAAC&GENOME=HG19
 	GTTTCCATAGTGTACTGGTTATCACATTCACCTAACACGCGAAAGGTCCTTGGTTTGAAACCAGGCAGAAACACCA
-	>ReadID#1_GTTTCCATAGTGTAGTGGTTATC_HITS8
+	>ReadID#1_GTTTCCATAGTGTAGTGGTTATC_hits8
 	GTTTCCATAGTGTAGTGGTTATC-----------------------------------------------------
 	>ReadID#2_GTTTCCATAGTGTAGTGG_HITS7
 	GTTTCCATAGTGTAGTGG----------------------------------------------------------
-	>ReadID#3_GTTTCCATAGTGTAGTGGTTAT_HITS6
+	>ReadID#3_GTTTCCATAGTGTAGTGGTTAT_x6
 	GTTTCCATAGTGTAGTGGTTAT------------------------------------------------------
 
-The '<CODE>_hits</CODE>' suffix is an indicator for the number of indentical copies of the read.
+The '<CODE>_hits...</CODE>' and '<CODE>_x...</CODE>' suffixes are indicators for the number of indentical copies of the read.
 
 To run flaimapper using SSLM data, we provide the paths of the directories that contain the SSLM data.
 In the article experiment '*[SRP006788](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788)*' was analysed.
@@ -392,9 +395,9 @@ FlaiMapper will export the results as table into '*[output/FlaiMapper/SRP006788/
 
 ### Input: multiple alignments
 
-FlaiMapper is able to deal with multiple input files. In certain situations you want to enhance your resulotion by combining datasets. Imagine you have multiple runs from the same sample, you can simply enhance your resolution by using a stacked alignment. You can tell FlaiMapper to use multiple alignments and it simply reads through these alignments as if they were one alignment. So, if you provide multiple input files you will get only one output file based on the concatenated data. If you want to get **individual outputs for any of your samples**, you have to **run FlaiMapper separately on each sample!**
+FlaiMapper is able to deal with multiple input files. In certain situations you want to enhance your resulotion by combining datasets, multiple runs for example. You can simply enhance your resolution by stacking the alignment. Instead of creating merged BAM or SSLM files, you can simply tell FlaiMapper to use multiple alignments and FlaiMapper will simply reads through these alignments as if they were one alignment. So, if you provide multiple input files you will get only one output file based on the concatenated data. If you want to get **individual outputs for any of your samples**, you have to **run FlaiMapper separately on each sample!**
 
-The last argument of FlaiMapper is simply a 1-to-many argument. You can run FlaiMapper on multiple files by separating all desired files with a space:
+The last argument of FlaiMapper is simply a 1-or-multiple. You can run FlaiMapper on multiple files by separating all desired files with a space:
 
 	flaimapper \
 	    -f 1 \
@@ -432,7 +435,7 @@ The last argument of FlaiMapper is simply a 1-to-many argument. You can run Flai
 	        share/small_RNA-seq_alignments/SRP002175/SRR038862 \
 	        share/small_RNA-seq_alignments/SRP002175/SRR038863
 
-Remark that the backslashes are used to continue at the next line and can be removed when the command is written on a single line.
+Remark that the backslashes are used to make the command continue at the next line and they can be removed when the command is written on a single line.
 
 ### Output: formats
 
