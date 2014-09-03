@@ -144,7 +144,7 @@ class MaskedRegion:
 			upper = theValues[count/2]
 			return (float(lower + upper)) / 2
 	
-	def count_reads_per_region(self,fragments):							# @TODO change to 'sequencing_depth()
+	def count_reads_per_region(self,fragments):							# @TODO change to 'sequencing_depth()'
 		for fragment in fragments:
 			fragment.supporting_reads = 0
 		
