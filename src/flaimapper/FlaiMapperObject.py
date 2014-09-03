@@ -115,14 +115,6 @@ class FlaiMapperObject(FragmentContainer):
 				
 				predicted_fragments = all_predicted_fragments[ncRNA].getResults()
 				
-				#aligned_reads = AlignmentParser(ncRNA,self.alignment_directories_indexed[ncRNA],self.verbosity)
-				#aligned_reads.count_reads_per_region(annotations)
-				#aligned_reads.parse_stats()
-				
-				#predicted_fragments_obj = FragmentFinder(ncRNA,aligned_reads)
-				#predicted_fragments_obj.run()
-				#predicted_fragments = predicted_fragments_obj.getResults()
-				
 				i += 1
 				
 				for annotation in annotations.fragments:
@@ -130,7 +122,7 @@ class FlaiMapperObject(FragmentContainer):
 					j += 1
 					
 					if(closest):
-						errors = self.find_errors(annotation,closest)
+						errors = self.find_errors(annotation,closest)#@todo ,reference_offset
 						err_5p = errors[0]
 						err_3p = errors[1]
 						
@@ -209,7 +201,7 @@ class FlaiMapperObject(FragmentContainer):
 					j += 1
 					
 					if(closest):
-						errors = self.find_errors(annotation,closest)
+						errors = self.find_errors(annotation,closest)	#@todo ,reference_offset
 						err_5p.append(errors[0])
 						err_3p.append(errors[1])
 						
@@ -269,12 +261,9 @@ class FlaiMapperObject(FragmentContainer):
 					j += 1
 					
 					if(closest):
-						errors = self.find_errors(annotation,closest)
+						errors = self.find_errors(annotation,closest,reference_offset)
 						err_5p = errors[0]
 						err_3p = errors[1]
-						
-						#if(abs(err_5p) > 5):
-						#	print err_5p
 						
 						if(err_5p > 5):
 							err_5p = ">5"
@@ -349,7 +338,7 @@ class FlaiMapperObject(FragmentContainer):
 					closest_fragment = self.find_closest_overlapping_fragment(mirna_annotation,predicted_fragments,reference_offset)
 					
 					if(closest_fragment):
-						errors = self.find_errors(mirna_annotation,[(closest_fragment.start - reference_offset), (closest_fragment.stop - reference_offset)])
+						errors = self.find_errors(mirna_annotation,[(closest_fragment.start - reference_offset), (closest_fragment.stop - reference_offset)])#@todo ,reference_offset
 						err_5p = errors[0]
 						err_3p = errors[1]
 						
@@ -361,10 +350,8 @@ class FlaiMapperObject(FragmentContainer):
 	def find_closest_overlapping_fragment(self,annotated_fragment,predicted_fragments,reference_offset=0):
 		closest = False
 		closest_overlapping_bases = 0
-		
 		for predicted_fragment in predicted_fragments:
 			#predicted = [(predicted_fragment["start"] - reference_offset), (predicted_fragment["stop"] - reference_offset),predicted_fragment.start_supporting_reads,predicted_fragment.stop_supporting_reads]
-			
 			overlap = self.find_overlapping_bases([annotated_fragment.start,annotated_fragment.stop],[(predicted_fragment["start"] - reference_offset), (predicted_fragment["stop"] - reference_offset)])
 			if(overlap > 0 and overlap > closest_overlapping_bases):
 				closest_overlapping_bases = overlap
@@ -378,7 +365,7 @@ class FlaiMapperObject(FragmentContainer):
 		else:
 			return fragment_1[1] - fragment_2[0]
 	
-	def find_errors(self,annotated_fragment,predicted_fragment):
+	def find_errors(self,annotated_fragment,predicted_fragment,reference_offset=0):
 		"""
 		Example:
 			   [ miRNA ]
@@ -392,8 +379,8 @@ class FlaiMapperObject(FragmentContainer):
 		
 		"""
 		
-		error_5p = predicted_fragment[0] - annotated_fragment.start
-		error_3p = predicted_fragment[1] - annotated_fragment.stop
+		error_5p = predicted_fragment.start - annotated_fragment.start - reference_offset
+		error_3p = predicted_fragment.stop - annotated_fragment.stop - reference_offset
 		
 		return [error_5p,error_3p]
 	
