@@ -48,6 +48,8 @@ from flaimapper.MaskedRegion import MaskedRegion
 class SSLMParser(MaskedRegion):
 	"""parseNcRNA is a class that parses the SSLM alignment files.
 	"""
+	regex1 = re.compile("^>(.*?)_x([0-9]+)$")
+	
 	def parse_reads(self):
 		"""parse the reads from a SSLM (FASTA) file and return each read
 		as an iterator object
@@ -59,7 +61,7 @@ class SSLMParser(MaskedRegion):
 			i = 0
 			with open(filename,'r') as fh:
 				for line in fh:
-					line = line.strip()
+					line = line.strip().replace('revcomp','')
 					
 					if(i % 2 == 1):
 						if(i == 1):
@@ -68,14 +70,20 @@ class SSLMParser(MaskedRegion):
 							# previous_line = ">fasta name _hits etc"
 							#          line = "-----ACTG-----"
 							
-							k = previous_line.lower().find('_hits') 
+							k = previous_line.lower().find('_hits')
 							
 							if(k > -1):
 								name = previous_line[1:k]
 								numberofhits = int(previous_line[k+5::])
 							else:
-								name = previous_line[::-1].lstrip(">")
-								numberofhits = 1
+								m = self.regex1.search(name)			# For the "_x123" suffix
+								
+								if(m):
+									name = m.group(1)
+									numberofhits = int(m.group(2))
+								else:
+									name = previous_line[::-1].lstrip(">")
+									numberofhits = 1
 							
 							start_pos = self.get_start_position(line)
 							stop_pos = self.get_stop_position(line)
