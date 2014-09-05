@@ -36,7 +36,7 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-import os
+import os,tempfile
 import pysam
 
 def index_gff(gff_file):
