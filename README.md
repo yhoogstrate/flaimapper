@@ -203,7 +203,7 @@ If you think installing, configuring and creating references takes too long, you
 
 ### Read collapsing
 
-In small RNA-Seq it is not uncommon to apply read collapsing. This technique simply merges all reads with an identical sequence into one sequence, which sharply reduces the number of aligned reads. The consequence is that the peak detection will be applied upon much lower numbers, lowering the resolution of the experiment. This will most likely affect your results in a negative way. Therefore we advice you **not to use read collapsing ** techniques before FlaiMapper unless you have a clear reason to believe it will give a better answer to your outcome or biological question(s).
+In small RNA-Seq it is not uncommon to apply read collapsing. This technique simply merges all reads with an identical sequence into one sequence, which sharply reduces the number of aligned reads. The consequence is that the peak detection will be applied upon much lower numbers, lowering the resolution of the experiment. This will most likely affect your results in a negative way. Therefore we advice you **not to use read collapsing** before FlaiMapper unless you have a clear reason to believe it will give a better answer to your outcome or biological question(s).
 
 ### Multi-mapping
 
