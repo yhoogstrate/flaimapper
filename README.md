@@ -194,8 +194,8 @@ Most aligners require tool-specific reference files (indexed versions of the ref
 
 | *Aligner* | *Reference file(s)* |
 |:----------|:--------------------|
-| TopHat & Bowtie | [ncrnadb09.ebwt.tar.gz](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncrna_annotation/ncrnadb09.ebwt.tar.gz) |
-| TopHat2 & Bowtie2 | [ncrnadb09.bt2.tar.gz](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncrna_annotation/ncrnadb09.bt2.tar.gz) |
+| TopHat & Bowtie | [ncrnadb09.ebwt.tar.gz](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncRNA_annotation/ncrnadb09.ebwt.tar.gz) |
+| TopHat2 & Bowtie2 | [ncrnadb09.bt2.tar.gz](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncRNA_annotation/ncrnadb09.bt2.tar.gz) |
 
 If you think installing, configuring and creating references takes too long, you can make use of Galaxy. We have a public instance with ncRNAdb09 installed available at the following url:
 
@@ -334,8 +334,8 @@ Currently we serve the ncRNAdb09 MASK as a GTF/GFF file for the following refere
 
 | **Ref. Genome** | **Ref. Genome ID** | **GTF file** | **GTF index** |
 |:----------------|:--------------------|:--------------|:----------------|
-| ncRNAdb09 (Human) | ncrnadb09 | [ncrnadb09.gtf](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncrna_annotation/ncrnadb09.gtf) | [ncrnadb09.gtf.tbi](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncrna_annotation/ncrnadb09.gtf.tbi) |
-| Human Feb. 2009 \(GRCh37/hg19\) | hg19 | [ncrnadb09_hg19.gtf](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncrna_annotation/ncrnadb09_hg19.gtf) | [ncrnadb09_hg19.gtf.tbi](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncrna_annotation/ncrnadb09_hg19.gtf.tbi) |
+| ncRNAdb09 (Human) | ncrnadb09 | [ncrnadb09.gtf](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncRNA_annotation/ncrnadb09.gtf) | [ncrnadb09.gtf.tbi](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncRNA_annotation/ncrnadb09.gtf.tbi) |
+| Human Feb. 2009 \(GRCh37/hg19\) | hg19 | [ncrnadb09_hg19.gtf](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncRNA_annotation/ncrnadb09_hg19.gtf) | [ncrnadb09_hg19.gtf.tbi](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncRNA_annotation/ncrnadb09_hg19.gtf.tbi) |
 
 #### The "<CODE>\-\-fasta</CODE>"-argument
 
