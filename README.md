@@ -349,9 +349,9 @@ To ensure FlaiMapper has access to the reference sequence(s), you can provide th
 
 For ncRNAdb09, the FASTA file (and corresponding index) are available at the following url:
 
-[ncRNAdb09\_with\_tRNAs\_and\_Pseudogenes\_\_21\_oct\_2011\_\_hg19.fasta](https://raw.github.com/yhoogstrate/flaimapper/master/share/annotations/ncRNA\_annotation/ncRNA\_annotation/ncRNAdb09\_with\_tRNAs\_and\_Pseudogenes\_\_21\_oct\_2011\_\_hg19.fasta)
+[ncrnadb09.fa](https://raw.github.com/yhoogstrate/flaimapper/master/share/annotations/ncRNA_annotation/ncrnadb09.fa)
 
-[ncRNAdb09\_with\_tRNAs\_and\_Pseudogenes\_\_21\_oct\_2011\_\_hg19.fasta.fai](https://raw.github.com/yhoogstrate/flaimapper/master/share/annotations/ncRNA\_annotation/ncRNA\_annotation/ncRNAdb09\_with\_tRNAs\_and\_Pseudogenes\_\_21\_oct\_2011\_\_hg19.fasta.fai)
+[ncrnadb09.fa.fai](https://raw.github.com/yhoogstrate/flaimapper/master/share/annotations/ncRNA_annotation/ncrnadb09.fa.fai)
 
 You need to have a <U>corresponding index file</U> under the name '*<prefix>.fa.fai*' besides your FASTA reference file.
 
