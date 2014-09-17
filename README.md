@@ -27,6 +27,7 @@
     - [Choose aligner](#choose-aligner)
          - [Full genome alignment](#full-genome-alignment-1)
          - [ncRNAdb09 alignment](#ncrnadb09-alignment-1)
+    - [Read collapsing](#read-collapsing)
     - [Multi-mapping](#multi-mapping)
     - [Alignment indexing](#alignment-indexing)
 - [Run FlaiMapper](#run-flaimapper)
@@ -50,16 +51,23 @@ Make sure you have *python2*, *pip* and the *pysam* library installed. Pysam is 
 
 The easiest way to install the latest version of pysam is via pip using the following terminal command:
 
+	sudo apt-get install python-dev python-pip
+
+	sudo pip install --upgrade pyrex
+
 	sudo pip install --upgrade pysam
+
 
 ### Download FlaiMapper
 #### Latest version from GitHub
 
-To get the latest version of FlaiMapper please download with Git (make sure it's installed) from GitHub using the following terminal command:
+To get the latest version of FlaiMapper please download with Git (make sure it is installed) from GitHub using the following terminal command:
+
+	sudo apt-get install git
 
 	git clone --recursive https://github.com/yhoogstrate/flaimapper.git
 
-Or you can download and extract the latest source as ZIP package from the following url: [here (right mouse click; save as)](https://github.com/yhoogstrate/flaimapper/archive/master.zip).
+Or you can download the latest source as ZIP package from the following url: [here (right mouse click; save as)](https://github.com/yhoogstrate/flaimapper/archive/master.zip). Extract this package to a directory called "flaimapper".
 
 #### Read & agree with GPL3 free software license
 
@@ -68,9 +76,9 @@ If you have downloaded FlaiMapper, you should read the GNU General Public Licens
 *	[https://github.com/yhoogstrate/flaimapper/raw/master/LICENSE](https://github.com/yhoogstrate/flaimapper/raw/master/LICENSE)
 
 ### Compile & Install
-Browse into the directory you just have created: 
+Browse into the src directory you just have created: 
 
-	cd flaimapper
+	cd flaimapper/src
 
 The installation procedure of FlaiMapper first converts the python code into byte code, followed by a mechanism that installs flaimapper in the system directories. You can achieve this by running the following two commands: 
 
@@ -84,7 +92,7 @@ Last but not least, please check if FlaiMapper runs. You can do this by running 
 
 	flaimapper --help
 
-If FlaiMapper givers errors, warnings or doesn't install, please don't hazitate and either submit the bug or send a fix to the GitHub repository at the following url: <A HREF='https://github.com/yhoogstrate/flaimapper' TARGET='_new'>https://github.com/yhoogstrate/flaimapper</A>
+If FlaiMapper givers errors, warnings or does not install, please do not hazitate and either submit the bug or send a fix to the GitHub repository at the following url: <A HREF='https://github.com/yhoogstrate/flaimapper' TARGET='_new'>https://github.com/yhoogstrate/flaimapper</A>
 
 Otherwise: congratulations, you have just installed FlaiMapper!
 
@@ -114,12 +122,12 @@ In this strategy reads are aligned to an enitre reference genome (e.g hg19).
 In this strategy reads are aligned to a list of annotated small ncRNAs with HUGO nomenclature (http://www.genenames.org/rna).
 This list contains pre-miRNAs, snoRNAs, scRNAs, snRNAs, SNARs, vaultRNAs, miscRNAs and Y-RNAs, all with 10bp genomic extensions on both sides.
 Also, the reference contains mature tRNAs from the genomic tRNA database (http://gtrnadb.ucsc.edu/) without introns and with CCA suffix.
-The reference doesn't include Piwi- and rRNAs.
+The reference does not include Piwi- and rRNAs.
 All identical sequences have been merged into single entries, but sequences may still partially overlap with others.
 
 If you use this reference instead of a full reference genome, you have to be aware of the following:
 
-*	Pro's: alignment is simpler (and faster) because it shouldn't be aware of splicing (if mature ncRNAs are included).
+*	Pro's: alignment is simpler (and faster) because it should not be aware of splicing (if mature ncRNAs are included).
 *	Con's: you restrict yourself to a limited part of the genome and therefore you will miss any ncRNA that is not within this database.
 
 #### Combination
@@ -151,11 +159,11 @@ Although it is common in RNA-Seq to trim low quality bases from your reads, we s
 
 ### Choose aligner
 
-The main complexity in RNA-Seq is splicing. There are several widely used free alignment programs for RNA-Seq. The same principle holds for small RNA-Seq. However, we are (at the moment) not aware of splicing events in ncRNAs other than tRNAs. The splice junctions in tRNAs are small (~10bp) but might be too long to be aligned using classicial alignment without adjusted settings. Therefore, if you want to align reads to pre-tRNAs, you want your aligner to understand splicing. Otherwise, if you want to use a 'classical' (non-splicing-aware) aligner, you want your introns to be removed prior to alignment. If you're not focussing on tRNAs at all, you probably also don't need your aligner to be aware of splicing and you can continue with classical aligners.
+The main complexity in RNA-Seq is splicing. There are several widely used free alignment programs for RNA-Seq. The same principle holds for small RNA-Seq. However, we are (at the moment) not aware of splicing events in ncRNAs other than tRNAs. The splice junctions in tRNAs are small (~10bp) but might be too long to be aligned using classicial alignment without adjusted settings. Therefore, if you want to align reads to pre-tRNAs, you want your aligner to understand splicing. Otherwise, if you want to use a 'classical' (non-splicing-aware) aligner, you want your introns to be removed prior to alignment. If you are not focussing on tRNAs at all, you probably also do not need your aligner to be aware of splicing and you can continue with classical aligners.
 
 #### Full genome alignment
 
-In case you want to align to the entire genome, you're not making use of mature ncRNAs. Also, if you want to include results from immature ncRNAs that undergo splicing (e.g. pre-tRNAs) you should proceed with a splicing-aware aligner. The following aligners are popular and should have sufficient documentation in order to run an alignment:
+In case you want to align to the entire genome, you are not making use of mature ncRNAs. Also, if you want to include results from immature ncRNAs that undergo splicing (e.g. pre-tRNAs) you should proceed with a splicing-aware aligner. The following aligners are popular and should have sufficient documentation in order to run an alignment:
 
 *	TopHat: [http://ccb.jhu.edu/software/tophat/index.shtml](http://ccb.jhu.edu/software/tophat/index.shtml)
 *	RNA STAR: [http://code.google.com/p/rna-star/](http://code.google.com/p/rna-star/)
@@ -165,14 +173,14 @@ In case you want to align to the entire genome, you're not making use of mature 
 
 #### ncRNAdb09 alignment
 
-If your reference consists of mature ncRNAs or you are sure you don't take results of ncRNAs that undergo alternative splicing (tRNAs) into account, you can use the following 'classical' aligners:
+If your reference consists of mature ncRNAs or you are sure you do not take results of ncRNAs that undergo alternative splicing (tRNAs) into account, you can use the following 'classical' aligners:
 
 *	BWA: [http://bio-bwa.sourceforge.net/](http://bio-bwa.sourceforge.net/)
 *	bowtie: [http://bowtie-bio.sourceforge.net/bowtie2/index.shtml](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml)
 *	SubRead: [http://subread.sourceforge.net/](http://subread.sourceforge.net/)
 *	NovoAlign (<FONT COLOR='red'>commercial</FONT>): [http://www.novocraft.com/](http://www.novocraft.com/)
 *	CLC Bio (small RNA-Seq module; <FONT COLOR='red'>commercial</FONT>):	 [http://www.clcbio.com/](http://www.clcbio.com/)
-	*	Although we have used CLC for our analysis, we **do not** recommend using it prior to FlaiMapper. Exporting to SAM/BAM file aggregates all reads with an identical sequence and exporting the tables doesn't provide the coordinates of the aligned reads. The SAM/BAM aggregation affects the peak-detection of FlaiMapper. We have solved this issue by doing a first alignment round in CLC, to link the reads to their corresponding pre-cursor ncRNAs. We then apply a second alignment using MUSCLE (http://nar.oxfordjournals.org/content/32/5/1792.long), wrapped by a program called SSLM (http://www.gatcplatform.nl/), to find the exact coordinates of the reads linked to their precursor. We wrote a program to converts the SSLM format into BAM to ensure compatibility with other tools. To convert MUSCLE's output as wrapped by SSLM into BAM proceed with the following command(s):
+	*	Although we have used CLC for our analysis, we **do not** recommend using it prior to FlaiMapper. Exporting to SAM/BAM file aggregates all reads with an identical sequence and exporting the tables does not provide the coordinates of the aligned reads. The SAM/BAM aggregation affects the peak-detection of FlaiMapper. We have solved this issue by doing a first alignment round in CLC, to link the reads to their corresponding pre-cursor ncRNAs. We then apply a second alignment using MUSCLE (http://nar.oxfordjournals.org/content/32/5/1792.long), wrapped by a program called SSLM (http://www.gatcplatform.nl/), to find the exact coordinates of the reads linked to their precursor. We wrote a program to converts the SSLM format into BAM to ensure compatibility with other tools. To convert MUSCLE's output as wrapped by SSLM into BAM proceed with the following command(s):
 
 			sslm2sam "output_sslm" -m ncrnadb09.gtf -o output_unsorted.sam
 		
@@ -193,13 +201,17 @@ If you think installing, configuring and creating references takes too long, you
 
 *	[http://galaxy-sandbox.trait-ctmm.cloudlet.sara.nl/](http://galaxy-sandbox.trait-ctmm.cloudlet.sara.nl/)
 
+### Read collapsing
+
+In small RNA-Seq it is not uncommon to apply read collapsing. This technique simply merges all reads with an identical sequence into one sequence, which sharply reduces the number of aligned reads. The consequence is that the peak detection will be applied upon much lower numbers, lowering the resolution of the experiment. This will most likely affect your results in a negative way. Therefore we advice you **not to use read collapsing ** techniques before FlaiMapper unless you have a clear reason to believe it will give a better answer to your outcome or biological question(s).
+
 ### Multi-mapping
 
 Some small ncRNAs have multiple genomic copies or share identical regions of their sequence with others. Reads that align to such a location(s) are called multi-map reads, since they have multiple candidate genomic origins. There are several strategies to deal with a multi-map read. Imagine we detected a read 6 times and it aligns 100% correctly to 3 different ncRNAs (multi-map regions). There are several strategies to deal with this situation:
 
-1.	**All reads are assigned to only one of the multi-map locations.** In this case you would have 1 location with 6 reads, and two locations with 0 reads. Disadvantage: you're (most likely) under-representing the other locations.
-2.	**All reads are mapped to all multi-map locations.** In this case you would end up with 6 aligned reads mapped to each of the 3 locations. This means that the total number of aligned reads has been multiplied with the number of multi-maps (3*6=18). Disadvantage: you're most likely over-representing most/all of the locations.
-3.	**All reads are proportionally or randomly distributed over all multi-map locations.** If you do this proportionally, you would end up with 2 aligned reads for each of the 3 locations. Disadvantage: for all locations you're (most likely) either over- or under- representing them since.
+1.	**All reads are assigned to only one of the multi-map locations.** In this case you would have 1 location with 6 reads, and two locations with 0 reads. Disadvantage: you are (most likely) under-representing the other locations.
+2.	**All reads are mapped to all multi-map locations.** In this case you would end up with 6 aligned reads mapped to each of the 3 locations. This means that the total number of aligned reads has been multiplied with the number of multi-maps (3*6=18). Disadvantage: you are most likely over-representing most/all of the locations.
+3.	**All reads are proportionally or randomly distributed over all multi-map locations.** If you do this proportionally, you would end up with 2 aligned reads for each of the 3 locations. Disadvantage: for all locations you are (most likely) either over- or under- representing them since.
 
 Each of these strategies are based upon different assumptions and have their own disadvantages. It is difficult to state which strategy is the best, also because this may be dependent on where you want to use the outcome for. In case you want to enlist all possible fragments in your sample(s), we propose to use strategy 2. A single multi-map read, as measured by the sequencer, can not be unambiguously indicate its true genomic origin. Therefore, we believe that by retaining as much as possible multi-map reads, flaimapper will probably report as many as possible scenario's and annotate all possibilities. Since the intention is to enlist all possibilities, we would rather find a fragment more often due to its homology than missing some because of underrepresentation. Surely, down-stream research can still validate a fragment annotation in a multi-map region if necessary.
 
@@ -343,7 +355,7 @@ For ncRNAdb09, the FASTA file (and corresponding index) are available at the fol
 
 You need to have a <U>corresponding index file</U> under the name '*<prefix>.fa.fai*' besides your FASTA reference file.
 
-*Yet we don't provide any other reference genome than the Human ncRNAdb09.*
+*Yet we do not provide any other reference genome than the Human ncRNAdb09.*
 
 ### Input: SSLM
 
@@ -397,7 +409,7 @@ To analyse 1 of its 6 SSLM experiments '*[SRR207111_HeLa18-30](https://github.co
 
 FlaiMapper will export the results as table into '*[output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt](https://github.com/yhoogstrate/flaimapper/raw/master/output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt)*'.
 
-*The SSLM version of FlaiMapper doesn't support entire reference genome alignment.*
+*The SSLM version of FlaiMapper does not support entire reference genome alignment.*
 
 ### Input: multiple alignments
 
