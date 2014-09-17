@@ -1,8 +1,0 @@
->HGNC=10119&HUGO-SYMBOL=SNORA74A&HUGO-NAME=SMALL_NUCLEOLAR_RNA,_H/ACA_BOX_74A&LOCI=[CHR5:138614459-138614678:STRAND=+]&SOURCE=REFSEQ&SOURCE-ACCESSION=NR_002915&GENOME=HG19
-TTCAGGAATCATCCAGCGGTTGTCAGCTATCCAGGCTCATGTGGTGCCTGTGATGGTGTTACACTGTTGGAAGAGCAAACACTGTCTTTATTGAGGTTTGGCTCCAAGCACTGTTTTGGTGTTGTAGCTGAGTACCTTTGGGCAGTGTTTTGCACCTCTGAGAGTGGAATGACTCCTGTGGAGTTGATCCTAGTCTGGGTGCAAACAATTTTTTTCTGTT
->SOLEXA_READ_ATCCAGCGGTTGTCAGCTATCCAGGCT_HITS9
-----------ATCCAGCGGTTGTCAGCTATCCAGGCT---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
->SOLEXA_READ_ATCCAGCGGTTGTCAGC_HITS9
-----------ATCCAGCGGTTGTCAGC-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
->SOLEXA_READ_ATCCAGCGGTTGTCAG_HITS7
-----------ATCCAGCGGTTGTCAG--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

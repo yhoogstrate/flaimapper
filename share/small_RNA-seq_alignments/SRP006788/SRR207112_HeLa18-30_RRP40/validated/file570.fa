@@ -1,8 +1,0 @@
->HGNC=10116&HUGO-SYMBOL=SNORA73B&HUGO-NAME=SMALL_NUCLEOLAR_RNA,_H/ACA_BOX_73B&LOCI=[CHR1:28835060-28835284:STRAND=+]&SOURCE=REFSEQ&SOURCE-ACCESSION=NR_004406&GENOME=HG19&MERGED=[HGNC=10102]
-TAATGAGCATTCCAACGTGGATACCCTGGGAGGTCACTCTCCCCAGGCTCTGTCCAAGTGGCATAGGGGAGCTTAGGGCTCTGCCCCATGATGTACAGTCCCTTTCCACAACGTTGAAGATGAAGCTGGGCCTCGTGTCTGCGCCTGCATATTCCTACAGCTTCCCAGAGTCCTGTGGACAATGACTGGGGAGACAAACCATGCAGGAAACATATCTAGTATACT
->SOLEXA_READ_TCCAACGTGGATACCCTGGGAGGT_HITS4
-----------TCCAACGTGGATACCCTGGGAGGT-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
->SOLEXA_READ_TCCAACGTGGATACCCTGGGAGG_HITS13
-----------TCCAACGTGGATACCCTGGGAGG------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
->SOLEXA_READ_GGGAGACAAACCATGCAGGAAACATAT_HITS10
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------GGGAGACAAACCATGCAGGAAACATAT----------

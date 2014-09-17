@@ -1,8 +1,0 @@
->HGNC=37499&HUGO-SYMBOL=RNU1-6&HUGO-NAME=RNA,_U1_SMALL_NUCLEAR_6&LOCI=[CHR1:145969260-145969443:STRAND=-&CHR1:147510994-147511177:STRAND=-]&SOURCE=REFSEQ&SOURCE-ACCESSION=NR_030723&GENOME=HG19&MERGED=[HGNC=37500]
-GTGTGAAGTCATACTTACCTGGCAGGGGAGATACCATGATCACGAAGGTGGTTTTCCCAGGGCGAGGCTTATCCATTGCACTCCGGATGTGCTGACCCCTGCGATTTCCCCAAATGTGGGAAACTCGACTGCATAATTTGTGGTAGTGGGGGACTGCGTCCGCGCTTTCCCCTGAATTTTTGTA
->SOLEXA_READ_2_OF_2_GGTAGTGGGGGACTGC_HITS8
----------------------------------------------------------------------------------------------------------------------------------------------GGTAGTGGGGGACTGC---------------------------
->SOLEXA_READ_2_OF_2_CAAATGTGGGAAACTCGACTG_HITS5
---------------------------------------------------------------------------------------------------------------CAAATGTGGGAAACTCGACTG-----------------------------------------------------
->SOLEXA_READ_2_OF_2_TGGTTTTCCCTGGGCGAGGCT_HITS4
-------------------------------------------------TGGTTTTCCCTGGGCGAGGCT-------------------------------------------------------------------------------------------------------------------
