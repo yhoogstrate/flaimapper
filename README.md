@@ -486,5 +486,5 @@ The master script '*[scripts/analysis.sh](https://github.com/yhoogstrate/flaimap
 The people who have contributed to this project are:
 
  - Youri Hoogstrate
- - Elena S. Martens-Uzunova
  - Guido Jenster
+ - Elena S. Martens-Uzunova
