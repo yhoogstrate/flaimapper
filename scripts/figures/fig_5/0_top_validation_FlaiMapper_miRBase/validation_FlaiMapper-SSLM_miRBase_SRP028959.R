@@ -1,15 +1,21 @@
-experiments = c('SRR207111_HeLa18-30', 'SRR207112_HeLa18-30_RRP40', 'SRR207113_HeLa18-30_AGO1_2', 'SRR207114_HeLa18-30_AGO1_2_RRP40', 'SRR207115_HeLa18-30_XRN1_2', 'SRR207116_HeLa18-30_N')
+#!/usr/bin/env R
+args <- commandArgs(trailingOnly = TRUE)
+
+data_dir = args[1]
+output_dir = args[2]
+output_dir_extra = args[3]
+
+experiments = c('SRR954957', 'SRR954958', 'SRR954959')
 
 for(experiment in experiments) {
-  f1 = paste("validation_FlaiMapper_miRBase_SRP006788_",experiment,"_sensitivity.txt",sep="")
-  f2 = paste("validation_FlaiMapper_miRBase_SRP006788_",experiment,"_offset.txt",sep="")
+  f1 = paste(data_dir,"/validation_FlaiMapper_miRBase_SRP028959_",experiment,"_sensitivity.txt",sep="")
+  f2 = paste(data_dir,"/validation_FlaiMapper_miRBase_SRP028959_",experiment,"_offset.txt",sep="")
   
-  f3 = paste("../../../../output/figures/fig_5_extra/validation_FlaiMapper_miRBase_SRP006788_",experiment,"_sensitivity_barplot.svg",sep="")
-  f4 = paste("../../../../output/figures/fig_5_extra/validation_FlaiMapper_miRBase_SRP006788_",experiment,"_sensitivity_piechart.svg",sep="")
+  f3 = paste(output_dir_extra,"/validation_FlaiMapper_miRBase_SRP028959_",experiment,"_sensitivity_barplot.svg",sep="")
+  f4 = paste(output_dir_extra,"/validation_FlaiMapper_miRBase_SRP028959_",experiment,"_sensitivity_piechart.svg",sep="")
   
-  f5 = paste("../../../../output/figures/fig_5_extra/validation_FlaiMapper_miRBase_SRP006788_",experiment,"_offset_with_miRBase_start-positions.svg",sep="")
-  f6 = paste("../../../../output/figures/fig_5_extra/validation_FlaiMapper_miRBase_SRP006788_",experiment,"_offset_with_miRBase_stop-positions.svg",sep="")
-  
+  f5 = paste(output_dir_extra,"/validation_FlaiMapper_miRBase_SRP028959_",experiment,"_offset_with_miRBase_start-positions.svg",sep="")
+  f6 = paste(output_dir_extra,"/validation_FlaiMapper_miRBase_SRP028959_",experiment,"_offset_with_miRBase_stop-positions.svg",sep="")
   
   table_overlap <- read.table(f1,header=T,row.names=1)
   table_error <- read.table(f2,header=T,row.names=1)
@@ -26,7 +32,7 @@ for(experiment in experiments) {
   
   svg(f4)
   column <- 3
-  pie(table_overlap[,column],labels=paste(c("predicted","not predicted","no reads"),texting,sep=": "),col=c("darkgreen","red","gray"),main="miRBase predicted by FlaiMapper\nsample SRP006788")
+  pie(table_overlap[,column],labels=paste(c("predicted","not predicted","no reads"),texting,sep=": "),col=c("darkgreen","red","gray"),main="miRBase predicted by FlaiMapper\nsample SRP028959_4-1x_Ion_Torrent_PGM_HeLa")
   dev.off()
   
   
