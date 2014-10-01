@@ -55,13 +55,15 @@ class BAMParser(MaskedRegion):
 		# Check indexes
 		for bam_file in self.alignments:
 			fh = pysam.Samfile(bam_file)
-			try:
-				fh.fetch(self.name, 0, 0)
-				fh.close()
-			except:
-				fh.close()
-				sys.stderr.write('Indexing BAM file with samtools: '+bam_file+"\n")
-				subprocess.call(["samtools", "index", bam_file])		# Create index
+			
+			if(self.name in fh.references):
+				try:
+					fh.fetch(self.name, 0, 0)
+					fh.close()
+				except:
+					fh.close()
+					sys.stderr.write('Indexing BAM file with samtools: '+bam_file+"\n")
+					subprocess.call(["samtools", "index", bam_file])	# Create index
 		
 		for bam_file in self.alignments:
 			fh = pysam.Samfile(bam_file)
