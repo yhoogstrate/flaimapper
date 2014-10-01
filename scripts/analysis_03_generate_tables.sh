@@ -35,7 +35,7 @@ printf "SCARNA\t"$(grep SCARNA $FILE3    | wc -l)"/"$(grep SCARNA $FILE4 | wc -l
 printf   "MISC\t"$(grep -v =MIR $FILE3   | grep -v SNORD | grep -v SNORA | grep -v NAME=TRNA | grep -v SCARNA | wc -l)"/"$(grep -v =MIR $FILE4 | grep -v SNORD | grep -v SNORA | grep -v NAME=TRNA | grep -v SCARNA | wc -l)"\n" >> $FILE5
 printf "\n" >> $FILE5
 
-unset ROOT_DIR
+unset ROOT_DIR FILE1 FILE2 FILE3 FILE4 FILE5
 
 # ----------------------------------------------------------------------
 
@@ -76,7 +76,7 @@ do :
 	printf "\n" >> $FILE5
 done
 
-unset SAMPLE SAMPLES ROOT_DIR
+unset SAMPLE SAMPLES ROOT_DIR FILE1 FILE2 FILE3 FILE4 FILE5
 
 # ----------------------------------------------------------------------
 
@@ -119,7 +119,7 @@ do :
 	printf "\n" >> $FILE5
 done
 
-unset SAMPLE SAMPLES
+unset SAMPLE SAMPLES FILE1 FILE2 FILE3 FILE4 FILE5
 
 # ----------------------------------------------------------------------
 
@@ -162,7 +162,7 @@ do :
 	printf "\n" >> $FILE5
 done
 
-unset SAMPLE SAMPLES
+unset SAMPLE SAMPLES FILE1 FILE2 FILE3 FILE4 FILE5
 
 # ----------------------------------------------------------------------
 
@@ -199,7 +199,7 @@ printf "SCARNA\t"$(grep SCARNA $FILE3    | wc -l)"/"$(grep SCARNA $FILE4 | wc -l
 printf   "MISC\t"$(grep -v =MIR $FILE3   | grep -v SNORD | grep -v SNORA | grep -v NAME=TRNA | grep -v SCARNA | wc -l)"/"$(grep -v =MIR $FILE4 | grep -v SNORD | grep -v SNORA | grep -v NAME=TRNA | grep -v SCARNA | wc -l)"\n" >> $FILE5
 printf "\n" >> $FILE5
 
-unset ROOT_DIR
+unset ROOT_DIR FILE1 FILE2 FILE3 FILE4 FILE5
 
 # ----------------------------------------------------------------------
 
@@ -236,6 +236,6 @@ printf "SCARNA\t"$(grep SCARNA $FILE3    | wc -l)"/"$(grep SCARNA $FILE4 | wc -l
 printf   "MISC\t"$(grep -v =MIR $FILE3   | grep -v SNORD | grep -v SNORA | grep -v NAME=TRNA | grep -v SCARNA | wc -l)"/"$(grep -v =MIR $FILE4 | grep -v SNORD | grep -v SNORA | grep -v NAME=TRNA | grep -v SCARNA | wc -l)"\n" >> $FILE5
 printf "\n" >> $FILE5
 
-unset ROOT_DIR
+unset ROOT_DIR FILE1 FILE2 FILE3 FILE4 FILE5
 
 # ----------------------------------------------------------------------
