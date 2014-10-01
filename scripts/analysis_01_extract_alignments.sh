@@ -11,22 +11,20 @@ cd "SRP002175"
 
 echo "  - Dataset: SRP002175"
 
-FILES=( "SRR038852.tar.gz" "SRR038853.tar.gz" "SRR038854.tar.gz" "SRR038855.tar.gz" "SRR038856.tar.gz" "SRR038857.tar.gz" "SRR038858.tar.gz" "SRR038859.tar.gz" "SRR038860.tar.gz" "SRR038861.tar.gz" "SRR038862.tar.gz" "SRR038863.tar.gz" )
+SAMPLES=( "SRR038852" "SRR038853" "SRR038854" "SRR038855" "SRR038856" "SRR038857" "SRR038858" "SRR038859" "SRR038860" "SRR038861" "SRR038862" "SRR038863" )
 
-for FILE in "${FILES[@]}"
+for SAMPLE in ${SAMPLES[@]}
 do :
-
-	if [ -e $FILE ]
+	if [ -e $SAMPLE".tar.gz" ]
 	then
-		echo "    * Extracting: $FILE"
-		tar xzvf $FILE > /dev/null
+		echo "    * Extracting: $SAMPLE"
+		tar xzvf $SAMPLE".tar.gz" > /dev/null
 	else
-		echo "    ! Could not find archive: $FILE"
+		echo "    ! Could not find archive: "$SAMPLE".tar.gz"
 	fi
-
 done
 
-unset FILE FILES
+unset SAMPLE SAMPLES
 
 cd ../
 
@@ -38,22 +36,20 @@ cd "SRP006788"
 
 echo "  - Dataset: SRP006788"
 
-FILES=( "SRR207111_HeLa18-30.tar.gz" "SRR207112_HeLa18-30_RRP40.tar.gz" "SRR207113_HeLa18-30_AGO1_2.tar.gz" "SRR207114_HeLa18-30_AGO1_2_RRP40.tar.gz" "SRR207115_HeLa18-30_XRN1_2.tar.gz" "SRR207116_HeLa18-30_N.tar.gz" )
+SAMPLES=( "SRR207111_HeLa18-30" "SRR207112_HeLa18-30_RRP40" "SRR207113_HeLa18-30_AGO1_2" "SRR207114_HeLa18-30_AGO1_2_RRP40" "SRR207115_HeLa18-30_XRN1_2" "SRR207116_HeLa18-30_N" )
 
-for FILE in "${FILES[@]}"
+for SAMPLE in ${SAMPLES[@]}
 do :
-
-	if [ -e $FILE ]
+	if [ -e $SAMPLE".tar.gz" ]
 	then
-		echo "    * Extracting: $FILE"
-		tar xzvf $FILE > /dev/null
+		echo "    * Extracting: $SAMPLE"
+		tar xzvf $SAMPLE".tar.gz" > /dev/null
 	else
-		echo "    ! Could not find archive: $FILE"
+		echo "    ! Could not find archive: "$SAMPLE".tar.gz"
 	fi
-
 done
 
-unset FILE FILES
+unset SAMPLE SAMPLES
 
 cd ../
 
@@ -65,22 +61,20 @@ cd "SRP028959"
 
 echo "  - Dataset: SRP028959"
 
-FILES=( "SRR954957.tar.gz" "SRR954958.tar.gz" "SRR954959.tar.gz" )
+SAMPLES=( "SRR954957" "SRR954958" "SRR954959" )
 
-for FILE in "${FILES[@]}"
+for SAMPLE in ${SAMPLES[@]}
 do :
-
-	if [ -e $FILE ]
+	if [ -e $SAMPLE".tar.gz" ]
 	then
-		echo "    * Extracting: $FILE"
-		tar xzvf $FILE > /dev/null
+		echo "    * Extracting: $SAMPLE"
+		tar xzvf $SAMPLE".tar.gz" > /dev/null
 	else
-		echo "    ! Could not find archive: $FILE"
+		echo "    ! Could not find archive: "$SAMPLE".tar.gz"
 	fi
-
 done
 
-unset FILE FILES
+unset SAMPLE SAMPLES
 
 cd ../
 
@@ -92,22 +86,20 @@ cd "SRP034013"
 
 echo "  - Dataset: SRP034013"
 
-FILES=( "SRR1049397.tar.gz" "SRR1049398.tar.gz" "SRR1049399.tar.gz" )
+SAMPLES=( "SRR1049397" "SRR1049398" "SRR1049399" )
 
-for FILE in "${FILES[@]}"
+for SAMPLE in ${SAMPLES[@]}
 do :
-
-	if [ -e $FILE ]
+	if [ -e $SAMPLE".tar.gz" ]
 	then
-		echo "    * Extracting: $FILE"
-		tar xzvf $FILE > /dev/null
+		echo "    * Extracting: $SAMPLE"
+		tar xzvf $SAMPLE".tar.gz" > /dev/null
 	else
-		echo "    ! Could not find archive: $FILE"
+		echo "    ! Could not find archive: "$SAMPLE".tar.gz"
 	fi
-
 done
 
-unset FILE FILES
+unset SAMPLE SAMPLES
 
 cd ../
 
@@ -119,22 +111,20 @@ cd "SRP041082"
 
 echo "  - Dataset: SRP041082"
 
-FILES=( "SRR1232072.tar.gz" "SRR1232073.tar.gz" )
+SAMPLES=( "SRR1232072" "SRR1232073" )
 
-for FILE in "${FILES[@]}"
+for SAMPLE in ${SAMPLES[@]}
 do :
-
-	if [ -e $FILE ]
+	if [ -e $SAMPLE".tar.gz" ]
 	then
-		echo "    * Extracting: $FILE"
-		tar xzvf $FILE > /dev/null
+		echo "    * Extracting: $SAMPLE"
+		tar xzvf $SAMPLE".tar.gz" > /dev/null
 	else
-		echo "    ! Could not find archive: $FILE"
+		echo "    ! Could not find archive: "$SAMPLE".tar.gz"
 	fi
-
 done
 
-unset FILE FILES
+unset SAMPLE SAMPLES
 
 cd ../
 
