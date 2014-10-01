@@ -16,13 +16,13 @@ FILES=( "SRR038852.tar.gz" "SRR038853.tar.gz" "SRR038854.tar.gz" "SRR038855.tar.
 for FILE in "${FILES[@]}"
 do :
 
-  if [ -e $FILE ]
-  then
-    echo "    * Extracting: $FILE"
-    tar xzvf $FILE > /dev/null
-  else
-    echo "    ! Could not find archive: $FILE"
-  fi
+	if [ -e $FILE ]
+	then
+		echo "    * Extracting: $FILE"
+		tar xzvf $FILE > /dev/null
+	else
+		echo "    ! Could not find archive: $FILE"
+	fi
 
 done
 
@@ -43,13 +43,13 @@ FILES=( "SRR207111_HeLa18-30.tar.gz" "SRR207112_HeLa18-30_RRP40.tar.gz" "SRR2071
 for FILE in "${FILES[@]}"
 do :
 
-  if [ -e $FILE ]
-  then
-    echo "    * Extracting: $FILE"
-    tar xzvf $FILE > /dev/null
-  else
-    echo "    ! Could not find archive: $FILE"
-  fi
+	if [ -e $FILE ]
+	then
+		echo "    * Extracting: $FILE"
+		tar xzvf $FILE > /dev/null
+	else
+		echo "    ! Could not find archive: $FILE"
+	fi
 
 done
 
@@ -70,13 +70,13 @@ FILES=( "SRR954957.tar.gz" "SRR954958.tar.gz" "SRR954959.tar.gz" )
 for FILE in "${FILES[@]}"
 do :
 
-  if [ -e $FILE ]
-  then
-    echo "    * Extracting: $FILE"
-    tar xzvf $FILE > /dev/null
-  else
-    echo "    ! Could not find archive: $FILE"
-  fi
+	if [ -e $FILE ]
+	then
+		echo "    * Extracting: $FILE"
+		tar xzvf $FILE > /dev/null
+	else
+		echo "    ! Could not find archive: $FILE"
+	fi
 
 done
 
@@ -97,13 +97,13 @@ FILES=( "SRR1049397.tar.gz" "SRR1049398.tar.gz" "SRR1049399.tar.gz" )
 for FILE in "${FILES[@]}"
 do :
 
-  if [ -e $FILE ]
-  then
-    echo "    * Extracting: $FILE"
-    tar xzvf $FILE > /dev/null
-  else
-    echo "    ! Could not find archive: $FILE"
-  fi
+	if [ -e $FILE ]
+	then
+		echo "    * Extracting: $FILE"
+		tar xzvf $FILE > /dev/null
+	else
+		echo "    ! Could not find archive: $FILE"
+	fi
 
 done
 
@@ -124,13 +124,13 @@ FILES=( "SRR1232072.tar.gz" "SRR1232073.tar.gz" )
 for FILE in "${FILES[@]}"
 do :
 
-  if [ -e $FILE ]
-  then
-    echo "    * Extracting: $FILE"
-    tar xzvf $FILE > /dev/null
-  else
-    echo "    ! Could not find archive: $FILE"
-  fi
+	if [ -e $FILE ]
+	then
+		echo "    * Extracting: $FILE"
+		tar xzvf $FILE > /dev/null
+	else
+		echo "    ! Could not find archive: $FILE"
+	fi
 
 done
 
