@@ -1,59 +1,7 @@
 #!/bin/bash
 
-# Step 01: annotate the fragments
-../src/flaimapper.py \
-                     -v \
-                     -o ../output/SRP002175/01_output_flaimapper.txt \
-                     -f 1 \
-                        ../share/small_RNA-seq_alignments/SRP002175/SRR038853 \
-                        ../share/small_RNA-seq_alignments/SRP002175/SRR038855 \
-                        ../share/small_RNA-seq_alignments/SRP002175/SRR038857 \
-                        ../share/small_RNA-seq_alignments/SRP002175/SRR038859 \
-                        ../share/small_RNA-seq_alignments/SRP002175/SRR038861 \
-                        ../share/small_RNA-seq_alignments/SRP002175/SRR038863 \
-                        ../share/small_RNA-seq_alignments/SRP002175/SRR038852 \
-                        ../share/small_RNA-seq_alignments/SRP002175/SRR038854 \
-                        ../share/small_RNA-seq_alignments/SRP002175/SRR038856 \
-                        ../share/small_RNA-seq_alignments/SRP002175/SRR038858 \
-                        ../share/small_RNA-seq_alignments/SRP002175/SRR038860 \
-                        ../share/small_RNA-seq_alignments/SRP002175/SRR038862
-
-../src/flaimapper.py \
-                     -v \
-                     -o ../output/SRP006788/01.a_output_flaimapper.txt \
-                     -f 1 \
-                        ../share/small_RNA-seq_alignments/SRP006788/SRR207111_HeLa18-30
-
-../src/flaimapper.py \
-                     -v \
-                     -o ../output/SRP006788/01.b_output_flaimapper.txt \
-                     -f 1 \
-                        ../share/small_RNA-seq_alignments/SRP006788/SRR207112_HeLa18-30_RRP40
-
-../src/flaimapper.py \
-                     -v \
-                     -o ../output/SRP006788/01.c_output_flaimapper.txt \
-                     -f 1 \
-                        ../share/small_RNA-seq_alignments/SRP006788/SRR207113_HeLa18-30_AGO1_2
-
-../src/flaimapper.py \
-                     -v \
-                     -o ../output/SRP006788/01.d_output_flaimapper.txt \
-                     -f 1 \
-                        ../share/small_RNA-seq_alignments/SRP006788/SRR207114_HeLa18-30_AGO1_2_RRP40
-
-../src/flaimapper.py \
-                     -v \
-                     -o ../output/SRP006788/01.e_output_flaimapper.txt \
-                     -f 1 \
-                        ../share/small_RNA-seq_alignments/SRP006788/SRR207115_HeLa18-30_XRN1_2
-
-../src/flaimapper.py \
-                     -v \
-                     -o ../output/SRP006788/01.f_output_flaimapper.txt \
-                     -f 1 \
-                        ../share/small_RNA-seq_alignments/SRP006788/SRR207116_HeLa18-30_N
-
+source analysis_01_extract_alignments.sh
+source analysis_02_run_flaimapper.sh
 
 ### Step 02: aggregate data
 grep -v Precursor ../output/SRP002175/01_output_flaimapper.txt > ../output/SRP002175/02_output_flaimapper.txt
