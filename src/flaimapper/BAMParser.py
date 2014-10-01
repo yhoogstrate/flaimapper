@@ -60,7 +60,7 @@ class BAMParser(MaskedRegion):
 				fh.close()
 			except:
 				fh.close()
-				sys.stderr.write('Indexing BAM file with samtools: '+bam_file)
+				sys.stderr.write('Indexing BAM file with samtools: '+bam_file+"\n")
 				subprocess.call(["samtools", "index", bam_file])		# Create index
 		
 		for bam_file in self.alignments:
