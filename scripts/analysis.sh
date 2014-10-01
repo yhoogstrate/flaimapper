@@ -2,24 +2,7 @@
 
 source analysis_01_extract_alignments.sh
 source analysis_02_run_flaimapper.sh
-
-### Step 02: aggregate data
-grep -v Precursor ../output/SRP002175/01_output_flaimapper.txt > ../output/SRP002175/02_output_flaimapper.txt
-cut -f 2 ../output/SRP002175/02_output_flaimapper.txt | sort | uniq > ../output/SRP002175/03_unique_ncRNAs_with_fragments.txt
-grep -E "^>" ../share/annotations/ncRNA_annotation/ncRNdb09_with_tRNAs_and_Pseudogenes__21_oct_2011__hg19.fasta > ../output/SRP002175/04_unique_ncRNAs.txt
-printf "[Fragments]\nMIRNA\t"$(grep =MIR ../output/SRP002175/02_output_flaimapper.txt | wc -l)"\nSNORD\t"$(grep SNORD ../output/SRP002175/02_output_flaimapper.txt | wc -l)"\nSNORA\t"$(grep SNORA ../output/SRP002175/02_output_flaimapper.txt | wc -l)"\nTRNA\t"$(grep NAME=TRNA ../output/SRP002175/02_output_flaimapper.txt | wc -l)"\nSCARNA\t"$(grep SCARNA ../output/SRP002175/02_output_flaimapper.txt | wc -l)"\nMISC\t"$(grep -v =MIR ../output/SRP002175/02_output_flaimapper.txt | grep -v SNORD | grep -v SNORA | grep -v NAME=TRNA | grep -v SCARNA  | wc -l)"\n\n[Affected ncRNAs/total reference ncRNAs]\nMIRNA\t"$(grep =MIR ../output/SRP002175/03_unique_ncRNAs_with_fragments.txt | wc -l)"/"$(grep =MIR      ../output/SRP002175/04_unique_ncRNAs.txt | wc -l)"\nSNORD\t"$(grep SNORD ../output/SRP002175/03_unique_ncRNAs_with_fragments.txt | wc -l)"/"$(grep SNORD     ../output/SRP002175/04_unique_ncRNAs.txt | wc -l)"\nSNORA\t"$(grep SNORA ../output/SRP002175/03_unique_ncRNAs_with_fragments.txt | wc -l)"/"$(grep SNORA     ../output/SRP002175/04_unique_ncRNAs.txt | wc -l)"\nTRNA\t"$(grep NAME=TRNA ../output/SRP002175/03_unique_ncRNAs_with_fragments.txt | wc -l)"/"$(grep NAME=TRNA ../output/SRP002175/04_unique_ncRNAs.txt | wc -l)"\nSCARNA\t"$(grep SCARNA ../output/SRP002175/03_unique_ncRNAs_with_fragments.txt | wc -l)"/"$(grep SCARNA    ../output/SRP002175/04_unique_ncRNAs.txt | wc -l)"\nMISC\t"$(grep -v =MIR ../output/SRP002175/03_unique_ncRNAs_with_fragments.txt | grep -v SNORD | grep -v SNORA | grep -v NAME=TRNA | grep -v SCARNA  | wc -l)"/"$(grep -v =MIR ../output/SRP002175/04_unique_ncRNAs.txt | grep -v SNORD | grep -v SNORA | grep -v NAME=TRNA | grep -v SCARNA  | wc -l)"\n\n" > ../output/SRP002175/05_summary.txt
-
-
-
-SUFFIXES=( "a" "b" "c" "d" "e" "f" )
-for SUFFIX in "${SUFFIXES[@]}"
-do :
-	grep -v Precursor "../output/SRP006788/01."$SUFFIX"_output_flaimapper.txt" > "../output/SRP006788/02."$SUFFIX"_output_flaimapper.txt"
-	cut -f 2 "../output/SRP006788/02."$SUFFIX"_output_flaimapper.txt" | sort | uniq > "../output/SRP006788/03."$SUFFIX"_unique_ncRNAs_with_fragments.txt"
-	grep -E "^>" ../share/annotations/ncRNA_annotation/ncRNdb09_with_tRNAs_and_Pseudogenes__21_oct_2011__hg19.fasta > ../output/SRP006788/04_unique_ncRNAs.txt
-	printf "[Fragments]\nMIRNA\t"$(grep =MIR "../output/SRP006788/02."$SUFFIX"_output_flaimapper.txt" | wc -l)"\nSNORD\t"$(grep SNORD "../output/SRP006788/02."$SUFFIX"_output_flaimapper.txt" | wc -l)"\nSNORA\t"$(grep SNORA "../output/SRP006788/02."$SUFFIX"_output_flaimapper.txt" | wc -l)"\nTRNA\t"$(grep NAME=TRNA "../output/SRP006788/02."$SUFFIX"_output_flaimapper.txt" | wc -l)"\nSCARNA\t"$(grep SCARNA "../output/SRP006788/02."$SUFFIX"_output_flaimapper.txt" | wc -l)"\nMISC\t"$(grep -v =MISC "../output/SRP006788/02."$SUFFIX"_output_flaimapper.txt" | grep -v SNORD | grep -v SNORA | grep -v NAME=TRNA | grep -v SCARNA  | wc -l)"\n\n[Affected ncRNAs/total reference ncRNAs]\nMIRNA\t"$(grep =MIR "../output/SRP006788/03."$SUFFIX"_unique_ncRNAs_with_fragments.txt" | wc -l)"/"$(grep =MIR      ../output/SRP006788/04_unique_ncRNAs.txt | wc -l)"\nSNORD\t"$(grep SNORD "../output/SRP006788/03."$SUFFIX"_unique_ncRNAs_with_fragments.txt" | wc -l)"/"$(grep SNORD     ../output/SRP006788/04_unique_ncRNAs.txt | wc -l)"\nSNORA\t"$(grep SNORA "../output/SRP006788/03."$SUFFIX"_unique_ncRNAs_with_fragments.txt" | wc -l)"/"$(grep SNORA     ../output/SRP006788/04_unique_ncRNAs.txt | wc -l)"\nTRNA\t"$(grep NAME=TRNA "../output/SRP006788/03."$SUFFIX"_unique_ncRNAs_with_fragments.txt" | wc -l)"/"$(grep NAME=TRNA ../output/SRP006788/04_unique_ncRNAs.txt | wc -l)"\nSCARNA\t"$(grep SCARNA "../output/SRP006788/03."$SUFFIX"_unique_ncRNAs_with_fragments.txt" | wc -l)"/"$(grep SCARNA    ../output/SRP006788/04_unique_ncRNAs.txt | wc -l)"\nMISC\t"$(grep -v =MIR "../output/SRP006788/03."$SUFFIX"_unique_ncRNAs_with_fragments.txt" | grep -v SNORD | grep -v SNORA | grep -v NAME=TRNA | grep -v SCARNA  | wc -l)"/"$(grep -v =MIR "../output/SRP002175/04_unique_ncRNAs.txt" | grep -v SNORD | grep -v SNORA | grep -v NAME=TRNA | grep -v SCARNA  | wc -l)"\n" > "../output/SRP006788/05."$SUFFIX"_summary.txt"
-done
-
+source analysis_03_generate_tables.sh
 
 
 # Fig 1:
