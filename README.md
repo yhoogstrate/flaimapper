@@ -488,3 +488,11 @@ The people who have contributed to this project are:
  - Youri Hoogstrate
  - Guido Jenster
  - Elena S. Martens-Uzunova
+
+You can find the corresponding article at:
+
+http://dx.doi.org/10.1093/bioinformatics/btu696
+
+Youri Hoogstrate, Guido Jenster, and Elena S. Martens-Uzunova
+FlaiMapper: computational annotation of small ncRNA derived fragments using RNA-seq high throughput data
+Bioinformatics first published online October 22, 2014 doi:10.1093/bioinformatics/btu696
