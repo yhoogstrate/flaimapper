@@ -1,0 +1,5 @@
+2014-11-14  Youri Hoogstrate
+	* (v1.1.1) Added "src/bin/gtf-from-fasta" and added the file to the
+	  installer. This file makes it posible to create a mask file that
+	  corresponds to a reference fasta file (only if mature ncRNAs are
+	  given in the fasta file).
