@@ -45,6 +45,6 @@ setup(name='flaimapper',
       description='Fragment Location Annotation Identification Mapper',
       author=flaimapper.__author__,
       url='https://github.com/yhoogstrate/flaimapper',
-      scripts=["bin/flaimapper","bin/flaimapper-sslm","bin/sslm2bed","bin/sslm2sam"],
+      scripts=["bin/flaimapper","bin/flaimapper-sslm","bin/sslm2bed","bin/sslm2sam","bin/gtf-from-fasta"],
       packages=['flaimapper'],
      )
