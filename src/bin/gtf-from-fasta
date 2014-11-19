@@ -1,0 +1,82 @@
+#!/usr/bin/env python
+
+"""FlaiMapper: computational annotation of small ncRNA derived fragments using RNA-seq high throughput data
+
+ Here we present Fragment Location Annotation Identification mapper
+ (FlaiMapper), a method that extracts and annotates the locations of
+ sncRNA-derived RNAs (sncdRNAs). These sncdRNAs are often detected in
+ sequencing data and observed as fragments of their  precursor sncRNA.
+ Using small RNA-seq read alignments, FlaiMapper is able to annotate
+ fragments primarily by peak-detection on the start and  end position
+ densities followed by filtering and a reconstruction processes.
+ Copyright (C) 2011-2014:
+ - Youri Hoogstrate
+ - Elena S. Martens-Uzunova
+ - Guido Jenster
+ 
+ 
+ [License: GPL3]
+ 
+ This file is part of flaimapper.
+ 
+ flaimapper is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ flaimapper is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+ Documentation as defined by:
+ <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
+"""
+
+
+import os,re,random,operator,argparse,sys,textwrap,datetime
+import pysam
+
+def main():
+	import flaimapper
+	
+	# CLI
+	parser = argparse.ArgumentParser(description="If you don't have a MASK file you can create them based on the FASTA file. This only works for MATURE ncRNA sequences and NOT for REFERENCE GENOMES. For every entry in a FASTA file one corresponding line in a GTF file will be created.",formatter_class=argparse.RawDescriptionHelpFormatter,epilog="Further details can be found in the manual:\n<https://github.com/yhoogstrate/flaimapper>")
+	
+	parser.add_argument('-V','--version', action='version', version=textwrap.dedent("%(prog)s "+flaimapper.__version__+"\nCopyright (C) 2011-"+str(datetime.datetime.now().year)+" Youri Hoogstrate.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n"))
+	
+	parser.add_argument("-o","--output",help="output filename; '-' for stdout",default="-")
+	
+	parser.add_argument("fasta_file",help="Reference fasta file",nargs=1)
+	
+	args = parser.parse_args()
+	
+	
+	# Program
+	fasta_ref = pysam.Fastafile(args.fasta_file[0])
+	
+	if(args.output == "-"):
+		fh = sys.stdout
+	else:
+		fh = open(args.output,'w')
+	
+	if(len(fasta_ref.lengths) == len(fasta_ref.references)):
+		for i in range(len(fasta_ref.lengths)):
+			name = fasta_ref.references[i]
+			length = str(fasta_ref.lengths[i])
+			fh.write(name+"\tflaimapper\tncRNA\t0\t"+length+"\t.\t.\t.\n")
+		
+		if(args.output != "-"):
+			fh.close()
+	else:
+		if(args.output != "-"):
+			fh.close()
+		
+		raise Exception("Pysam error: number of reference annotations doesn't match with their provided lengths")
+
+
+if __name__ == "__main__":
+	sys.exit(main())
