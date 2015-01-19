@@ -83,7 +83,7 @@ class FlaiMapperObject(FragmentContainer):
 				print "     * Detecting fragments"
 			
 			predicted_fragments = FragmentFinder(region[0],aligned_reads)
-			predicted_fragments.run()
+			#predicted_fragments.run()
 			
 			self.add_fragments(predicted_fragments,self.fasta_file)
 	
