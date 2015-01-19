@@ -1,3 +1,7 @@
+2015-01-19  Youri Hoogstrate
+	* (v1.1.2) Found and disabled an unnecessairy double exectution of a
+	  'run' function which caused double calculation time.
+
 2014-11-14  Youri Hoogstrate
 	* (v1.1.1) Added "src/bin/gtf-from-fasta" and added the file to the
 	  installer. This file makes it posible to create a mask file that
