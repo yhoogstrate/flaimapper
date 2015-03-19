@@ -39,12 +39,23 @@
 import flaimapper
 
 from distutils.core import setup
+from setuptools import setup, find_packages
 
 setup(name='flaimapper',
-      version=flaimapper.__version__,
-      description='Fragment Location Annotation Identification Mapper',
-      author=flaimapper.__author__,
-      url='https://github.com/yhoogstrate/flaimapper',
-      scripts=["bin/flaimapper","bin/flaimapper-sslm","bin/sslm2bed","bin/sslm2sam","bin/gtf-from-fasta"],
-      packages=['flaimapper'],
-     )
+		version=flaimapper.__version__,
+		description='Fragment Location Annotation Identification Mapper',
+		author=flaimapper.__author__,
+		maintainer=flaimapper.__author__,
+		url='https://github.com/yhoogstrate/flaimapper',
+		scripts=["bin/flaimapper","bin/flaimapper-sslm","bin/sslm2bed","bin/sslm2sam","bin/gtf-from-fasta"],
+		packages=['flaimapper'],
+		install_requires=['pysam >= 0.8.0'],
+		classifiers=[
+			'Environment :: Console',
+			'Intended Audience :: Science/Research',
+			'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+			'Operating System :: OS Independent'
+			'Topic :: Scientific/Engineering',
+			'Topic :: Scientific/Engineering :: Bio-Informatics',
+			],
+	)
