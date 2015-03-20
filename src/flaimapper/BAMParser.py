@@ -62,8 +62,11 @@ class BAMParser(MaskedRegion):
 					fh.close()
 				except:
 					fh.close()
-					sys.stderr.write('Indexing BAM file with samtools: '+bam_file+"\n")
-					subprocess.call(["samtools", "index", bam_file])	# Create index
+					try:
+						print ' - Indexing BAM file with samtools: '+bam_file+"\n"
+						subprocess.call(["samtools", "index", bam_file])# Create index
+					except:
+						sys.stderr.write('Couldn\'t indexing BAM file with samtools: '+bam_file+'\nAre you sure samtools is installed?\n')
 		
 		for bam_file in self.alignments:
 			fh = pysam.Samfile(bam_file)

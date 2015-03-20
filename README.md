@@ -199,7 +199,15 @@ Most aligners require tool-specific reference files (indexed versions of the ref
 
 If you think installing, configuring and creating references takes too long, you can make use of Galaxy. We have a public instance with ncRNAdb09 installed available at the following url:
 
-*	[http://galaxy-sandbox.trait-ctmm.cloudlet.sara.nl/](http://galaxy-sandbox.trait-ctmm.cloudlet.sara.nl/)
+*	[http://galaxy-demo.ctmm-trait.nl/](http://galaxy-demo.ctmm-trait.nl/)
+
+If you have a personal galaxy instance, you can install FlaiMapper via the testoolshed at the following url:
+
+*	[https://testtoolshed.g2.bx.psu.edu/view/yhoogstrate/flaimapper](https://testtoolshed.g2.bx.psu.edu/view/yhoogstrate/flaimapper)
+
+If you want to improve upon the galaxy wrapper, you can find the wrapper at the following url:
+
+*	[https://bitbucket.org/EMCbioinf/galaxy-tool-shed-tools/raw/master/flaimapper/](https://bitbucket.org/EMCbioinf/galaxy-tool-shed-tools/raw/master/flaimapper/)
 
 ### Read collapsing
 

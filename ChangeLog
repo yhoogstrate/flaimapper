@@ -1,4 +1,7 @@
 2015-03-20  Youri Hoogstrate
+	* (v1.1.5) Removed warning written to stderr that should be reported
+	  to stdout.
+	
 	* (v1.1.4) Tabix libraries from the pysam library have been replaced
 	  with flaimapper libraries because of multiple incompatibility
 	  issues.
