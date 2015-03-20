@@ -70,15 +70,20 @@ def fasta_entry_names(fasta_file):
 	return names.keys()
 
 def parse_gff(gff_file):
+	"""2015-mar-20: Changed the tabix iterator
+	because pysam 0.8.2.1 is has become incompatible
+	previous versions and its own documentation
+	"""
 	index_gff(gff_file)
 	
+	print "\t\t- Parsing GFF file:"
 	regions = []
 	
-	for region in pysam.Tabixfile(gff_file).fetch():
-		region = region.strip("\r").split("\t")
-		regions.append((region[0],int(region[3]),int(region[4])-1,region[6]))
-	
-	return regions
+	fh = pysam.Tabixfile(gff_file)
+	for contig in fh.contigs:
+			for region in fh.fetch(contig):
+					region = region.strip("\r").split("\t")
+					regions.append((region[0],int(region[3]),int(region[4])-1,region[6]))
 
 def link_mirbase_to_ncrnadb09(mirbase,ncrnadb09):
 	links = {}
