@@ -1,4 +1,8 @@
 2015-03-20  Youri Hoogstrate
+	* (v1.1.4) Tabix libraries from the pysam library have been replaced
+	  with flaimapper libraries because of multiple incompatibility
+	  issues.
+	
 	* (v1.1.3) Pysam 0.8.2.1 shows different behavior with the
 	  TabixFile.fetch() function when no arguments are given. Flaimapper
 	  has been made compatible also with the latest version of pysam.

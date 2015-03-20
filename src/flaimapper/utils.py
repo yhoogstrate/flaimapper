@@ -37,28 +37,6 @@
 """
 
 import os,tempfile
-import pysam
-
-def index_gff(gff_file):
-	gff_file = os.path.abspath(gff_file)
-	new_idx = gff_file+".tbi"
-	if(not os.path.isfile(new_idx)):
-		print "making index for gtf/gff file..."
-		tmp_name = tempfile.gettempdir()+"/"+os.path.basename(gff_file)
-		tmp_name_gz = tmp_name+".gz"
-		tmp_name_idx = tmp_name_gz+".tbi"
-		
-		if(os.path.isfile(tmp_name)):
-			os.remove(tmp_name)
-		if(os.path.isfile(tmp_name_gz)):
-			os.remove(tmp_name_gz)
-		if(os.path.isfile(tmp_name_idx)):
-			os.remove(tmp_name_idx)
-		
-		os.symlink(gff_file, tmp_name)
-		
-		pysam.tabix_index(tmp_name, preset="gff")
-		os.rename(tmp_name_idx,new_idx)
 
 def fasta_entry_names(fasta_file):
 	names = {}
@@ -70,20 +48,20 @@ def fasta_entry_names(fasta_file):
 	return names.keys()
 
 def parse_gff(gff_file):
-	"""2015-mar-20: Changed the tabix iterator
-	because pysam 0.8.2.1 is has become incompatible
-	previous versions and its own documentation
+	"""2015-mar-20: Removed the Tabix library because of incompatibility
+	issues.
 	"""
-	index_gff(gff_file)
 	
-	print "\t\t- Parsing GFF file:"
 	regions = []
 	
-	fh = pysam.Tabixfile(gff_file)
-	for contig in fh.contigs:
-			for region in fh.fetch(contig):
-					region = region.strip("\r").split("\t")
-					regions.append((region[0],int(region[3]),int(region[4])-1,region[6]))
+	with open(gff_file,'r') as fh:
+		for line in fh:
+			line = line.strip()
+			if(len(line) > 0 and line[0] != '#'):
+				region = line.split('\t')
+				regions.append((region[0],int(region[3]),int(region[4])-1,region[6]))
+	
+	return regions
 
 def link_mirbase_to_ncrnadb09(mirbase,ncrnadb09):
 	links = {}
