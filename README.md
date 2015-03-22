@@ -17,6 +17,7 @@
     - [Compile & Install](#compile--install)
     - [Check if it works!](#check-if-it-works)
     - [Uninstall FlaiMapper](#uninstall-flaimapper)
+    - [Galaxy](#galaxy)
 - [Alignment](#alignment)
     - [Obtain reference](#obtain-reference)
          - [Full genome alignment](#full-genome-alignment)
@@ -103,6 +104,20 @@ To remove FlaiMapper automatically from your system directories (without removin
 	sudo pip uninstall flaimapper
 
 The downloaded source files can only be removed manually. Be aware that references files for *ncRNAdb09* and the data of the analysis as demonstrated in the corresponding article are also located within this directory.
+
+### Galaxy
+
+If you think installing, configuring FlaiMapper, creating references and understanding the commandline interface takes too long, you can make use of Galaxy. We have a public instance available at the following url:
+
+*	[http://galaxy-demo.ctmm-trait.nl/](http://galaxy-demo.ctmm-trait.nl/)
+
+If you have a personal galaxy instance, you can install FlaiMapper via the testoolshed at the following url:
+
+*	[https://testtoolshed.g2.bx.psu.edu/view/yhoogstrate/flaimapper](https://testtoolshed.g2.bx.psu.edu/view/yhoogstrate/flaimapper)
+
+If you want to improve upon the galaxy wrapper, you can find the wrapper at the following url:
+
+*	[https://bitbucket.org/EMCbioinf/galaxy-tool-shed-tools/raw/master/flaimapper/](https://bitbucket.org/EMCbioinf/galaxy-tool-shed-tools/raw/master/flaimapper/)
 
 ## Alignment
 
@@ -196,18 +211,6 @@ Most aligners require tool-specific reference files (indexed versions of the ref
 |:----------|:--------------------|
 | TopHat & Bowtie | [ncrnadb09.ebwt.tar.gz](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncRNA_annotation/ncrnadb09.ebwt.tar.gz) |
 | TopHat2 & Bowtie2 | [ncrnadb09.bt2.tar.gz](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncRNA_annotation/ncrnadb09.bt2.tar.gz) |
-
-If you think installing, configuring and creating references takes too long, you can make use of Galaxy. We have a public instance with ncRNAdb09 installed available at the following url:
-
-*	[http://galaxy-demo.ctmm-trait.nl/](http://galaxy-demo.ctmm-trait.nl/)
-
-If you have a personal galaxy instance, you can install FlaiMapper via the testoolshed at the following url:
-
-*	[https://testtoolshed.g2.bx.psu.edu/view/yhoogstrate/flaimapper](https://testtoolshed.g2.bx.psu.edu/view/yhoogstrate/flaimapper)
-
-If you want to improve upon the galaxy wrapper, you can find the wrapper at the following url:
-
-*	[https://bitbucket.org/EMCbioinf/galaxy-tool-shed-tools/raw/master/flaimapper/](https://bitbucket.org/EMCbioinf/galaxy-tool-shed-tools/raw/master/flaimapper/)
 
 ### Read collapsing
 
