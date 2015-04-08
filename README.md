@@ -8,6 +8,8 @@
 	(_)    (____/'(_) (_)(_)(_) (_)(_) (_)(_)    (_)    (____/'(_) (_)
 
 ---
+![FlaiMapper](https://github.com/yhoogstrate/flaimapper/raw/master/share/flaimapper.png)
+---
 
 - [Download & Installation](#download--installation)
     - [Install dependencies](#install-dependencies)
