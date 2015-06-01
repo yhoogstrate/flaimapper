@@ -59,7 +59,7 @@ def parse_gff(gff_file):
 			line = line.strip()
 			if(len(line) > 0 and line[0] != '#'):
 				region = line.split('\t')
-				regions.append((region[0],int(region[3]),int(region[4])-1,region[6]))
+				regions.append((region[0],int(region[3]),int(region[4])-1,0))
 	
 	return regions
 
