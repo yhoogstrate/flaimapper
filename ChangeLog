@@ -1,4 +1,9 @@
-2015-03-20  Youri Hoogstrate
+2015-06-03  Youri Hoogstrate
+	* (v1.2.1) Output files are sorted on chromosome names. This ensures
+	  that lines in the output file always appear in the same order.
+	  Deriving GTF/GFF files from FASTA files has now the correct
+	  1-based offset.
+	
 	* (v1.2.0) Fixed a bug that didn't allow reads larger than 35bp.
 	  The 0-based and 1-based coordinates are now consistent. some out
 	  commented code has been removed. Improved output format 1 "table;
@@ -12,9 +17,11 @@
 	  The fixed file is provided at:
 	  share/annotations/ncRNA_annotation/ncrnadb09_v2.0.gtf
 	
+2015-06-01  Youri Hoogstrate
 	* (v1.1.6) Fixed a GFF/GTF parsing error - FlaiMapper only supported
 	  annotations with the score value set.
 	
+2015-03-20  Youri Hoogstrate
 	* (v1.1.5) Removed warning written to stderr that should be reported
 	  to stdout.
 	

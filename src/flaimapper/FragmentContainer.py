@@ -86,8 +86,8 @@ class FragmentContainer(object):
 			fh_grouped = open(filenamePrefix+suffixes[0],'w')
 			fh_single = open(filenamePrefix+suffixes[1],'w')
 			
-			for name in self.sequences.keys():
-				for masked_region_id in self.sequences[name]:
+			for name in sorted(self.sequences.keys()):
+				for masked_region_id in sorted(self.sequences[name]):
 					result = self.sequences[name][masked_region_id].results
 					if(result):
 						preSeq = self.sequences[name].seq
@@ -161,8 +161,8 @@ class FragmentContainer(object):
 			
 			fh.write("\n")
 			
-			for name in self.sequences.keys():
-				for masked_region_id in self.sequences[name]:
+			for name in sorted(self.sequences.keys()):
+				for masked_region_id in sorted(self.sequences[name]):
 					result = self.sequences[name][masked_region_id].results
 					if(result):
 						row = name+"\tNo\t?"
@@ -196,8 +196,8 @@ class FragmentContainer(object):
 			
 			fh.write("Fragment\tSize\tReference sequence\tStart\tEnd\tPrecursor\tStart in precursor\tEnd in precursor\tSequence\tCorresponding-reads (start)\tCorresponding-reads (end)\tCorresponding-reads (total)\n")
 			
-			for name in self.sequences.keys():
-				for masked_region_id in self.sequences[name]:
+			for name in sorted(self.sequences.keys()):
+				for masked_region_id in sorted(self.sequences[name]):
 					result = self.sequences[name][masked_region_id].results
 					
 					if(result):

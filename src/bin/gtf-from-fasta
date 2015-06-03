@@ -67,7 +67,7 @@ def main():
 		for i in range(len(fasta_ref.lengths)):
 			name = fasta_ref.references[i]
 			length = str(fasta_ref.lengths[i])
-			fh.write(name+"\tflaimapper\tncRNA\t0\t"+length+"\t.\t.\t.\n")
+			fh.write(name+"\tflaimapper\tncRNA\t1\t"+length+"\t.\t.\t.\n")
 		
 		if(args.output != "-"):
 			fh.close()
