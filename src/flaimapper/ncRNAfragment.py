@@ -37,12 +37,13 @@
 """
 
 class ncRNAfragment:
-	def __init__(self,start=None,stop=None,reference_sequence=None,genomic_offset_masked_region=0):
+	def __init__(self,start=None,stop=None,reference_sequence=None,masked_region=None,genomic_offset_masked_region=0):
 		self.name = False
 		
 		self.set_location(start,stop,reference_sequence)
 		self.genomic_offset_masked_region = genomic_offset_masked_region
 		
+		self.masked_region = masked_region
 		self.sequence = None
 		
 		self.reset_supporting_reads()

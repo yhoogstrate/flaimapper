@@ -98,7 +98,7 @@ class miRBase:
 						state = 'closed'
 						ncRNAObj = ncRNA(info['name'])
 						for fragment in info['mirs']:
-							fragmentObj = ncRNAfragment(fragment['pos']['start'],fragment['pos']['stop'],None)
+							fragmentObj = ncRNAfragment(fragment['pos']['start'],fragment['pos']['stop'],None,None)
 							fragmentObj.set_sequence(info['seq'][fragment['pos']['start']:fragment['pos']['stop']])
 							fragmentObj.set_name(fragment['name'])
 							fragmentObj.set_evidence(fragment['evidence'])

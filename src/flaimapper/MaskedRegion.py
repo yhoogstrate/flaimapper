@@ -92,7 +92,7 @@ class MaskedRegion:
 			avgLenF = self.get_median(start_avg_lengths[i])
 			avgLenR = self.get_median(stop_avg_lengths[i])
 			if(avgLenF):
-				avgLenF = round(avgLenF)
+				avgLenF = round(avgLenF+1)
 			if(avgLenR):
 				avgLenR = round(avgLenR-0.5)							# Why -0.5 -> because of rounding a negative number
 			self.start_avg_lengths.append(avgLenF)

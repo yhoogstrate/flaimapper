@@ -1,4 +1,17 @@
 2015-03-20  Youri Hoogstrate
+	* (v1.2.0) Fixed a bug that didn't allow reads larger than 35bp.
+	  The 0-based and 1-based coordinates are now consistent. some out
+	  commented code has been removed. Improved output format 1 "table;
+	  per fragment". This includes that the file format has changed to
+	  0-based (both start- and end positions). Also columns have been
+	  added: positions relative to the gene annotation(s) for the "Full
+	  genome alignment"-type analysis. The GTF/GFF parser now supports
+	  "gene_id" column parsing. The mask file
+	  share/annotations/ncRNA_annotation/ncrnadb09.gtf was using 0-based
+	  cooridnates while the GTF/GFF format requires 1-based coordinates.
+	  The fixed file is provided at:
+	  share/annotations/ncRNA_annotation/ncrnadb09_v2.0.gtf
+	
 	* (v1.1.6) Fixed a GFF/GTF parsing error - FlaiMapper only supported
 	  annotations with the score value set.
 	

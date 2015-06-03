@@ -52,7 +52,13 @@ class FragmentContainer(object):
 		----
 		@param flaimapperObj: 
 		"""
-		self.sequences[flaimapperObj.name] = flaimapperObj
+		for fragment in flaimapperObj.results:
+			if(flaimapperObj.name not in self.sequences.keys()):
+				self.sequences[flaimapperObj.name] = {}
+			
+			self.sequences[flaimapperObj.name][flaimapperObj.masked_region[5]] = flaimapperObj
+		
+		#self.sequences[flaimapperObj.name][] = flaimapperObj
 		self.fasta_file = fasta_file
 	
 	def export_genbank(self,filenamePrefix,suffixes=['_grouped.gbk','_single.gbk'],loffset = -3,roffset = 5):
@@ -80,30 +86,31 @@ class FragmentContainer(object):
 			fh_grouped = open(filenamePrefix+suffixes[0],'w')
 			fh_single = open(filenamePrefix+suffixes[1],'w')
 			
-			for name in self.sequences:
-				result = self.sequences[name].getResults()
-				if(result):
-					preSeq = self.sequences[name].seq
-					fh_grouped.write('LOCUS	   '+name+'		'+str(len(preSeq))+' bp	DNA	 linear   UNA'+"\n"+'DEFINITION  Homo sapiens '+name[0:150]+' ncRNA\n'+'ACCESSION   '+name+"\n"+'SOURCE	  Homo sapiens'+"\n"+'REFERENCE   1  '+"\n"+'  AUTHORS   Person X;'+"\n"+'  TITLE	 \"A certain title\"'+"\n"+'  JOURNAL   JournalX. 5:e1000716(2009.'+'\n   PUBMED   12345678'+"\nFEATURES			 Location/Qualifiers"+"\n")
-					
-					j = 1
-					for fragment in result:
-						fh_single.write('LOCUS	   '+name+'_Fragment_'+str(j)+'		'+str(len(fragment['extended']['sequence']))+' bp	DNA	 linear   UNA'+"\n"+'DEFINITION  Homo sapiens '+name[0:150]+' ncRNA\n'+'ACCESSION   '+name+'_Fragment_'+str(j)+"\n"+'SOURCE	  Homo sapiens'+"\n"+'REFERENCE   1  '+"\n"+'  AUTHORS   Person X;'+"\n"+'  TITLE	 \"A certain title\"'+"\n"+'  JOURNAL   JournalX. 5:e1000123(2012.'+'\n   PUBMED   12345678'+"\nFEATURES			 Location/Qualifiers"+"\n")
-						fh_single.write("	 Fragment		"+str(fragment['extended']['5_prime_cut']+1)+".."+str(len(fragment['extended']['sequence'])-fragment['extended']['3_prime_cut'])+"\n")
-						fh_single.write("					 /accession=mir-"+name+'_Fragment_'+str(j)+"\n")
-						fh_single.write("					 /product=mir-"+name+'_Fragment_'+str(j)+"\n")
-						fh_single.write("					 /evidence=experimental"+"\n")
-						fh_single.write("					 /experiment=\"Solexa\""+"\n")
-						fh_single.write("ORIGIN\n"+self.writeGenBank__format_sequence(fragment['extended']['sequence'])+"//"+"\n")
+			for name in self.sequences.keys():
+				for masked_region_id in self.sequences[name]:
+					result = self.sequences[name][masked_region_id].results
+					if(result):
+						preSeq = self.sequences[name].seq
+						fh_grouped.write('LOCUS	   '+name+'		'+str(len(preSeq))+' bp	DNA	 linear   UNA'+"\n"+'DEFINITION  Homo sapiens '+name[0:150]+' ncRNA\n'+'ACCESSION   '+name+"\n"+'SOURCE	  Homo sapiens'+"\n"+'REFERENCE   1  '+"\n"+'  AUTHORS   ???;'+"\n"+'  TITLE	 \"A certain title\"'+"\n"+'  JOURNAL   ??? ???'+'\n   PUBMED   12345678'+"\nFEATURES			 Location/Qualifiers"+"\n")
 						
-						fh_grouped.write("	 Fragment		"+str((int(fragment['start'])+1))+".."+str((int(fragment['stop'])))+"\n")
-						fh_grouped.write("					 /accession="+name+'_Fragment_'+str(j)+"\n")
-						fh_grouped.write("					 /product="+name+'_Fragment_'+str(j)+"\n")
-						fh_grouped.write("					 /evidence=experimental"+"\n")
-						fh_grouped.write("					 /experiment=\"Solexa\""+"\n")
-						j += 1
-					
-					fh_grouped.write("ORIGIN\n"+self.writeGenBank__format_sequence(preSeq)+"//"+"\n")
+						j = 1
+						for fragment in result:
+							fh_single.write('LOCUS	   '+name+'_Fragment_'+str(j)+'		'+str(len(fragment['extended']['sequence']))+' bp	DNA	 linear   UNA'+"\n"+'DEFINITION  Homo sapiens '+name[0:150]+' ncRNA\n'+'ACCESSION   '+name+'_Fragment_'+str(j)+"\n"+'SOURCE	  Homo sapiens'+"\n"+'REFERENCE   1  '+"\n"+'  AUTHORS   Person X;'+"\n"+'  TITLE	 \"A certain title\"'+"\n"+'  JOURNAL   JournalX. 5:e1000123(2012.'+'\n   PUBMED   12345678'+"\nFEATURES			 Location/Qualifiers"+"\n")
+							fh_single.write("	 Fragment		"+str(fragment['extended']['5_prime_cut']+1)+".."+str(len(fragment['extended']['sequence'])-fragment['extended']['3_prime_cut'])+"\n")
+							fh_single.write("					 /accession=mir-"+name+'_Fragment_'+str(j)+"\n")
+							fh_single.write("					 /product=mir-"+name+'_Fragment_'+str(j)+"\n")
+							fh_single.write("					 /evidence=experimental"+"\n")
+							fh_single.write("					 /experiment=\"Solexa\""+"\n")
+							fh_single.write("ORIGIN\n"+self.writeGenBank__format_sequence(fragment['extended']['sequence'])+"//"+"\n")
+							
+							fh_grouped.write("	 Fragment		"+str((int(fragment['start'])+1))+".."+str((int(fragment['stop'])))+"\n")
+							fh_grouped.write("					 /accession="+name+'_Fragment_'+str(j)+"\n")
+							fh_grouped.write("					 /product="+name+'_Fragment_'+str(j)+"\n")
+							fh_grouped.write("					 /evidence=experimental"+"\n")
+							fh_grouped.write("					 /experiment=\"Solexa\""+"\n")
+							j += 1
+						
+						fh_grouped.write("ORIGIN\n"+self.writeGenBank__format_sequence(preSeq)+"//"+"\n")
 			
 			fh_single.close()
 			fh_grouped.close()
@@ -154,15 +161,16 @@ class FragmentContainer(object):
 			
 			fh.write("\n")
 			
-			for name in self.sequences:
-				result = self.sequences[name].getResults()
-				if(result):
-					row = name+"\tNo\t?"
-					
-					for fragment in result:
-						row += "\t"+str(fragment['start'])+"\t"+str(fragment['stop'])+"\t"+str(fragment['sequence'])
-					
-					fh.write(row+"\n")
+			for name in self.sequences.keys():
+				for masked_region_id in self.sequences[name]:
+					result = self.sequences[name][masked_region_id].results
+					if(result):
+						row = name+"\tNo\t?"
+						
+						for fragment in result:
+							row += "\t"+str(fragment['start'])+"\t"+str(fragment['stop'])+"\t"+str(fragment['sequence'])
+						
+						fh.write(row+"\n")
 		
 		fh.close
 		return True
@@ -179,33 +187,86 @@ class FragmentContainer(object):
 		@rtype:
 		"""
 		if(not self.sequences):
-			return False
+			print "     * Warning: no fragments detected"
 		else:
 			if(filename == "-"):
 				fh = sys.stdout
 			else:
 				fh = open(filename,'w')
 			
-			fh.write("Fragment\tPrecursor\t5'\t3'\tSequence\tCorresponding-reads\n")
+			fh.write("Fragment\tSize\tReference sequence\tStart\tEnd\tPrecursor\tStart in precursor\tEnd in precursor\tSequence\tCorresponding-reads (start)\tCorresponding-reads (end)\tCorresponding-reads (total)\n")
 			
-			for name in self.sequences:
-				result = self.sequences[name].getResults()
-				if(result):
-					fragments_sorted_keys = {}
-					for fragment in result:
-						fragments_sorted_keys[fragment['start']] = fragment
+			for name in self.sequences.keys():
+				for masked_region_id in self.sequences[name]:
+					result = self.sequences[name][masked_region_id].results
 					
-					i = 0
-					for key in sorted(fragments_sorted_keys.keys()):	# Walk over i in the for-loop:
-						i += 1
-						fragment = fragments_sorted_keys[key]
-						if(self.fasta_file):
-							sequence = self.fasta_file.fetch(name,fragment['start'],fragment['stop'])
-						else:
-							sequence = ""
-						fh.write(name+'_Fragment_'+str(i)+'\t'+name+"\t"+str(fragment['start'])+"\t"+str(fragment['stop'])+"\t"+str(sequence)+"\t"+str(fragment['stop_supporting_reads']+fragment['start_supporting_reads'])+"\n")
+					if(result):
+						fragments_sorted_keys = {}
+						for fragment in result:
+							fragments_sorted_keys[fragment['start']] = fragment
+						
+						i = 0
+						for key in sorted(fragments_sorted_keys.keys()):	# Walk over i in the for-loop:
+							i += 1
+							fragment = fragments_sorted_keys[key]
+							
+							# Fragment uid
+							if(fragment.masked_region[4]):
+								fh.write(fragment.masked_region[4] + "_")
+							
+							if(name != fragment.masked_region[4]):
+								fh.write(name + "_")
+							
+							fh.write("Fragment_" + str(i) + "\t")
+							
+							# Size
+							fh.write(str(fragment['stop'] - fragment['start'] + 1) + "\t")
+							
+							# Reference sequence 
+							fh.write(name + "\t")
+							
+							# Start
+							fh.write(str(fragment['start']) + "\t")
+							
+							# End
+							fh.write(str(fragment['stop'])+"\t")
+							
+							# Precursor
+							if(fragment.masked_region[4]):
+								fh.write(fragment.masked_region[4])
+							elif(fragment.masked_region[1] == 0):
+								fh.write(name)
+							elif(fragment.masked_region[1] != 0):
+								print "     * Warning: masked region in the GTF/GFF file has no annotated gene name - please set the gene_id='gene-name' tag"
+							
+							# Start in precursor
+							fh.write("\t" + str(fragment['start']-fragment.masked_region[1])+ "\t")
+							
+							# End in precursor
+							fh.write(str(fragment['stop']-fragment.masked_region[1])+"\t")
+							
+							# Sequence 
+							if(self.fasta_file):
+								# PySam 0.8.2 claims to use 0-based coordinates pysam.FastaFile.fetch().
+								# This is only true for the start position, the end-position is 1-based.
+								fh.write(str(self.fasta_file.fetch(name,fragment['start'],fragment['stop']+1)))
+							
+							# Start supporting reads
+							fh.write("\t"+str(fragment['start_supporting_reads'])+"\t")
+							
+							# Stop supporting reads
+							fh.write(str(fragment['stop_supporting_reads'])+"\t")
+							
+							# Total supporting reads
+							fh.write(str(fragment['stop_supporting_reads']+fragment['start_supporting_reads']) + "\n")
 			
 			fh.close()
+	
+	def export_gtf__relative_to_reference_sequence(self,filename):
+		pass
+	
+	def export_gtf__relative_to_masked_region(self,filename):
+		pass
 	
 	def write(self,export_format,output_filename):
 		if(self.verbosity == "verbose"):

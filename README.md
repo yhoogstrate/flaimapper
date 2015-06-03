@@ -115,7 +115,7 @@ If you think installing, configuring FlaiMapper, creating references and underst
 
 If you have a personal galaxy instance, you can install FlaiMapper via the testoolshed at the following url:
 
-*	[https://testtoolshed.g2.bx.psu.edu/view/yhoogstrate/flaimapper](https://testtoolshed.g2.bx.psu.edu/view/yhoogstrate/flaimapper)
+*	[https://toolshed.g2.bx.psu.edu/view/yhoogstrate/flaimapper](https://toolshed.g2.bx.psu.edu/view/yhoogstrate/flaimapper)
 
 If you want to improve upon the galaxy wrapper, you can find the wrapper at the following url:
 
@@ -473,6 +473,7 @@ Remark that the backslashes are used to make the command continue at the next li
 FlaiMapper can export results into the following formats:
 
 - Tabular #1, per fragment
+  * This file format has changed from version 1.2.0: new columns have been added and the end-positions have become 0-based.
 - Tabular #2, per ncRNA
 - GenBank
 

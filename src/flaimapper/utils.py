@@ -36,7 +36,7 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-import os,tempfile
+import os,sys,re
 
 def fasta_entry_names(fasta_file):
 	names = {}
@@ -46,6 +46,10 @@ def fasta_entry_names(fasta_file):
 			if(line != '' and line[0] == '>'):
 				names[line[1:]] = True
 	return names.keys()
+
+def parse_gff_annotation_name(string,gid="gene_id"):
+	matches = re.findall(re.escape(gid)+'=[\'" ]?([^\'";]+)',string)
+	return matches[0] if len(matches) > 0 else None
 
 def parse_gff(gff_file):
 	"""2015-mar-20: Removed the Tabix library because of incompatibility
@@ -59,7 +63,27 @@ def parse_gff(gff_file):
 			line = line.strip()
 			if(len(line) > 0 and line[0] != '#'):
 				region = line.split('\t')
-				regions.append((region[0],int(region[3]),int(region[4])-1,0))
+				
+				start_pos = int(region[3])-1
+				
+				if(start_pos < 0):
+					sys.stderr.write('Masked regions (GTF/GFF) file "'+gff_file+'" is currupt:\n\n'+line+'\n\nThis format must have 1-based coordinates.\n')
+					sys.exit()
+				
+				#@todo -> additional info column should just be the name column (1st column)
+				name = None
+				if(len(region) >= 9):
+					name = parse_gff_annotation_name(region[8])
+				
+				# GTF uses 1-based coordinates - convert them to 0-based
+				regions.append((
+					region[0],			# chr
+					start_pos,			# start (0-based)
+					int(region[4])-1,	# end   (0-based)
+					0,					# score
+					name,				# name of precursor
+					len(regions)		# id in regions (0, 1, ...)
+				))
 	
 	return regions
 

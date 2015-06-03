@@ -44,8 +44,10 @@ from flaimapper.ncRNAfragment import ncRNAfragment
 
 class FragmentFinder:
 	"""Class Flaimapper Finds fragments in alignment files.
+	
+	@todo merge masked_region
 	"""
-	def __init__(self,name,readcount,autorun=True):
+	def __init__(self,masked_region,readcount,autorun=True):
 		"""
 		----
 		@param: name
@@ -53,7 +55,9 @@ class FragmentFinder:
 		@param: readcount
 		@param: autorun
 		"""
-		self.name = name
+		
+		self.masked_region = masked_region
+		self.name = masked_region[0]
 		
 		if(autorun):
 			self.positions = {}
@@ -120,31 +124,31 @@ class FragmentFinder:
 		-12 :0.0354626,
 		-11 :0.1203860,
 		-10 :0.3865920,
-		-9  :1.110900,
-		-8  :2.856550,
-		-7  :6.572853,
-		-6  :13.53353,
-		-5  :24.93522,
-		-4  :100,
-		-3  :100,
-		-2  :100,
-		-1  :100,
+		 -9 :1.110900,
+		 -8 :2.856550,
+		 -7 :6.572853,
+		 -6 :13.53353,
+		 -5 :24.93522,
+		 -4 :100,
+		 -3 :100,
+		 -2 :100,
+		 -1 :100,
 		
-		1   :100,
-		2   :100,
-		3   :100,
-		4   :100,
-		5   :24.93522,
-		6   :13.53353,
-		7   :6.572853,
-		8   :2.856550,
-		9   :1.110900,
-		10  :0.3865920,
-		11  :0.1203860,
-		12  :0.0354626,
-		13 :0.008364835,
-		14 :0.0001866447,
-		15 :0.00003726653 }
+		  1 :100,
+		  2 :100,
+		  3 :100,
+		  4 :100,
+		  5 :24.93522,
+		  6 :13.53353,
+		  7 :6.572853,
+		  8 :2.856550,
+		  9 :1.110900,
+		 10 :0.3865920,
+		 11 :0.1203860,
+		 12 :0.0354626,
+		 13 :0.008364835,
+		 14 :0.0001866447,
+		 15 :0.00003726653 }
 		
 		# There is a small mistake in the algorithm,
 		# it should search not for ALL peaks
@@ -170,7 +174,7 @@ class FragmentFinder:
 		
 		return pnew
 	
-	def findFragments(self,pstart,pstop,pexpectedStart,pexpectedStop,prime_5_ext = 3,prime_3_ext=5,genomic_offset_masked_region=0):
+	def find_fragments(self,pstart,pstop,pexpectedStart,pexpectedStop,prime_5_ext = 3,prime_3_ext=5,genomic_offset_masked_region=0):
 		"""Traceback:
 		
 		genomic_offset_masked_region - imagine your pre-miRNA is starts at position 400.000 in the genome; then your position should be 400.000 + start
@@ -185,14 +189,11 @@ class FragmentFinder:
 			for itema in pstopSorted:
 				pos = itema[0]
 				diff = pexpectedStop[pos]
-				predictedPos = pos+diff
+				predictedPos = pos+diff+1								# 149 - 50 = 99; 149- 50 + 1 = 100 (example of read aligned to 100,149 (size=50)
 				fragment = False
 				
-				lborder = 33 + diff
-				rborder = -diff-15
-				
 				highest = 0
-				items = [s for s in pstart if ((s >= predictedPos-lborder) and (s <= predictedPos+rborder))]
+				items = [s for s in pstart if ((s >= predictedPos-15) and (s <= predictedPos+15))]
 				for item in items:
 					distance = abs(predictedPos - item)
 					penalty = 1.0 - (distance * 0.09)
@@ -200,11 +201,7 @@ class FragmentFinder:
 					if(score >= highest):
 						highest = pstart[item]
 						
-						#fragment = {'start':item,'stop':pos,'sequence':None}
-						#fragment['start_supporting_reads'] = pstart[fragment['start']]
-						#fragment['stop_supporting_reads']  = pstop[fragment['stop']]
-						
-						fragment = ncRNAfragment(item,pos,None,genomic_offset_masked_region)
+						fragment = ncRNAfragment(item,pos,None,self.masked_region,genomic_offset_masked_region)
 						fragment.supporting_reads_start = pstart[fragment.start]
 						fragment.supporting_reads_stop = pstop[fragment.stop]
 				
@@ -217,14 +214,13 @@ class FragmentFinder:
 			for itema in pstartSorted:
 				pos = itema[0]
 				diff = pexpectedStart[pos]
+				
+				#@todo figure out if this requires << + 1
 				predictedPos = pos+diff
 				fragment = False
 				
-				lborder = 33 - diff
-				rborder = diff-15
-				
 				highest = 0
-				items = [s for s in pstop if ((s >= predictedPos-lborder) and (s <= predictedPos+rborder))]
+				items = [s for s in pstop if ((s >= predictedPos-15) and (s <= predictedPos+15))]
 				
 				for item in items:
 					distance = abs(predictedPos - item)
@@ -237,7 +233,7 @@ class FragmentFinder:
 						#fragment['start_supporting_reads'] = pstart[fragment['start']]
 						#fragment['stop_supporting_reads']  = pstop[fragment['stop']]
 						
-						fragment = ncRNAfragment(pos,item,None,genomic_offset_masked_region)
+						fragment = ncRNAfragment(pos,item,None,self.masked_region,genomic_offset_masked_region)
 						fragment.supporting_reads_start = pstart[fragment.start]
 						fragment.supporting_reads_stop = pstop[fragment.stop]
 				
@@ -267,7 +263,13 @@ class FragmentFinder:
 			"""
 			
 			#fragment['extended'] = {'5_prime_cut':cut5,'3_prime_cut':cut3,'5_prime_pos':fragment['start']-cut5,'3_prime_pos':fragment['stop']+cut3,'sequence':self.seq[(fragment['start']-cut5):(fragment['stop']+cut3)]}
-			fragment.extended = {'5_prime_cut':cut5,'3_prime_cut':cut3,'5_prime_pos':fragment['start']-cut5,'3_prime_pos':fragment.stop+cut3}
+			fragment.extended = {
+				'5_prime_cut':cut5,
+				'3_prime_cut':cut3,
+				
+				'5_prime_pos':fragment['start']-cut5,
+				'3_prime_pos':fragment.stop+cut3
+				}
 		
 		return fragments
 	
@@ -286,9 +288,8 @@ class FragmentFinder:
 		self.correctedPeaksStart = self.correctNeighbourPeaks(self.peaksStart)
 		self.correctedPeaksStop = self.correctNeighbourPeaks(self.peaksStop)
 		
-		
 		# Trace start and stop positions together and obtain actual peaks
-		self.results = self.findFragments(self.correctedPeaksStart,self.correctedPeaksStop,self.positions['startAvgLengths'],self.positions['stopAvgLengths'])
+		self.results = self.find_fragments(self.correctedPeaksStart,self.correctedPeaksStop,self.positions['startAvgLengths'],self.positions['stopAvgLengths'])
 		
 		return True
 	

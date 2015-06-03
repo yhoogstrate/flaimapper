@@ -82,9 +82,7 @@ class FlaiMapperObject(FragmentContainer):
 			if(self.verbosity == "verbose"):
 				print "     * Detecting fragments"
 			
-			predicted_fragments = FragmentFinder(region[0],aligned_reads)
-			#predicted_fragments.run()
-			
+			predicted_fragments = FragmentFinder(region,aligned_reads)
 			self.add_fragments(predicted_fragments,self.fasta_file)
 	
 	def count_reads_per_region_custom_table(self,regions,links,all_predicted_fragments,reference_offset=0):
@@ -252,7 +250,7 @@ class FlaiMapperObject(FragmentContainer):
 				predicted_fragments_obj = FragmentFinder(ncRNA,aligned_reads)
 				predicted_fragments_obj.run()
 				
-				predicted_fragments = predicted_fragments_obj.getResults()
+				predicted_fragments = predicted_fragments_obj.results
 				
 				i += 1
 				

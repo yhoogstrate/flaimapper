@@ -52,7 +52,9 @@ class BAMParser(MaskedRegion):
 	"""parseNcRNA is a class that parses the BAM alignment files using pysam.
 	"""
 	def parse_reads(self):
-		# Check indexes
+		
+		# Check if a valid index exists by requesting the very first element
+		# If it throw's an exception, run 'samtools index' to index.
 		for bam_file in self.alignments:
 			fh = pysam.Samfile(bam_file)
 			
@@ -73,4 +75,7 @@ class BAMParser(MaskedRegion):
 			
 			if(self.name in fh.references):
 				for read in fh.fetch(self.name, self.start, self.stop):
-					yield Read(read.blocks[0][0],read.blocks[-1][1],read.qname,read.seq)
+					
+					# First coordinate is given at 0 base, the second as 1
+					# Therefore the second is converted with "-1"
+					yield Read(read.blocks[0][0],read.blocks[-1][1]-1,read.qname,read.seq)
