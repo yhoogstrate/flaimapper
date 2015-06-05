@@ -111,7 +111,7 @@ The downloaded source files can only be removed manually. Be aware that referenc
 
 If you think installing, configuring FlaiMapper, creating references and understanding the commandline interface takes too long, you can make use of Galaxy. We have a public instance available at the following url:
 
-*	[http://galaxy-demo.ctmm-trait.nl/](http://galaxy-demo.ctmm-trait.nl/)
+*	[http://bioinf-galaxian.erasmusmc.nl/galaxy/](http://bioinf-galaxian.erasmusmc.nl/galaxy/)
 
 If you have a personal galaxy instance, you can install FlaiMapper via the testoolshed at the following url:
 
