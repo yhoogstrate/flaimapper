@@ -1,3 +1,6 @@
+2015-09-02  Youri Hoogstrate
+	* (v1.2.2) Added GTF/GFF as output format.
+	
 2015-06-03  Youri Hoogstrate
 	* (v1.2.1) Output files are sorted on chromosome names. This ensures
 	  that lines in the output file always appear in the same order.

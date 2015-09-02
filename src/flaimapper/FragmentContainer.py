@@ -40,6 +40,7 @@
 import os,re,random,operator,argparse,sys
 import pysam
 
+import flaimapper
 
 
 class FragmentContainer(object):
@@ -266,7 +267,61 @@ class FragmentContainer(object):
 		pass
 	
 	def export_gtf__relative_to_masked_region(self,filename):
-		pass
+			if(filename == "-"):
+				fh = sys.stdout
+			else:
+				fh = open(filename,'w')
+			
+			for name in sorted(self.sequences.keys()):
+				for masked_region_id in sorted(self.sequences[name]):
+					result = self.sequences[name][masked_region_id].results
+					
+					if(result):
+						fragments_sorted_keys = {}
+						for fragment in result:
+							fragments_sorted_keys[fragment['start']] = fragment
+						
+						i = 0
+						for key in sorted(fragments_sorted_keys.keys()):# Walk over i in the for-loop:
+							i += 1
+							fragment = fragments_sorted_keys[key]
+							
+							# Seq-name
+							fh.write(name + "\t")
+							
+							# Source
+							fh.write("flaimapper "+flaimapper.__version__+"\t")
+							
+							# Feature
+							fh.write("small RNA\t")
+							
+							# Start
+							fh.write(str(fragment['start']+1) + "\t")
+							
+							# End
+							fh.write(str(fragment['stop']+1)+"\t")
+							
+							# Score
+							fh.write(str(fragment['stop_supporting_reads']+fragment['start_supporting_reads']) + "\t")
+							
+							# Strand and Frame
+							fh.write(".\t.\t")
+							
+							# Attribute
+							attributes = []
+							if(fragment.masked_region[4]):
+								attributes.append('gene_name "'+ fragment.masked_region[4]+'"' )
+							elif(fragment.masked_region[1] == 0):
+								attributes.append('gene_name "'+ name+'"' )
+							
+							attributes = ", ".join(attributes)
+							
+							if(attributes == ""):
+								attributes = "."
+							
+							fh.write(attributes+"\n")
+			
+			fh.close()
 	
 	def write(self,export_format,output_filename):
 		if(self.verbosity == "verbose"):
@@ -280,3 +335,6 @@ class FragmentContainer(object):
 		elif(export_format == 3):
 			print "   - Format: gen-bank"
 			self.export_genbank(output_filename)
+		elif(export_format == 4):
+			print "   - Format: GTF"
+			self.export_gtf__relative_to_masked_region(output_filename)

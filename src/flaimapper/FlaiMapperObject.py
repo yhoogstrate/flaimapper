@@ -87,7 +87,7 @@ class FlaiMapperObject(FragmentContainer):
 	
 	def count_reads_per_region_custom_table(self,regions,links,all_predicted_fragments,reference_offset=0):
 		"""
-		All sequences in our library of ncRNAs have been extended with 10 bases.
+		All sequences in our library of ncRNAs were extended with 10 bases.
 		"""
 		
 		stats_table = {}
