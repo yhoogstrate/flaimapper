@@ -92,13 +92,13 @@ represents the percentage of reduction. The zero value is excluded.
         
         for i in range(1,len(pos)):
             if pos[i] - pos[i-1] != 1:
-                raise ValueError("missing values in parameters file")
+                raise ValueError("missing positive values in parameters file")
 
         for i in range(1,len(neg)):
             if neg[i] - neg[i-1] != 1:
-                raise ValueError("missing values in parameters file")
+                raise ValueError("missing negative values in parameters file")
         
         self.left_padding = len(pos)
-        self.right_padidng = len(neg)
+        self.right_padding = len(neg)
         
         self.matrix = matrix

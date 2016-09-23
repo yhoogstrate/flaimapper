@@ -46,7 +46,7 @@ class TestFilterParameters(unittest.TestCase):
         fp = FilterParameters()
         
         self.assertEqual(fp.left_padding, 15)
-        self.assertEqual(fp.right_padidng, 15)
+        self.assertEqual(fp.right_padding, 15)
 
         keys = fp.matrix.keys()
         for i in range(-15,0):
