@@ -57,16 +57,24 @@ def CLI(argv=None):
     parser.add_argument("-p","--parameters",required=False,help="File containing the filtering parameters, using default if none is provided")
     
     parser.add_argument("-o","--output",help="output filename; '-' for stdout",default="-")
-    parser.add_argument("-f","--format",help="file format of the output: [1: table; per fragment], [2: table; per ncRNA], [3: genbank], [4: GTF (default)]",type=int,choices=range(1, 4+1),default=1)
+    parser.add_argument("-f","--format",help="file format of the output: [1: table; per fragment], [2: table; per ncRNA], [3: genbank], [4: GTF (default)]",type=int,choices=range(1, 4+1), default=4)
     
-    parser.add_argument("-r","--fasta",help="Single reference FASTA file (+faid index) containing all genomic reference sequences",default="/home/youri/Dropbox/Article_FlaiMapper/flaimapper_bam/ncRNdb09_with_tRNAs_and_Pseudogenes__21_oct_2011__hg19.fasta")
+    parser.add_argument("-r","--fasta",help="Single reference FASTA file (+faid index) containing all genomic reference sequences")
     
-    parser.add_argument("alignment_files",help="indexed SAM or BAM files compatible with pysam",nargs='+')
+    parser.add_argument("alignment_file",help="indexed SAM or BAM file",nargs=1)
     
-    if(argv == None):
+    if argv == None:
         args = parser.parse_args()
     else:# Argumented parameters (only for testing)
         args = parser.parse_args(argv)
+    
+    
+    args.alignment_file = pysam.AlignmentFile(args.alignment_file[0])
+    
+    if args.fasta != None:
+        args.fasta_handle = pysam.Fastafile(args.fasta)
+    else:
+        args.fasta_handle = None
     
     args.parameters = FilterParameters(args.parameters)
     

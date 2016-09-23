@@ -45,7 +45,7 @@ import unittest
 
 class TestCLI(unittest.TestCase):
     def test_01(self):
-        cli = CLI(["alignent.bam"])
+        cli = CLI(["/tmp/a/SRR1232072/SRR1232072.bam"])
         
         self.assertTrue(cli.parameters.left_padding, 15)
         self.assertTrue(cli.parameters.right_padding, 15)
@@ -53,7 +53,7 @@ class TestCLI(unittest.TestCase):
     def test_02(self):
         param_file = resource_filename("flaimapper","data/parameters.default.txt")
         
-        cli = CLI(["alignent.bam","-p",param_file])
+        cli = CLI(["/tmp/a/SRR1232072/SRR1232072.bam","-p",param_file])
         
         self.assertTrue(cli.parameters.left_padding, 15)
         self.assertTrue(cli.parameters.right_padding, 15)

@@ -36,28 +36,22 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-from flaimapper.FlaiMapperObject import FlaiMapperObject
+from flaimapper.FlaiMapper import FlaiMapper
 from flaimapper.CLI import CLI
 
-import unittest,pysam
+import unittest
 
 
-class TestCLI(unittest.TestCase):
+class TestFlaiMapper(unittest.TestCase):
     def test_01(self):
-        args = CLI(["test-file.bam"])
+        args = CLI(["/tmp/a/SRR1232072/SRR1232072.bam"])
         
         # Load BAM Files
-        flaimapper = FlaiMapperObject('bam',args.verbosity)
-        for alignment_file in args.alignment_files:
-            flaimapper.add_alignment(alignment_file)
-        
-        # The genomic regions of the precursor sequence(s).
-        fasta_ref = pysam.Fastafile(args.fasta)
+        flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
         
         # Run analysis
-        flaimapper.run(regions,fasta_ref,args.parameters.matrix)
+        flaimapper.run(args.fasta_handle,args.parameters)
         flaimapper.write(args.format,args.output)
-        
         
         self.assertEqual("status","complete")
 
