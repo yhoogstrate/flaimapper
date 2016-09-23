@@ -59,7 +59,6 @@ def CLI(argv=None):
     parser.add_argument("-o","--output",help="output filename; '-' for stdout",default="-")
     parser.add_argument("-f","--format",help="file format of the output: [1: table; per fragment], [2: table; per ncRNA], [3: genbank], [4: GTF (default)]",type=int,choices=range(1, 4+1),default=1)
     
-    parser.add_argument("-m","--mask",required=True,help="GTF/GFF3 mask file (precursors)")
     parser.add_argument("-r","--fasta",help="Single reference FASTA file (+faid index) containing all genomic reference sequences",default="/home/youri/Dropbox/Article_FlaiMapper/flaimapper_bam/ncRNdb09_with_tRNAs_and_Pseudogenes__21_oct_2011__hg19.fasta")
     
     parser.add_argument("alignment_files",help="indexed SAM or BAM files compatible with pysam",nargs='+')
