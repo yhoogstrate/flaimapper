@@ -61,7 +61,7 @@ class FlaiMapperObject(FragmentContainer):
 	def add_alignment(self,alignment_file):
 		self.alignments.append(alignment_file)
 	
-	def run(self,regions,fasta_file):
+	def run(self,regions,fasta_file,filter_parameters):
 		if(self.verbosity == "verbose"):
 			print " - Running fragment detection"
 		
