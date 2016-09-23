@@ -9,7 +9,7 @@
  Using small RNA-seq read alignments, FlaiMapper is able to annotate
  fragments primarily by peak-detection on the start and  end position
  densities followed by filtering and a reconstruction processes.
- Copyright (C) 2011-2014:
+ Copyright (C) 2011-2016:
  - Youri Hoogstrate
  - Elena S. Martens-Uzunova
  - Guido Jenster
@@ -36,36 +36,29 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-import flaimapper
+from pkg_resources import resource_filename
 
-from distutils.core import setup
-from setuptools import setup, find_packages
+class FilterParameters:
+    """
+    File format should be like this:
 
-setup(name='flaimapper',
-        version=flaimapper.__version__,
-        description='Fragment Location Annotation Identification Mapper',
-        author=flaimapper.__author__,
-        maintainer=flaimapper.__author__,
-        url='https://github.com/yhoogstrate/flaimapper',
+-3 \t 0.0
+-2 \t 50.0
+-1 \t 100.0
+-1 \t 100.0
+-2 \t 50.0
+-3 \t 0.0
+
+Every line represents an offset from a peak, and the second column
+represents the percentage of reduction. The zero value is excluded.
+    """
+    def __init__(self,filename=None):
+        if filename == None:
+            filename = resource_filename("flaimapper","data/parameters.default.txt")
         
-        scripts=["bin/flaimapper","bin/flaimapper-sslm","bin/sslm2bed","bin/sslm2sam","bin/gtf-from-fasta"],
-        packages=['flaimapper'],
-        #package_dir={'flaimapper': 'flaimapper'},
-        package_data={'': ['flaimapper/data/parameters.*.txt']},
-        include_package_data=True,
-        
-        # Very severe backwards incompatibility in 0.9 and above
-        setup_requires=['pysam >= 0.8.0,<0.9'],
-        install_requires=['pysam >= 0.8.0,<0.9'],
-        
-        test_suite="tests",
-        
-        classifiers=[
-            'Environment :: Console',
-            'Intended Audience :: Science/Research',
-            'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
-            'Operating System :: OS Independent'
-            'Topic :: Scientific/Engineering',
-            'Topic :: Scientific/Engineering :: Bio-Informatics',
-            ],
-    )
+        self.parse(filename)
+    
+    def parse(self,filename):
+        self.matrix = {}
+        self.left_padding = 0
+        self.right_padidng = 0

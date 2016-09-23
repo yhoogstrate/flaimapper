@@ -46,11 +46,14 @@ def CLI():
 	
 	parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,epilog="Further details can be found in the manual:\n<https://github.com/yhoogstrate/flaimapper>")
 	
+	# Writing to stderr, python issue: https://hg.python.org/cpython/rev/ec9a4b77f37b
 	parser.add_argument('-V','--version', action='version', version=textwrap.dedent("%(prog)s "+flaimapper.__version__+"\nCopyright (C) 2011-"+str(datetime.datetime.now().year)+" Youri Hoogstrate.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n"))
 	
 	group = parser.add_mutually_exclusive_group()
 	group.add_argument("-v","--verbose", action="store_true",default=False)
 	group.add_argument("-q","--quiet", action="store_false",default=True)
+	
+	#parser.add_argument("-p","--parameters",required=False,help="File containing the filtering parameters")
 	
 	parser.add_argument("-o","--output",help="output filename; '-' for stdout",default="-")
 	parser.add_argument("-f","--format",help="file format of the output: [1: table; per fragment], [2: table; per ncRNA], [3: genbank], [4: GTF (default)]",type=int,choices=range(1, 4+1),default=1)

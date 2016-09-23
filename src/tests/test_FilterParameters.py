@@ -36,36 +36,26 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-import flaimapper
+from flaimapper.FilterParameters import FilterParameters
 
-from distutils.core import setup
-from setuptools import setup, find_packages
+import unittest
 
-setup(name='flaimapper',
-        version=flaimapper.__version__,
-        description='Fragment Location Annotation Identification Mapper',
-        author=flaimapper.__author__,
-        maintainer=flaimapper.__author__,
-        url='https://github.com/yhoogstrate/flaimapper',
+
+class TestFilterParameters(unittest.TestCase):
+    def test_01(self):
+        fp = FilterParameters()
         
-        scripts=["bin/flaimapper","bin/flaimapper-sslm","bin/sslm2bed","bin/sslm2sam","bin/gtf-from-fasta"],
-        packages=['flaimapper'],
-        #package_dir={'flaimapper': 'flaimapper'},
-        package_data={'': ['flaimapper/data/parameters.*.txt']},
-        include_package_data=True,
-        
-        # Very severe backwards incompatibility in 0.9 and above
-        setup_requires=['pysam >= 0.8.0,<0.9'],
-        install_requires=['pysam >= 0.8.0,<0.9'],
-        
-        test_suite="tests",
-        
-        classifiers=[
-            'Environment :: Console',
-            'Intended Audience :: Science/Research',
-            'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
-            'Operating System :: OS Independent'
-            'Topic :: Scientific/Engineering',
-            'Topic :: Scientific/Engineering :: Bio-Informatics',
-            ],
-    )
+        self.assertEqual(fp.left_padding, 15)
+        self.assertEqual(fp.right_padidng, 15)
+
+        keys = fp.matrix.keys()
+        for i in range(-15,0):
+            self.assertTrue(i in keys)
+            self.assertTrue(fp.matrix[i] >= 0.0)
+            self.assertTrue(fp.matrix[i] <= 100.0)
+
+def main():
+    unittest.main()
+
+if __name__ == '__main__':
+    main()
