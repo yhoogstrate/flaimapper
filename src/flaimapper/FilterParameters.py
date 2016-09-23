@@ -59,6 +59,46 @@ represents the percentage of reduction. The zero value is excluded.
         self.parse(filename)
     
     def parse(self,filename):
-        self.matrix = {}
-        self.left_padding = 0
-        self.right_padidng = 0
+        matrix = {}
+        
+        with open(filename, "r") as fh:
+            for line in fh:
+                line = line.strip()
+                if len(line) > 0:
+                    params = line.split("\t")
+                    if len(params) != 2:
+                        raise ValueError("inappropriate line detected in parameters file: %s:\n%s" % (filename, line))
+                    
+                    params = (int(params[0]),float(params[1]))
+                    if params[0] != 0 and params[1] >= 0.0 and params[1] <= 100.0:
+                        matrix[params[0]] = params[1]
+                    else:
+                        raise ValueError("inappropriate value(s) in line detected in parameters file %s" % (filename, line))
+        
+        self.set_matrix(matrix)
+    
+    def set_matrix(self,matrix):
+        pos = []
+        neg = []
+        
+        for key in matrix.keys():
+            if key < 0:
+                neg.append(key)
+            else:
+                pos.append(key)
+        
+        pos.sort()
+        neg.sort()
+        
+        for i in range(1,len(pos)):
+            if pos[i] - pos[i-1] != 1:
+                raise ValueError("missing values in parameters file")
+
+        for i in range(1,len(neg)):
+            if neg[i] - neg[i-1] != 1:
+                raise ValueError("missing values in parameters file")
+        
+        self.left_padding = len(pos)
+        self.right_padidng = len(neg)
+        
+        self.matrix = matrix
