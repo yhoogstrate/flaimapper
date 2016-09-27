@@ -210,17 +210,17 @@ class TestFlaiMapper(unittest.TestCase):
         self.assertEqual(i, 2)
     
     
-    #def test_10(self):
-        #args = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
+    def test_02(self):
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
         
-        #flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
+        flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
         
-        ## Run analysis
-        #flaimapper.run(args.fasta_handle,args.parameters.matrix)
+        # Run analysis
+        flaimapper.run(args.fasta_handle,args.parameters)
 
-        #flaimapper.write(args.format,args.output)
+        flaimapper.write(args.format, args.output)
         
-        #self.assertEqual("status","complete")
+        self.assertEqual("status","complete")
 
 
 def main():

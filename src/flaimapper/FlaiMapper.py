@@ -91,12 +91,12 @@ class FlaiMapper(FragmentContainer):
                             m  = max(ss[1],r.blocks[-1][1]-1)
                             ss[1] = m
                         else:
-                            yield (s_name, (ss[0] - i_dist_l - 1), (ss[1] + i_dist_r + 1))
+                            yield (s_name, max(0, ss[0] - i_dist_l - 1), max(0, ss[1] + i_dist_r + 1))
                             
                             ss = [r.blocks[0][0],r.blocks[-1][1]-1]
         
             if ss[0] != None:
-                yield (s_name, (ss[0] - i_dist_l - 1), (ss[1] + i_dist_r + 1))
+                yield (s_name, max(0, ss[0] - i_dist_l - 1), max(0, ss[1] + i_dist_r + 1))
     
     def run(self,fasta_file,filter_parameters):
         if(self.verbosity == "verbose"):
@@ -111,7 +111,7 @@ class FlaiMapper(FragmentContainer):
                 print "     * Acquiring statistics"
             
             #if(self.input_format == 'bam'):
-            aligned_reads = BAMParser(region[0],region[1],region[2],[self.alignment],self.verbosity)
+            aligned_reads = BAMParser(region[0],region[1],region[2],self.alignment,self.verbosity)
             #elif(self.input_format == 'sslm'):
             #	aligned_reads = SSLMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
             
@@ -120,8 +120,9 @@ class FlaiMapper(FragmentContainer):
             if(self.verbosity == "verbose"):
                 print "     * Detecting fragments"
             
-            predicted_fragments = FragmentFinder(region,aligned_reads)
-            self.add_fragments(predicted_fragments,self.fasta_file)
+            predicted_fragments = FragmentFinder(region, aligned_reads)
+            print predicted_fragments
+            self.add_fragments(predicted_fragments, self.fasta_file)
     
     def count_reads_per_region_custom_table(self,regions,links,all_predicted_fragments,reference_offset=0):
         """
@@ -140,7 +141,6 @@ class FlaiMapper(FragmentContainer):
         
         i = 0
         j = 0
-        
         
         for ncRNA in all_predicted_fragments.keys():
             if(links.has_key(ncRNA)):
@@ -204,10 +204,8 @@ class FlaiMapper(FragmentContainer):
         All sequences in our library of ncRNAs have been extended with 10 bases.
         """
         
-        
         err_5p = []
         err_3p = []
-        
         
         if(self.verbosity == "verbose"):
             print " - Running fragment detection"

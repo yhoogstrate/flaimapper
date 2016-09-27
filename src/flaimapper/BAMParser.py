@@ -37,7 +37,6 @@
 """
 
 
-
 import os,re,random,operator,argparse,sys,subprocess
 import pysam
 
@@ -47,35 +46,24 @@ from flaimapper.ncRNAfragment import ncRNAfragment
 from flaimapper.MaskedRegion import MaskedRegion
 
 
-
 class BAMParser(MaskedRegion):
-	"""parseNcRNA is a class that parses the BAM alignment files using pysam.
-	"""
-	def parse_reads(self):
-		
-		# Check if a valid index exists by requesting the very first element
-		# If it throw's an exception, run 'samtools index' to index.
-		for bam_file in self.alignments:
-			fh = pysam.Samfile(bam_file)
-			
-			if(self.name in fh.references):
-				try:
-					fh.fetch(self.name, 0, 0)
-					fh.close()
-				except:
-					fh.close()
-					try:
-						print ' - Indexing BAM file with samtools: '+bam_file
-						subprocess.call(["samtools", "index", bam_file])# Create index
-					except:
-						sys.stderr.write('Couldn\'t indexing BAM file with samtools: '+bam_file+'\nAre you sure samtools is installed?\n')
-		
-		for bam_file in self.alignments:
-			fh = pysam.Samfile(bam_file)
-			
-			if(self.name in fh.references):
-				for read in fh.fetch(self.name, self.start, self.stop):
-					
-					# First coordinate is given at 0 base, the second as 1
-					# Therefore the second is converted with "-1"
-					yield Read(read.blocks[0][0],read.blocks[-1][1]-1,read.qname,read.seq)
+    """parseNcRNA is a class that parses the BAM alignment files using pysam.
+    """
+    def parse_reads(self):
+        if(self.name in self.alignment.references):
+            try:
+                self.alignment.fetch(self.name, 0, 0)
+            except:
+                try:
+                    print ' - Indexing BAM file with samtools: '+bam_file
+                    subprocess.call(["samtools", "index", bam_file])# Create index
+                except:
+                    # @todo thow/raise exception ?
+                    sys.stderr.write('Couldn\'t indexing BAM file with samtools: '+bam_file+'\nAre you sure samtools is installed?\n')
+        
+        if(self.name in self.alignment.references):
+            for read in self.alignment.fetch(self.name, self.start, self.stop):
+                
+                # First coordinate is given at 0 base, the second as 1
+                # Therefore the second is converted with "-1"
+                yield Read(read.blocks[0][0], read.blocks[-1][1]-1, read.qname, read.seq)
