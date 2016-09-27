@@ -47,21 +47,16 @@ from flaimapper.FlaiMapperObject import FlaiMapperObject
 from flaimapper.utils import parse_gff
 
 def main():
-	args = CLI()
-	
-	# Load BAM Files
-	flaimapper = FlaiMapperObject('bam',args.verbosity)
-	for alignment_file in args.alignment_files:
-		flaimapper.add_alignment(alignment_file)
-	
-	# The genomic regions of the precursor sequence(s).
-	regions = parse_gff(args.mask)
-	fasta_ref = pysam.Fastafile(args.fasta)
-	
-	# Run analysis
-	flaimapper.run(regions,fasta_ref)
-	flaimapper.write(args.format,args.output)
+    args = CLI()
+    
+    flaimapper = FlaiMapperObject(args.alignment_file,args.verbosity)
+    
+    # Run analysis
+    flaimapper.run(args.fasta_handle,args.parameters.matrix)
+    flaimapper.write(args.format,args.output)
+    
+    self.assertEqual("status","complete")
 
 
 if __name__ == "__main__":
-	sys.exit(main())
+    sys.exit(main())

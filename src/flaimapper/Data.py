@@ -9,7 +9,7 @@
  Using small RNA-seq read alignments, FlaiMapper is able to annotate
  fragments primarily by peak-detection on the start and  end position
  densities followed by filtering and a reconstruction processes.
- Copyright (C) 2011-2014:
+ Copyright (C) 2011-2016:
  - Youri Hoogstrate
  - Elena S. Martens-Uzunova
  - Guido Jenster
@@ -36,28 +36,8 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-from flaimapper.FlaiMapperObject import FlaiMapperObject
-from flaimapper.CLI import CLI
-from flaimapper.Data import *
+from pkg_resources import resource_filename
 
-import unittest,pysam
+PARAMETERS_DEFAULT = resource_filename("flaimapper","data/parameters.default.txt")
 
-
-class TestCLI(unittest.TestCase):
-    def test_01(self):
-        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
-        
-        flaimapper = FlaiMapperObject(args.alignment_file,args.verbosity)
-        
-        # Run analysis
-        flaimapper.run(args.fasta_handle,args.parameters.matrix)
-        flaimapper.write(args.format,args.output)
-        
-        self.assertEqual("status","complete")
-
-
-def main():
-    unittest.main()
-
-if __name__ == '__main__':
-    main()
+TESTS_EXAMPLE_ALIGNMENT_01 = resource_filename("flaimapper","data/tests/alignment_gap_6bp.bam")

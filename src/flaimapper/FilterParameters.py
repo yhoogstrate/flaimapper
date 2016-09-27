@@ -36,7 +36,7 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-from pkg_resources import resource_filename
+from flaimapper.Data import *
 
 class FilterParameters:
     """
@@ -54,7 +54,7 @@ represents the percentage of reduction. The zero value is excluded.
     """
     def __init__(self,filename=None):
         if filename == None:
-            filename = resource_filename("flaimapper","data/parameters.default.txt")
+            filename = PARAMETERS_DEFAULT
         
         self.parse(filename)
     

@@ -37,8 +37,7 @@
 """
 
 from flaimapper.CLI import CLI
-
-from pkg_resources import resource_filename
+from flaimapper.Data import *
 
 import unittest
 
@@ -51,7 +50,7 @@ class TestCLI(unittest.TestCase):
         self.assertTrue(cli.parameters.right_padding, 15)
 
     def test_02(self):
-        param_file = resource_filename("flaimapper","data/parameters.default.txt")
+        param_file = PARAMETERS_DEFAULT
         
         cli = CLI(["alignent.bam","-p",param_file])
         
