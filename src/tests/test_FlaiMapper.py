@@ -49,12 +49,23 @@ class TestFlaiMapper(unittest.TestCase):
         
         flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
         
-        # Run analysis
-        flaimapper.run(args.fasta_handle,args.parameters.matrix)
-
-        flaimapper.write(args.format,args.output)
+        print "::"
+        for region in flaimapper.regions(args.parameters):
+            print ">>",region
+        print ";;"
         
-        self.assertEqual("status","complete")
+    
+    #def test_10(self):
+        #args = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
+        
+        #flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
+        
+        ## Run analysis
+        #flaimapper.run(args.fasta_handle,args.parameters.matrix)
+
+        #flaimapper.write(args.format,args.output)
+        
+        #self.assertEqual("status","complete")
 
 
 def main():

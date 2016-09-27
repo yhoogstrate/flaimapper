@@ -80,32 +80,28 @@ class FlaiMapper(FragmentContainer):
             k = 0
             ss = [None,None]
             
-            print "    "
-            print "    "
-            print s_name
             p = None
             
             q = 0
             for r in self.alignment.fetch(s_name):
                 if ss[0] == None:
                     ss = [r.blocks[0][0],r.blocks[-1][1]-1]
-                    print "ss=",ss[0],",",ss[1]
                 else:
-                    #print r.blocks[-1][1]-1 ,">", ss[1]
                     if r.blocks[-1][1]-1 > ss[1]:
-                        #print "T!"
                         if r.blocks[0][0] - ss[1] <= 15:
                             m  = max(ss[1],r.blocks[-1][1]-1)
-                            print "ss ",ss[0],",",ss[1]," -> ",ss[0],",",m,"               ",r.blocks[0][0],",",r.blocks[-1][1]-1
+                            #print "ss ",ss[0],",",ss[1]," -> ",ss[0],",",m,"               ",r.blocks[0][0],",",r.blocks[-1][1]-1
                             ss[1] = m
                         else:
                             yield (s_name, ss[0], ss[1])
                             
                             ss = [r.blocks[0][0],r.blocks[-1][1]-1]
-                            print "previous should be saved, start over"
-                            print "ss=",ss[0],",",ss[1]
+                            #print "previous should be saved, start over"
+                            #print "ss=",ss[0],",",ss[1]
         
-        #yield (s_name, ss[0], ss[1])
+            if ss[0] != None:
+                yield (s_name, ss[0], ss[1])
+        
         raise ValueError("stop here - apply correction for l and r bound")
     
     def run(self,fasta_file,filter_parameters):
