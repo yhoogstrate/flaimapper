@@ -72,6 +72,7 @@ class FlaiMapper(FragmentContainer):
         two regions to be yielded
         """
         
+        i_dist = abs(filter_parameters.left_padding)+abs(filter_parameters.right_padding)
         
         for i in range(self.alignment.nreferences):
             s_name = self.alignment.references[i]
@@ -88,7 +89,7 @@ class FlaiMapper(FragmentContainer):
                     ss = [r.blocks[0][0],r.blocks[-1][1]-1]
                 else:
                     if r.blocks[-1][1]-1 > ss[1]:
-                        if r.blocks[0][0] - ss[1] <= 15:
+                        if r.blocks[0][0] - ss[1] <= i_dist:
                             m  = max(ss[1],r.blocks[-1][1]-1)
                             #print "ss ",ss[0],",",ss[1]," -> ",ss[0],",",m,"               ",r.blocks[0][0],",",r.blocks[-1][1]-1
                             ss[1] = m
@@ -102,7 +103,7 @@ class FlaiMapper(FragmentContainer):
             if ss[0] != None:
                 yield (s_name, ss[0], ss[1])
         
-        raise ValueError("stop here - apply correction for l and r bound")
+        #raise ValueError("stop here - apply correction for l and r bound")
     
     def run(self,fasta_file,filter_parameters):
         if(self.verbosity == "verbose"):

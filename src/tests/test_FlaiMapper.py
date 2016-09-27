@@ -44,16 +44,89 @@ import unittest
 
 
 class TestFlaiMapper(unittest.TestCase):
-    def test_01(self):
+    def test_01_a(self):
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
+        
+        args.parameters.left_padding = 1
+        args.parameters.right_padding = 1
         
         flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
         
-        print "::"
+        i = 0
         for region in flaimapper.regions(args.parameters):
-            print ">>",region
-        print ";;"
+            i += 1
         
+        self.assertEqual(i, 3)
+    
+    def test_01_b(self):
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
+        
+        args.parameters.left_padding = 2
+        args.parameters.right_padding = 2
+        
+        flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
+        
+        i = 0
+        for region in flaimapper.regions(args.parameters):
+            i += 1
+        
+        self.assertEqual(i, 3)
+    
+    def test_01_c(self):
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
+        
+        args.parameters.left_padding = 3
+        args.parameters.right_padding = 3
+        
+        flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
+        
+        i = 0
+        for region in flaimapper.regions(args.parameters):
+            i += 1
+        
+        self.assertEqual(i, 3)
+    
+    def test_01_d(self):
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
+        
+        args.parameters.left_padding = 3
+        args.parameters.right_padding = 4
+        
+        flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
+        
+        i = 0
+        for region in flaimapper.regions(args.parameters):
+            i += 1
+        
+        self.assertEqual(i, 2)
+    
+    def test_01_e(self):
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
+        
+        args.parameters.left_padding = 4
+        args.parameters.right_padding = 3
+        
+        flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
+        
+        i = 0
+        for region in flaimapper.regions(args.parameters):
+            i += 1
+        
+        self.assertEqual(i, 2)
+    
+    def test_01_f(self):
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
+        args.parameters.left_padding = 4
+        args.parameters.right_padding = 4
+        
+        flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
+        
+        i = 0
+        for region in flaimapper.regions(args.parameters):
+            i += 1
+        
+        self.assertEqual(i, 2)
+    
     
     #def test_10(self):
         #args = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
