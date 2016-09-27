@@ -72,18 +72,16 @@ class FlaiMapper(FragmentContainer):
         two regions to be yielded
         """
         
-        i_dist = abs(filter_parameters.left_padding)+abs(filter_parameters.right_padding)
+        i_dist_l = abs(filter_parameters.left_padding)
+        i_dist_r = abs(filter_parameters.right_padding)
+        i_dist = i_dist_l + i_dist_r
         
         for i in range(self.alignment.nreferences):
             s_name = self.alignment.references[i]
             s_len = self.alignment.lengths[i]
             
-            k = 0
             ss = [None,None]
             
-            p = None
-            
-            q = 0
             for r in self.alignment.fetch(s_name):
                 if ss[0] == None:
                     ss = [r.blocks[0][0],r.blocks[-1][1]-1]
@@ -91,19 +89,14 @@ class FlaiMapper(FragmentContainer):
                     if r.blocks[-1][1]-1 > ss[1]:
                         if r.blocks[0][0] - ss[1] <= i_dist:
                             m  = max(ss[1],r.blocks[-1][1]-1)
-                            #print "ss ",ss[0],",",ss[1]," -> ",ss[0],",",m,"               ",r.blocks[0][0],",",r.blocks[-1][1]-1
                             ss[1] = m
                         else:
-                            yield (s_name, ss[0], ss[1])
+                            yield (s_name, (ss[0] - i_dist_l - 1), (ss[1] + i_dist_r + 1))
                             
                             ss = [r.blocks[0][0],r.blocks[-1][1]-1]
-                            #print "previous should be saved, start over"
-                            #print "ss=",ss[0],",",ss[1]
         
             if ss[0] != None:
-                yield (s_name, ss[0], ss[1])
-        
-        #raise ValueError("stop here - apply correction for l and r bound")
+                yield (s_name, (ss[0] - i_dist_l - 1), (ss[1] + i_dist_r + 1))
     
     def run(self,fasta_file,filter_parameters):
         if(self.verbosity == "verbose"):
