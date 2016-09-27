@@ -61,15 +61,19 @@ def CLI(argv=None):
     
     parser.add_argument("-r","--fasta",help="Single reference FASTA file (+faid index) containing all genomic reference sequences")
     
-    parser.add_argument("alignment_file",help="indexed SAM or BAM files compatible with pysam",nargs='1')
+    parser.add_argument("alignment_file",help="indexed SAM or BAM file",nargs=1)
     
     if argv == None:
         args = parser.parse_args()
     else:# Argumented parameters (only for testing)
         args = parser.parse_args(argv)
     
+    args.alignment_file = pysam.AlignmentFile(args.alignment_file[0])
+    
     if args.fasta != None:
-        args.fasta_handle = 
+        args.fasta_handle = pysam.Fastafile(args.fasta)
+    else:
+        args.fasta_handle = None
     
     args.parameters = FilterParameters(args.parameters)
     

@@ -44,7 +44,7 @@ import unittest
 
 class TestCLI(unittest.TestCase):
     def test_01(self):
-        cli = CLI(["alignent.bam"])
+        cli = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
         
         self.assertTrue(cli.parameters.left_padding, 15)
         self.assertTrue(cli.parameters.right_padding, 15)
@@ -52,7 +52,7 @@ class TestCLI(unittest.TestCase):
     def test_02(self):
         param_file = PARAMETERS_DEFAULT
         
-        cli = CLI(["alignent.bam","-p",param_file])
+        cli = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-p",param_file])
         
         self.assertTrue(cli.parameters.left_padding, 15)
         self.assertTrue(cli.parameters.right_padding, 15)

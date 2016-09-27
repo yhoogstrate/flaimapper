@@ -36,21 +36,22 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-from flaimapper.FlaiMapperObject import FlaiMapperObject
+from flaimapper.FlaiMapper import FlaiMapper
 from flaimapper.CLI import CLI
 from flaimapper.Data import *
 
-import unittest,pysam
+import unittest
 
 
-class TestCLI(unittest.TestCase):
+class TestFlaiMapper(unittest.TestCase):
     def test_01(self):
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
         
-        flaimapper = FlaiMapperObject(args.alignment_file,args.verbosity)
+        flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
         
         # Run analysis
         flaimapper.run(args.fasta_handle,args.parameters.matrix)
+
         flaimapper.write(args.format,args.output)
         
         self.assertEqual("status","complete")
