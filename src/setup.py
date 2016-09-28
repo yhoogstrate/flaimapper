@@ -51,7 +51,7 @@ setup(name='flaimapper',
         scripts=["bin/flaimapper","bin/flaimapper-sslm","bin/sslm2bed","bin/sslm2sam","bin/gtf-from-fasta"],
         packages=['flaimapper'],
         #package_dir={'flaimapper': 'flaimapper'},
-        package_data={'': ['data/parameters.*.txt']},
+        package_data={'': ['data/*','data/tests/*']},
         include_package_data=True,
         
         # Very severe backwards incompatibility in 0.9 and above

@@ -37,3 +37,7 @@ nosetests.xml
 /src/.venv/
 /src/.eggs/
 .directory
+
+# Test data
+/src/*.gtf
+/src/*.txt
