@@ -78,8 +78,6 @@ class FlaiMapper(FragmentContainer):
         
         for i in range(self.alignment.nreferences):
             s_name = self.alignment.references[i]
-            s_len = self.alignment.lengths[i]
-            
             ss = [None,None]
             
             for r in self.alignment.fetch(s_name):
