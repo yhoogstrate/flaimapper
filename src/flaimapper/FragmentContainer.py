@@ -195,12 +195,19 @@ class FragmentContainer():
             else:
                 fh = open(filename,'w')
             
-            fh.write("Fragment\tSize\tReference sequence\tStart\tEnd\tPrecursor\tStart in precursor\tEnd in precursor\tSequence\tCorresponding-reads (start)\tCorresponding-reads (end)\tCorresponding-reads (total)\n")
             
-            for name in sorted(self.sequences.keys()):
-                for masked_region_id in sorted(self.sequences[name]):
-                    result = self.sequences[name][masked_region_id].results
-                    
+            if(self.fasta_file):
+                fh.write("Fragment\tSize\tReference sequence\tStart\tEnd\tPrecursor\tStart in precursor\tEnd in precursor\tSequence (no fasta file given)\tCorresponding-reads (start)\tCorresponding-reads (end)\tCorresponding-reads (total)\n")
+            else:
+                fh.write("Fragment\tSize\tReference sequence\tStart\tEnd\tPrecursor\tStart in precursor\tEnd in precursor\tSequence\tCorresponding-reads (start)\tCorresponding-reads (end)\tCorresponding-reads (total)\n")
+            
+#            for name in sorted(self.sequences.keys()):
+#                for masked_region_id in sorted(self.sequences[name]):
+#                    result = self.sequences[name][masked_region_id].results
+            for uid in sorted(self.sequences.keys()):
+                for reference_sequence in self.sequences[uid]:
+                    name = reference_sequence.masked_region[0]
+                    result = reference_sequence.results
                     if(result):
                         fragments_sorted_keys = {}
                         for fragment in result:
@@ -212,10 +219,10 @@ class FragmentContainer():
                             fragment = fragments_sorted_keys[key]
                             
                             # Fragment uid
-                            if(fragment.masked_region[4]):
-                                fh.write(fragment.masked_region[4] + "_")
+                            if(fragment.masked_region[0]):
+                                fh.write(fragment.masked_region[0] + "_")
                             
-                            if(name != fragment.masked_region[4]):
+                            if(name != fragment.masked_region[0]):
                                 fh.write(name + "_")
                             
                             fh.write("Fragment_" + str(i) + "\t")
@@ -233,12 +240,7 @@ class FragmentContainer():
                             fh.write(str(fragment['stop'])+"\t")
                             
                             # Precursor
-                            if(fragment.masked_region[4]):
-                                fh.write(fragment.masked_region[4])
-                            elif(fragment.masked_region[1] == 0):
-                                fh.write(name)
-                            elif(fragment.masked_region[1] != 0):
-                                print "     * Warning: masked region in the GTF/GFF file has no annotated gene name - please set the gene_id='gene-name' tag"
+                            fh.write(fragment.masked_region[0])
                             
                             # Start in precursor
                             fh.write("\t" + str(fragment['start']-fragment.masked_region[1])+ "\t")
