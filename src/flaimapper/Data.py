@@ -43,3 +43,8 @@ PARAMETERS_DEFAULT = resource_filename("flaimapper","data/parameters.default.txt
 TESTS_EXAMPLE_ALIGNMENT_01 = resource_filename("flaimapper","data/tests/alignment_gap_6bp.bam")
 
 TESTS_FLAIMAPPER_TEST_02_OUTPUT_GTF = resource_filename("flaimapper","data/tests/test_FlaiMapper_test_02_output.gtf")
+
+TESTS_FLAIMAPPER_TEST_03_a_OUTPUT_TXT = resource_filename("flaimapper","data/tests/test_FlaiMapper_test_03_output.txt")
+TESTS_FLAIMAPPER_TEST_03_b_OUTPUT_TXT = resource_filename("flaimapper","data/tests/test_FlaiMapper_test_03_fa_output.txt")
+
+TESTS_FLAIMAPPER_FA = resource_filename("flaimapper","data/tests/test_FlaiMapper.fa")

@@ -228,7 +228,7 @@ class TestFlaiMapper(unittest.TestCase):
         if assertion:
             os.remove(fname)
     
-    def test_03(self):
+    def test_03_a(self):
         fname = 'test_FlaiMapper_test_03_output.txt'
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,"-f","1"])
         
@@ -240,11 +240,31 @@ class TestFlaiMapper(unittest.TestCase):
         flaimapper.write(args.format, args.output)
         
         # assert Contents:
-        assertion = filecmp.cmp(fname , TESTS_FLAIMAPPER_TEST_02_OUTPUT_GTF)
+        assertion = filecmp.cmp(fname , TESTS_FLAIMAPPER_TEST_03_a_OUTPUT_TXT)
         self.assertTrue(assertion)
         
         if assertion:
             os.remove(fname)
+    
+    def test_03_b(self):
+        fname = 'test_FlaiMapper_test_03_fa_output.txt'
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,"-f","1","--fasta",TESTS_FLAIMAPPER_FA])
+        
+        flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
+        
+        # Run analysis
+        flaimapper.run(args.fasta_handle,args.parameters)
+
+        flaimapper.write(args.format, args.output)
+        
+        # assert Contents:
+        assertion = filecmp.cmp(fname , TESTS_FLAIMAPPER_TEST_03_b_OUTPUT_TXT)
+        self.assertTrue(assertion)
+        
+        if assertion:
+            os.remove(fname)
+
+
 
 
 def main():

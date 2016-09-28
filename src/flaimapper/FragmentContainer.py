@@ -219,13 +219,7 @@ class FragmentContainer():
                             fragment = fragments_sorted_keys[key]
                             
                             # Fragment uid
-                            if(fragment.masked_region[0]):
-                                fh.write(fragment.masked_region[0] + "_")
-                            
-                            if(name != fragment.masked_region[0]):
-                                fh.write(name + "_")
-                            
-                            fh.write("Fragment_" + str(i) + "\t")
+                            fh.write('FM_'+ name+'_'+str(i).zfill(12)+"\t")
                             
                             # Size
                             fh.write(str(fragment['stop'] - fragment['start'] + 1) + "\t")
@@ -265,7 +259,7 @@ class FragmentContainer():
             
             fh.close()
         
-    def export_gtf__relative_to_masked_region(self,filename):
+    def export_gtf(self,filename):
         if(filename == "-"):
             fh = sys.stdout
         else:
@@ -309,7 +303,7 @@ class FragmentContainer():
                         
                         # Attribute
                         attributes = []
-                        attributes.append('gene_id FM_"'+ name+'_'+str(i).zfill(12)+'"' )
+                        attributes.append('gene_id "FM_'+ name+'_'+str(i).zfill(12)+'"' )
                         
                         fh.write(", ".join(attributes)+"\n")
         fh.close()
@@ -328,4 +322,4 @@ class FragmentContainer():
             self.export_genbank(output_filename)
         elif(export_format == 4):
             print "   - Format: GTF"
-            self.export_gtf__relative_to_masked_region(output_filename)
+            self.export_gtf(output_filename)
