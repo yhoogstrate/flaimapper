@@ -40,7 +40,7 @@ from flaimapper.FlaiMapper import FlaiMapper
 from flaimapper.CLI import CLI
 from flaimapper.Data import *
 
-import unittest
+import unittest,filecmp,os
 
 
 class TestFlaiMapper(unittest.TestCase):
@@ -211,7 +211,8 @@ class TestFlaiMapper(unittest.TestCase):
     
     
     def test_02(self):
-        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
+        fname = 'test_FlaiMapper_test_02_output.gtf'
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname])
         
         flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
         
@@ -220,7 +221,12 @@ class TestFlaiMapper(unittest.TestCase):
 
         flaimapper.write(args.format, args.output)
         
-        self.assertEqual("status","complete")
+        # assert Contents:
+        assertion = filecmp.cmp(fname , TESTS_FLAIMAPPER_TEST_02_OUTPUT_GTF)
+        self.assertTrue(assertion)
+        
+        if assertion:
+            os.remove(fname)
 
 
 def main():

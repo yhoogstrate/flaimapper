@@ -121,7 +121,6 @@ class FlaiMapper(FragmentContainer):
                 print "     * Detecting fragments"
             
             predicted_fragments = FragmentFinder(region, aligned_reads)
-            print predicted_fragments
             self.add_fragments(predicted_fragments, self.fasta_file)
     
     def count_reads_per_region_custom_table(self,regions,links,all_predicted_fragments,reference_offset=0):

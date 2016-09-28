@@ -307,7 +307,7 @@ class FragmentContainer():
                         
                         # Attribute
                         attributes = []
-                        attributes.append('gene_name "'+ name+'_'+str(i).zfill(12)+'"' )
+                        attributes.append('gene_id FM_"'+ name+'_'+str(i).zfill(12)+'"' )
                         
                         fh.write(", ".join(attributes)+"\n")
         fh.close()

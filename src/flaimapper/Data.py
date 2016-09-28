@@ -41,3 +41,5 @@ from pkg_resources import resource_filename
 PARAMETERS_DEFAULT = resource_filename("flaimapper","data/parameters.default.txt")
 
 TESTS_EXAMPLE_ALIGNMENT_01 = resource_filename("flaimapper","data/tests/alignment_gap_6bp.bam")
+
+TESTS_FLAIMAPPER_TEST_02_OUTPUT_GTF = resource_filename("flaimapper","data/tests/test_FlaiMapper_test_02_output.gtf")
