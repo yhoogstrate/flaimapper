@@ -57,7 +57,7 @@ def CLI(argv=None):
     parser.add_argument("-p","--parameters",required=False,help="File containing the filtering parameters, using default if none is provided")
     
     parser.add_argument("-o","--output",help="output filename; '-' for stdout",default="-")
-    parser.add_argument("-f","--format",help="file format of the output: [1: table; per fragment], [2: table; per ncRNA], [3: genbank], [4: GTF (default)]",type=int,choices=range(1, 4+1),default=4)
+    parser.add_argument("-f","--format",help="file format of the output: [1: table; per fragment], [2: genbank], [3: GTF (default)]",type=int,choices=range(1, 3+1),default=3)
     
     parser.add_argument("-r","--fasta",help="Single reference FASTA file (+faid index) containing all genomic reference sequences")
     

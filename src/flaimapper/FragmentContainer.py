@@ -137,45 +137,6 @@ class FragmentContainer():
             outp += "		 "[len(str((i*size)+1)):]+str((i*size)+1)+" "+slice+"\n"
         return outp
     
-    def export_table__per_ncRNA(self,filename):
-        """Writes the discovered framents to a tab-delimited file.
-        
-        ----
-        @param filename: the desired filename
-        
-        @return: success
-        @rtype: boolean
-        """
-        if(not self.sequences):
-            return False												# Raise error?
-        else:
-            if(filename == "-"):
-                fh = sys.stdout
-            else:
-                fh = open(filename,'w')
-            
-            fh.write("NAME\tCurated\tUnreliable")
-            
-            for i in range(0,25):
-                letter = chr(ord('A')+i)
-                fh.write("\tFragment-"+letter+"-Start\tFragment-"+letter+"-Stop\tFragment-"+letter+"-Sequence")
-            
-            fh.write("\n")
-            
-            for name in sorted(self.sequences.keys()):
-                for masked_region_id in sorted(self.sequences[name]):
-                    result = self.sequences[name][masked_region_id].results
-                    if(result):
-                        row = name+"\tNo\t?"
-                        
-                        for fragment in result:
-                            row += "\t"+str(fragment['start'])+"\t"+str(fragment['stop'])+"\t"+str(fragment['sequence'])
-                        
-                        fh.write(row+"\n")
-        
-        fh.close
-        return True
-    
     def export_table__per_fragment(self,filename):
         """Exports the discovered fragments to a tab-delimited file.
         
@@ -315,11 +276,8 @@ class FragmentContainer():
             print "   - Format: tab-delimited, per fragment"
             self.export_table__per_fragment(output_filename)
         elif(export_format == 2):
-            print "   - Format: tab-delimited, per ncRNA"
-            self.export_table__per_ncRNA(output_filename)
-        elif(export_format == 3):
             print "   - Format: gen-bank"
             self.export_genbank(output_filename)
-        elif(export_format == 4):
+        elif(export_format == 3):
             print "   - Format: GTF"
             self.export_gtf(output_filename)
