@@ -36,20 +36,22 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-import os,re,random,operator,argparse,sys
 
-
-from flaimapper.FlaiMapper import FlaiMapper
-from flaimapper.utils import parse_gff
 from flaimapper.CLI import CLI_sslm2sam
+from flaimapper.FragmentContainer import FragmentContainer
+
+import unittest,subprocess,os
 
 
-def main():
-    """	This program converts the alignments of the used format used in the
-    article (SSLM) to the SAM format.
-    """
-    args = CLI_sslm2sam()
-    
+class TestFlaiMapper(unittest.TestCase):
+    def test_01_a(self):
+        os.chdir("../share/small_RNA-seq_alignments/SRP006788/")
+        subprocess.call(["tar","-xzf","SRR207111_HeLa18-30.tar.gz"])
+        
+        args = CLI_sslm2sam(['-o','test.sam','SRR207111_HeLa18-30'])
+        sslm2bed_converter = FragmentContainer()
+        sslm2bed_converter.convert_to_sam(args.output)
+"""
     sslm2bed_converter = FlaiMapperObject('sslm',args.verbosity)
     for alignment_directory in args.alignment_directories:
         sslm2bed_converter.add_alignment(alignment_directory)
@@ -58,6 +60,12 @@ def main():
     
     sslm2bed_converter.convert_to_sam(regions,args.output)
 
+        """
 
-if __name__ == "__main__":
-	sys.exit(main())
+
+
+def main():
+    unittest.main()
+
+if __name__ == '__main__':
+    main()

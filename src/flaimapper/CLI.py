@@ -63,6 +63,7 @@ def CLI(argv=None):
     
     parser.add_argument("alignment_file",help="indexed SAM or BAM file",nargs=1)
     
+    # Parse parameters
     if argv == None:
         args = parser.parse_args()
     else:# Argumented parameters (only for testing)
@@ -77,6 +78,36 @@ def CLI(argv=None):
     
     args.parameters = FilterParameters(args.parameters)
     
+    # Set verbosity and logging
+    if args.verbose:
+        logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.DEBUG)
+        logging.info("Verbose output.")
+    elif(args.quiet):
+        logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.CRITICAL)
+    else:
+        logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)
+    
+    return args
+
+
+def CLI_sslm2sam(argv=None):
+    parser = argparse.ArgumentParser()
+    
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("-v","--verbose", action="store_true",default=False)
+    group.add_argument("-q","--quiet", action="store_false",default=True)
+    
+    parser.add_argument("-o","--output",help="output SAM-filename; '-' for stdout",default="-")
+    
+    parser.add_argument("sslm_directory",nargs='+',help="SSLM formatted output directories")
+    
+    # Parse parameters
+    if argv == None:
+        args = parser.parse_args()
+    else:# Argumented parameters (only for testing)
+        args = parser.parse_args(argv)
+    
+    # Set verbosity and logging
     if args.verbose:
         logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.DEBUG)
         logging.info("Verbose output.")
