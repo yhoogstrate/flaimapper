@@ -47,10 +47,8 @@ from flaimapper.FragmentFinder import FragmentFinder
 
 
 class FlaiMapper(FragmentContainer):
-    def __init__(self,alignment_file,verbosity):
-        self.verbosity = verbosity
+    def __init__(self,alignment_file):
         self.alignment = alignment_file
-        
         self.sequences = {}
         
         logging.info(" - Initiated FlaiMapper Object")
@@ -114,15 +112,11 @@ class FlaiMapper(FragmentContainer):
         
         
         for region in self.regions(filter_parameters):
-            if(self.verbosity == "verbose"):
-                logging.debug("   - Masked region: "+region[0]+":"+str(region[1])+"-"+str(region[2]))
-                logging.info("     * Acquiring statistics")
+            logging.debug("   - Masked region: "+region[0]+":"+str(region[1])+"-"+str(region[2]))
+            logging.debug("     * Acquiring statistics")
             
-            #if(self.input_format == 'bam'):
-            aligned_reads = BAMParser(region[0],region[1],region[2],self.alignment,self.verbosity)
-            #elif(self.input_format == 'sslm'):
-            #	aligned_reads = SSLMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
-            
+            # BAM
+            aligned_reads = BAMParser(region[0],region[1],region[2],self.alignment)
             aligned_reads.parse_stats()
             
             logging.debug("     * Detecting fragments")
@@ -149,8 +143,7 @@ class FlaiMapper(FragmentContainer):
         
         for ncRNA in all_predicted_fragments.keys():
             if(links.has_key(ncRNA)):
-                if(self.verbosity == "verbose"):
-                    print "   - Analysing: "+ncRNA
+                logging.debug("   - Analysing: "+ncRNA)
                 
                 annotations = regions.index[links[ncRNA]]
                 
@@ -199,14 +192,13 @@ class FlaiMapper(FragmentContainer):
                             else:
                                 stats_table['not_experimental']["not_predicted_with_reads"] += 1
         
-        print i,"annotated pre-miRNAs"
-        print j,"annotated miRNAs"
+        logging.info(str(i)+" annotated pre-miRNAs")
+        logging.info(str(j)+" annotated miRNAs")
         
         return stats_table
     
     def count_reads_per_region_custom_mse(self,regions,links,all_predicted_fragments,reference_offset=0):
-        """
-        All sequences in our library of ncRNAs have been extended with 10 bases.
+        """All sequences in our library of ncRNAs have been extended with 10 bases.
         """
         
         err_5p = []
@@ -221,8 +213,7 @@ class FlaiMapper(FragmentContainer):
         
         for ncRNA in all_predicted_fragments.keys():
             if(links.has_key(ncRNA)):
-                if(self.verbosity == "verbose"):
-                    print "   - Analysing: "+ncRNA
+                logging.debug("   - Analysing: "+ncRNA)
                 
                 match = re.search("chr[^:]+:([0-9]+)-([0-9]+):",ncRNA)
                 seq_length = abs(int(match.group(1)) - int(match.group(2)))
@@ -265,8 +256,7 @@ class FlaiMapper(FragmentContainer):
         stats_table['experimental']     = {'error_5p':{"<-5":0,-5:0,-4:0,-3:0,-2:0,-1:0,0:0,1:0,2:0,3:0,4:0,5:0,">5":0},'error_3p':{"<-5":0,-5:0,-4:0,-3:0,-2:0,-1:0,0:0,1:0,2:0,3:0,4:0,5:0,">5":0},'predicted':0,'not_predicted_no_reads':0,'not_predicted_with_reads':0}
         stats_table['not_experimental'] = {'error_5p':{"<-5":0,-5:0,-4:0,-3:0,-2:0,-1:0,0:0,1:0,2:0,3:0,4:0,5:0,">5":0},'error_3p':{"<-5":0,-5:0,-4:0,-3:0,-2:0,-1:0,0:0,1:0,2:0,3:0,4:0,5:0,">5":0},'predicted':0,'not_predicted_no_reads':0,'not_predicted_with_reads':0}
         
-        if(self.verbosity == "verbose"):
-            print " - Running fragment detection"
+        logging.debug(" - Running fragment detection")
         
         i = 0
         j = 0
@@ -275,16 +265,12 @@ class FlaiMapper(FragmentContainer):
         for region in masked_regions:
             ncRNA = region[0]
             if(links.has_key(ncRNA)):
-                if(self.verbosity == "verbose"):
-                    print "   - Analysing: "+ncRNA
+                logging.debug("   - Analysing: "+ncRNA)
                 
                 annotations = regions.index[links[ncRNA]]
                 
-                if(self.input_format == 'bam'):
-                    aligned_reads = BAMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
-                elif(self.input_format == 'sslm'):
-                    aligned_reads = SSLMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
-                
+                # Use SSLM2BAM if you need conversion - bam is the de facto standard
+                aligned_reads = BAMParser(region[0],region[1],region[2],self.alignments)
                 aligned_reads.parse_stats()
                 
                 predicted_fragments_obj = FragmentFinder(ncRNA,aligned_reads,None,True)
@@ -335,35 +321,26 @@ class FlaiMapper(FragmentContainer):
                             else:
                                 stats_table['not_experimental']["not_predicted_with_reads"] += 1
         
-        print i,"annotated pre-miRNAs"
-        print j,"annotated miRNAs"
+        logging.info(str(i)+" annotated pre-miRNAs")
+        logging.info(str(j)+" annotated miRNAs")
         
         return stats_table
     
     def count_error_with_intensity(self,regions,links,masked_regions,reference_offset=0):
-        """
-        All sequences in our library of ncRNAs have been extended with 10 bases.
+        """All sequences in our library of ncRNAs were extended with 10 bases.
         """
         out = []
-        
-        if(self.verbosity == "verbose"):
-            print " - Running fragment detection"
-        
-        
+        logging.debug(" - Running fragment detection")
         
         for region in masked_regions:
             ncRNA = region[0]
             if(links.has_key(ncRNA)):
-                if(self.verbosity == "verbose"):
-                    print "   - Analysing: "+ncRNA
+                logging.debug("   - Analysing: "+ncRNA)
                 
                 annotations = regions.index[links[ncRNA]]
                 
-                if(self.input_format == 'bam'):
-                    aligned_reads = BAMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
-                elif(self.input_format == 'sslm'):
-                    aligned_reads = SSLMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
-                
+                # Bam only
+                aligned_reads = BAMParser(region[0],region[1],region[2],self.alignments)
                 aligned_reads.parse_stats()
                 
                 predicted_fragments_obj = FragmentFinder(ncRNA,aligned_reads)
@@ -423,8 +400,7 @@ class FlaiMapper(FragmentContainer):
         return [error_5p,error_3p]
     
     def convert_to_bed(self,regions,output):
-        if(self.verbosity == "verbose"):
-            print "   - Converting to BED: "+output
+        logging.debug("   - Converting to BED: "+output)
         
         if(output == "-"):
             fh = sys.stdout
@@ -434,13 +410,12 @@ class FlaiMapper(FragmentContainer):
         i = 0
         
         for region in regions:
-            if(self.verbosity == "verbose"):
-                print "   - Masked region: "+region[0]+":"+str(region[1])+"-"+str(region[2])
+            logging.debug("   - Masked region: "+region[0]+":"+str(region[1])+"-"+str(region[2]))
             
             if(self.input_format == 'bam'):
-                aligned_reads = BAMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
+                aligned_reads = BAMParser(region[0],region[1],region[2],self.alignments)
             elif(self.input_format == 'sslm'):
-                aligned_reads = SSLMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
+                aligned_reads = SSLMParser(region[0],region[1],region[2],self.alignments)
             
             for read_stacked in aligned_reads.parse_reads_stacked():
                 read = read_stacked[0]
@@ -455,8 +430,7 @@ class FlaiMapper(FragmentContainer):
         fh.close()
     
     def convert_to_sam(self,regions,output):
-        if(self.verbosity == "verbose"):
-            print "   - Converting to SAM: "+output
+        logging.debug("   - Converting to SAM: "+output)
         
         if(output == "-"):
             fh = sys.stdout
@@ -469,9 +443,9 @@ class FlaiMapper(FragmentContainer):
         fh.write("@HD	VN:1.0	SO:unsorted\n")
         for region in regions:
             if(self.input_format == 'bam'):
-                aligned_reads = BAMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
+                aligned_reads = BAMParser(region[0],region[1],region[2],self.alignments)
             elif(self.input_format == 'sslm'):
-                aligned_reads = SSLMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
+                aligned_reads = SSLMParser(region[0],region[1],region[2],self.alignments)
             
             iterator = aligned_reads.parse_reads()
             if(next(iterator,None)):
@@ -482,13 +456,12 @@ class FlaiMapper(FragmentContainer):
         
         # 2: write alignment
         for region in regions:
-            if(self.verbosity == "verbose"):
-                print "   - Masked region: "+region[0]+":"+str(region[1])+"-"+str(region[2])
+            logging.debug("   - Masked region: "+region[0]+":"+str(region[1])+"-"+str(region[2]))
             
             if(self.input_format == 'bam'):
-                aligned_reads = BAMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
+                aligned_reads = BAMParser(region[0],region[1],region[2],self.alignments)
             elif(self.input_format == 'sslm'):
-                aligned_reads = SSLMParser(region[0],region[1],region[2],self.alignments,self.verbosity)
+                aligned_reads = SSLMParser(region[0],region[1],region[2],self.alignments)
             
             for read in aligned_reads.parse_reads():
                 if(read.name):

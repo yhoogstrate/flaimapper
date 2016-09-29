@@ -44,9 +44,6 @@ import flaimapper
 
 
 class FragmentContainer():
-    def __init__(self,verbosity):
-        self.verbosity = verbosity
-        
     def add_fragments(self,fragment_finder_results,fasta_file=None):
         """
         
@@ -192,8 +189,8 @@ class FragmentContainer():
         fh.close()
     
     def write(self,export_format,output_filename):
-        if(self.verbosity == "verbose"):
-            logging.info(" - Exporting results to: "+output_filename)
+        logging.debug(" - Exporting results to: "+output_filename)
+        
         if(export_format == 1):
             logging.info("   - Format: tab-delimited, per fragment")
             self.export_table__per_fragment(output_filename)

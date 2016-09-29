@@ -78,11 +78,9 @@ def CLI(argv=None):
     args.parameters = FilterParameters(args.parameters)
     
     if args.verbose:
-        args.verbosity = "verbose"
         logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.DEBUG)
         logging.info("Verbose output.")
     elif(args.quiet):
-        args.verbosity = "quiet"
         logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.CRITICAL)
     else:
         logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)

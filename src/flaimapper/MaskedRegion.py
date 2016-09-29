@@ -49,9 +49,7 @@ class MaskedRegion:
 	"""A masked region is a region masked in the reference genome to 
 	indicate where ncRNAs are located.
 	"""
-	def __init__(self,name,start,stop,alignment,verbosity):
-		self.verbosity = verbosity
-		
+	def __init__(self,name,start,stop,alignment):
 		self.name = name
 		
 		self.start = start

@@ -50,7 +50,7 @@ class TestFlaiMapper(unittest.TestCase):
         args.parameters.left_padding = 1
         args.parameters.right_padding = 1
         
-        flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
+        flaimapper = FlaiMapper(args.alignment_file)
         
         i = 0
         for region in flaimapper.regions(args.parameters):
@@ -80,7 +80,7 @@ class TestFlaiMapper(unittest.TestCase):
         args.parameters.left_padding = 2
         args.parameters.right_padding = 2
         
-        flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
+        flaimapper = FlaiMapper(args.alignment_file)
         
         i = 0
         for region in flaimapper.regions(args.parameters):
@@ -110,7 +110,7 @@ class TestFlaiMapper(unittest.TestCase):
         args.parameters.left_padding = 3
         args.parameters.right_padding = 3
         
-        flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
+        flaimapper = FlaiMapper(args.alignment_file)
         
         i = 0
         for region in flaimapper.regions(args.parameters):
@@ -140,7 +140,7 @@ class TestFlaiMapper(unittest.TestCase):
         args.parameters.left_padding = 3
         args.parameters.right_padding = 4
         
-        flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
+        flaimapper = FlaiMapper(args.alignment_file)
         
         i = 0
         for region in flaimapper.regions(args.parameters):
@@ -165,7 +165,7 @@ class TestFlaiMapper(unittest.TestCase):
         args.parameters.left_padding = 4
         args.parameters.right_padding = 3
         
-        flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
+        flaimapper = FlaiMapper(args.alignment_file)
         
         i = 0
         for region in flaimapper.regions(args.parameters):
@@ -190,7 +190,7 @@ class TestFlaiMapper(unittest.TestCase):
         args.parameters.left_padding = 4
         args.parameters.right_padding = 4
         
-        flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
+        flaimapper = FlaiMapper(args.alignment_file)
         
         i = 0
         for region in flaimapper.regions(args.parameters):
@@ -214,7 +214,7 @@ class TestFlaiMapper(unittest.TestCase):
         fname = 'test_FlaiMapper_test_02_output.gtf'
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,'--verbose'])
         
-        flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
+        flaimapper = FlaiMapper(args.alignment_file)
         
         # Run analysis
         flaimapper.run(args.fasta_handle,args.parameters)
@@ -232,7 +232,7 @@ class TestFlaiMapper(unittest.TestCase):
         fname = 'test_FlaiMapper_test_03_output.txt'
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,"-f","1",'--verbose'])
         
-        flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
+        flaimapper = FlaiMapper(args.alignment_file)
         
         # Run analysis
         flaimapper.run(args.fasta_handle,args.parameters)
@@ -250,7 +250,7 @@ class TestFlaiMapper(unittest.TestCase):
         fname = 'test_FlaiMapper_test_03_fa_output.txt'
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,"-f","1","--fasta",TESTS_FLAIMAPPER_FA,'--verbose'])
         
-        flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
+        flaimapper = FlaiMapper(args.alignment_file)
         
         # Run analysis
         flaimapper.run(args.fasta_handle,args.parameters)
