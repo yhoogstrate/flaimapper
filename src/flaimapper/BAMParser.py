@@ -51,19 +51,10 @@ class BAMParser(MaskedRegion):
     """
     def parse_reads(self):
         if(self.name in self.alignment.references):
-            try:
-                self.alignment.fetch(self.name, 0, 0)
-            except:
-                try:
-                    print ' - Indexing BAM file with samtools: '+bam_file
-                    subprocess.call(["samtools", "index", bam_file])# Create index
-                except:
-                    # @todo thow/raise exception ?
-                    sys.stderr.write('Couldn\'t indexing BAM file with samtools: '+bam_file+'\nAre you sure samtools is installed?\n')
-        
-        if(self.name in self.alignment.references):
             for read in self.alignment.fetch(self.name, self.start, self.stop):
                 
                 # First coordinate is given at 0 base, the second as 1
                 # Therefore the second is converted with "-1"
                 yield Read(read.blocks[0][0], read.blocks[-1][1]-1, read.qname, read.seq)
+        else:
+            raise Exception("Call to non-existing region")

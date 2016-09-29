@@ -37,7 +37,7 @@
 """
 
 
-import os,re,random,operator,argparse,sys,tempfile,textwrap,datetime
+import os,re,random,operator,argparse,sys,tempfile,textwrap,datetime,logging
 import pysam
 
 
@@ -57,7 +57,7 @@ def CLI(argv=None):
     parser.add_argument("-p","--parameters",required=False,help="File containing the filtering parameters, using default if none is provided")
     
     parser.add_argument("-o","--output",help="output filename; '-' for stdout",default="-")
-    parser.add_argument("-f","--format",help="file format of the output: [1: table; per fragment], [2: genbank], [3: GTF (default)]",type=int,choices=range(1, 3+1),default=3)
+    parser.add_argument("-f","--format",help="file format of the output: [1: table; per fragment], [2: GTF (default)]",type=int,choices=range(1, 2+1),default=2)
     
     parser.add_argument("-r","--fasta",help="Single reference FASTA file (+faid index) containing all genomic reference sequences")
     
@@ -77,9 +77,14 @@ def CLI(argv=None):
     
     args.parameters = FilterParameters(args.parameters)
     
-    if(args.verbose):
+    if args.verbose:
         args.verbosity = "verbose"
+        logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.DEBUG)
+        logging.info("Verbose output.")
     elif(args.quiet):
         args.verbosity = "quiet"
+        logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.CRITICAL)
+    else:
+        logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)
     
     return args

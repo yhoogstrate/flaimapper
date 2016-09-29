@@ -36,7 +36,7 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-import os,re,random,operator,argparse,sys
+import os,re,random,operator,argparse,sys,logging,subprocess
 
 import pysam
 
@@ -53,8 +53,19 @@ class FlaiMapper(FragmentContainer):
         
         self.sequences = {}
         
-        if(self.verbosity == "verbose"):
-            print " - Initiated FlaiMapper Object"
+        logging.info(" - Initiated FlaiMapper Object")
+        
+        try:
+            self.alignment.fetch()
+        except:
+            logging.info(' - Indexing BAM file with samtools: '+self.alignment.filename)
+            subprocess.call(["samtools", "index", self.alignment.filename])# Create index
+            self.alignment = pysam.AlignmentFile(self.alignment.filename)
+        
+        try:
+            self.alignment.fetch()
+        except:
+            raise Exception('Couldn\'t indexing BAM file with samtools: '+self.alignment.filename+'\nAre you sure samtools is installed?\n')
     
     def regions(self,filter_parameters):
         """
@@ -97,16 +108,15 @@ class FlaiMapper(FragmentContainer):
                 yield (s_name, max(0, ss[0] - i_dist_l - 1), max(0, ss[1] + i_dist_r + 1))
     
     def run(self,fasta_file,filter_parameters):
-        if(self.verbosity == "verbose"):
-            print " - Running fragment detection"
+        logging.debug(" - Running fragment detection")
         
         self.fasta_file = fasta_file
         
         
         for region in self.regions(filter_parameters):
             if(self.verbosity == "verbose"):
-                print "   - Masked region: "+region[0]+":"+str(region[1])+"-"+str(region[2])
-                print "     * Acquiring statistics"
+                logging.debug("   - Masked region: "+region[0]+":"+str(region[1])+"-"+str(region[2]))
+                logging.info("     * Acquiring statistics")
             
             #if(self.input_format == 'bam'):
             aligned_reads = BAMParser(region[0],region[1],region[2],self.alignment,self.verbosity)
@@ -115,10 +125,9 @@ class FlaiMapper(FragmentContainer):
             
             aligned_reads.parse_stats()
             
-            if(self.verbosity == "verbose"):
-                print "     * Detecting fragments"
+            logging.debug("     * Detecting fragments")
             
-            predicted_fragments = FragmentFinder(region, aligned_reads)
+            predicted_fragments = FragmentFinder(region, aligned_reads, filter_parameters, True)
             self.add_fragments(predicted_fragments, self.fasta_file)
     
     def count_reads_per_region_custom_table(self,regions,links,all_predicted_fragments,reference_offset=0):
@@ -133,8 +142,7 @@ class FlaiMapper(FragmentContainer):
         
         #a = c(1:10) mse_a = sum((a - mean(a)) ^ 2) / length(a)
         
-        if(self.verbosity == "verbose"):
-            print " - Running fragment detection"
+        logging.debug(" - Running fragment detection")
         
         i = 0
         j = 0
@@ -204,8 +212,7 @@ class FlaiMapper(FragmentContainer):
         err_5p = []
         err_3p = []
         
-        if(self.verbosity == "verbose"):
-            print " - Running fragment detection"
+        logging.debug(" - Running fragment detection")
         
         i = 0
         j = 0
@@ -280,7 +287,7 @@ class FlaiMapper(FragmentContainer):
                 
                 aligned_reads.parse_stats()
                 
-                predicted_fragments_obj = FragmentFinder(ncRNA,aligned_reads)
+                predicted_fragments_obj = FragmentFinder(ncRNA,aligned_reads,None,True)
                 predicted_fragments_obj.run()
                 
                 predicted_fragments = predicted_fragments_obj.results

@@ -45,7 +45,7 @@ import unittest,filecmp,os
 
 class TestFlaiMapper(unittest.TestCase):
     def test_01_a(self):
-        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'--verbose'])
         
         args.parameters.left_padding = 1
         args.parameters.right_padding = 1
@@ -75,7 +75,7 @@ class TestFlaiMapper(unittest.TestCase):
         self.assertEqual(i, 3)
     
     def test_01_b(self):
-        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'--verbose'])
         
         args.parameters.left_padding = 2
         args.parameters.right_padding = 2
@@ -105,7 +105,7 @@ class TestFlaiMapper(unittest.TestCase):
         self.assertEqual(i, 3)
     
     def test_01_c(self):
-        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'--verbose'])
         
         args.parameters.left_padding = 3
         args.parameters.right_padding = 3
@@ -135,7 +135,7 @@ class TestFlaiMapper(unittest.TestCase):
         self.assertEqual(i, 3)
     
     def test_01_d(self):
-        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'--verbose'])
         
         args.parameters.left_padding = 3
         args.parameters.right_padding = 4
@@ -160,7 +160,7 @@ class TestFlaiMapper(unittest.TestCase):
         self.assertEqual(i, 2)
     
     def test_01_e(self):
-        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'--verbose'])
         
         args.parameters.left_padding = 4
         args.parameters.right_padding = 3
@@ -185,7 +185,7 @@ class TestFlaiMapper(unittest.TestCase):
         self.assertEqual(i, 2)
     
     def test_01_f(self):
-        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'--verbose'])
         
         args.parameters.left_padding = 4
         args.parameters.right_padding = 4
@@ -212,7 +212,7 @@ class TestFlaiMapper(unittest.TestCase):
     
     def test_02(self):
         fname = 'test_FlaiMapper_test_02_output.gtf'
-        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname])
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,'--verbose'])
         
         flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
         
@@ -230,7 +230,7 @@ class TestFlaiMapper(unittest.TestCase):
     
     def test_03_a(self):
         fname = 'test_FlaiMapper_test_03_output.txt'
-        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,"-f","1"])
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,"-f","1",'--verbose'])
         
         flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
         
@@ -248,7 +248,7 @@ class TestFlaiMapper(unittest.TestCase):
     
     def test_03_b(self):
         fname = 'test_FlaiMapper_test_03_fa_output.txt'
-        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,"-f","1","--fasta",TESTS_FLAIMAPPER_FA])
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,"-f","1","--fasta",TESTS_FLAIMAPPER_FA,'--verbose'])
         
         flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
         
@@ -263,26 +263,6 @@ class TestFlaiMapper(unittest.TestCase):
         
         if assertion:
             os.remove(fname)
-
-    def test_04_a(self):
-        fname = 'test_FlaiMapper_test_04_output.txt'
-        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,"-f","2"])
-        
-        flaimapper = FlaiMapper(args.alignment_file,args.verbosity)
-        
-        # Run analysis
-        flaimapper.run(args.fasta_handle,args.parameters)
-
-        flaimapper.write(args.format, args.output)
-        
-        # assert Contents:
-        assertion = filecmp.cmp(fname , TESTS_FLAIMAPPER_TEST_03_a_OUTPUT_TXT)
-        self.assertTrue(assertion)
-        
-        if assertion:
-            os.remove(fname)
-    
- 
 
 
 def main():

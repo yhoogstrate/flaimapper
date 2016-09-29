@@ -37,7 +37,7 @@
 """
 
 
-import os,re,random,operator,argparse,sys
+import os,re,random,operator,argparse,sys,logging
 import pysam
 
 import flaimapper
@@ -62,81 +62,6 @@ class FragmentContainer():
         self.sequences[uid].append(fragment_finder_results)
         self.fasta_file = fasta_file
     
-    def export_genbank(self,filenamePrefix,suffixes=['_grouped.gbk','_single.gbk'],loffset = -3,roffset = 5):
-        """Write discovered fragments to genbank format (2 files). Certain arguments are created arbitrary just to make them non-empty.
-        
-        The following files:
-        - *grouped: 
-        - *single: 
-        
-        ----
-        @param filenamePrefix:
-        @param suffixes:
-        @param loffset:
-        @param roffset:
-        
-        @return: Success of the function
-        @rtype: boolean
-        """
-        if(not self.sequences):
-            return False
-        else:
-            if(filenamePrefix == "-"):
-                print "Currently stdout is not supported for genbank"
-            
-            fh_grouped = open(filenamePrefix+suffixes[0],'w')
-            fh_single = open(filenamePrefix+suffixes[1],'w')
-            
-            for name in sorted(self.sequences.keys()):
-                for masked_region_id in sorted(self.sequences[name]):
-                    result = self.sequences[name][masked_region_id].results
-                    if(result):
-                        preSeq = self.sequences[name].seq
-                        fh_grouped.write('LOCUS	   '+name+'		'+str(len(preSeq))+' bp	DNA	 linear   UNA'+"\n"+'DEFINITION  Homo sapiens '+name[0:150]+' ncRNA\n'+'ACCESSION   '+name+"\n"+'SOURCE	  Homo sapiens'+"\n"+'REFERENCE   1  '+"\n"+'  AUTHORS   ???;'+"\n"+'  TITLE	 \"A certain title\"'+"\n"+'  JOURNAL   ??? ???'+'\n   PUBMED   12345678'+"\nFEATURES			 Location/Qualifiers"+"\n")
-                        
-                        j = 1
-                        for fragment in result:
-                            fh_single.write('LOCUS	   '+name+'_Fragment_'+str(j)+'		'+str(len(fragment['extended']['sequence']))+' bp	DNA	 linear   UNA'+"\n"+'DEFINITION  Homo sapiens '+name[0:150]+' ncRNA\n'+'ACCESSION   '+name+'_Fragment_'+str(j)+"\n"+'SOURCE	  Homo sapiens'+"\n"+'REFERENCE   1  '+"\n"+'  AUTHORS   Person X;'+"\n"+'  TITLE	 \"A certain title\"'+"\n"+'  JOURNAL   JournalX. 5:e1000123(2012.'+'\n   PUBMED   12345678'+"\nFEATURES			 Location/Qualifiers"+"\n")
-                            fh_single.write("	 Fragment		"+str(fragment['extended']['5_prime_cut']+1)+".."+str(len(fragment['extended']['sequence'])-fragment['extended']['3_prime_cut'])+"\n")
-                            fh_single.write("					 /accession=mir-"+name+'_Fragment_'+str(j)+"\n")
-                            fh_single.write("					 /product=mir-"+name+'_Fragment_'+str(j)+"\n")
-                            fh_single.write("					 /evidence=experimental"+"\n")
-                            fh_single.write("					 /experiment=\"Solexa\""+"\n")
-                            fh_single.write("ORIGIN\n"+self.writeGenBank__format_sequence(fragment['extended']['sequence'])+"//"+"\n")
-                            
-                            fh_grouped.write("	 Fragment		"+str((int(fragment['start'])+1))+".."+str((int(fragment['stop'])))+"\n")
-                            fh_grouped.write("					 /accession="+name+'_Fragment_'+str(j)+"\n")
-                            fh_grouped.write("					 /product="+name+'_Fragment_'+str(j)+"\n")
-                            fh_grouped.write("					 /evidence=experimental"+"\n")
-                            fh_grouped.write("					 /experiment=\"Solexa\""+"\n")
-                            j += 1
-                        
-                        fh_grouped.write("ORIGIN\n"+self.writeGenBank__format_sequence(preSeq)+"//"+"\n")
-            
-            fh_single.close()
-            fh_grouped.close()
-            
-            return True
-    
-    def export_genbank__format_sequence(self,seq,size=60):
-        """Formats a sequence in order to use it for GenBank files.
-        Sequences get broken up in slices of 'size' which is 60
-        nucleotides by default.
-        
-        ----
-        @param seq: The DNA sequence
-        @param size: The length in amino acids that one row may take.
-        
-        @return: Tidy formatted DNA string
-        @rtype: string
-        """
-        outp = ''
-        times = ((len(seq) - len(seq)%size) / size)
-        for i in range(times+1):
-            slice = seq[i*size:(i+1)*size]
-            outp += "		 "[len(str((i*size)+1)):]+str((i*size)+1)+" "+slice+"\n"
-        return outp
-    
     def export_table__per_fragment(self,filename):
         """Exports the discovered fragments to a tab-delimited file.
         
@@ -149,7 +74,7 @@ class FragmentContainer():
         @rtype:
         """
         if(not self.sequences):
-            print "     * Warning: no fragments detected"
+            logging.warning("     * Warning: no fragments detected")
         else:
             if(filename == "-"):
                 fh = sys.stdout
@@ -162,9 +87,6 @@ class FragmentContainer():
             else:
                 fh.write("Fragment\tSize\tReference sequence\tStart\tEnd\tPrecursor\tStart in precursor\tEnd in precursor\tSequence\tCorresponding-reads (start)\tCorresponding-reads (end)\tCorresponding-reads (total)\n")
             
-#            for name in sorted(self.sequences.keys()):
-#                for masked_region_id in sorted(self.sequences[name]):
-#                    result = self.sequences[name][masked_region_id].results
             for uid in sorted(self.sequences.keys()):
                 for reference_sequence in self.sequences[uid]:
                     name = reference_sequence.masked_region[0]
@@ -271,13 +193,10 @@ class FragmentContainer():
     
     def write(self,export_format,output_filename):
         if(self.verbosity == "verbose"):
-            print " - Exporting results to: "+output_filename
+            logging.info(" - Exporting results to: "+output_filename)
         if(export_format == 1):
-            print "   - Format: tab-delimited, per fragment"
+            logging.info("   - Format: tab-delimited, per fragment")
             self.export_table__per_fragment(output_filename)
         elif(export_format == 2):
-            print "   - Format: gen-bank"
-            self.export_genbank(output_filename)
-        elif(export_format == 3):
-            print "   - Format: GTF"
+            logging.info("   - Format: GTF")
             self.export_gtf(output_filename)

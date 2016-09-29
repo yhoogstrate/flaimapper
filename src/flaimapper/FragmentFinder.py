@@ -47,7 +47,7 @@ class FragmentFinder:
 	
 	@todo merge masked_region
 	"""
-	def __init__(self,masked_region,readcount,autorun=True):
+	def __init__(self,masked_region,readcount,filter_parameters,autorun):
 		"""
 		----
 		@param: name
@@ -57,7 +57,7 @@ class FragmentFinder:
 		"""
 		
 		self.masked_region = masked_region
-		self.name = masked_region[0]
+		self.filter_parameters = filter_parameters
 		
 		if(autorun):
 			self.positions = {}
@@ -117,38 +117,6 @@ class FragmentFinder:
 		"""
 		
 		psorted = sorted(plist.iteritems(),key=operator.itemgetter(1))[::-1]
-		pmatrix = {
-		-15 :0.00003726653,
-		-14 :0.0001866447,
-		-13 :0.008364835,
-		-12 :0.0354626,
-		-11 :0.1203860,
-		-10 :0.3865920,
-		 -9 :1.110900,
-		 -8 :2.856550,
-		 -7 :6.572853,
-		 -6 :13.53353,
-		 -5 :24.93522,
-		 -4 :100,
-		 -3 :100,
-		 -2 :100,
-		 -1 :100,
-		
-		  1 :100,
-		  2 :100,
-		  3 :100,
-		  4 :100,
-		  5 :24.93522,
-		  6 :13.53353,
-		  7 :6.572853,
-		  8 :2.856550,
-		  9 :1.110900,
-		 10 :0.3865920,
-		 11 :0.1203860,
-		 12 :0.0354626,
-		 13 :0.008364835,
-		 14 :0.0001866447,
-		 15 :0.00003726653 }
 		
 		# There is a small mistake in the algorithm,
 		# it should search not for ALL peaks
@@ -157,12 +125,12 @@ class FragmentFinder:
 		for i in range(len(psorted)):
 			if(psorted[i] != False):
 				item = psorted[i]
-				for j in range(len(psorted)):							# Can be limited to size and -size of pmatrix
+				for j in range(len(psorted)):							# Can be limited to size and -size of self.filter_parameters.matrix
 					if((psorted[j] != False) and (j != i)):
 						item2 = psorted[j]
 						diff = item2[0]-item[0]
-						if(pmatrix.has_key(diff)):
-							perc = pmatrix[diff]/100.0
+						if(self.filter_parameters.matrix.has_key(diff)):
+							perc = self.filter_parameters.matrix[diff]/100.0
 							if((perc*item[1]) > item2[1]):
 								psorted[j] = False
 		

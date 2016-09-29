@@ -54,8 +54,6 @@ def main():
     # Run analysis
     flaimapper.run(args.fasta_handle,args.parameters.matrix)
     flaimapper.write(args.format,args.output)
-    
-    self.assertEqual("status","complete")
 
 
 if __name__ == "__main__":
