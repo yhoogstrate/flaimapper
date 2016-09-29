@@ -57,7 +57,7 @@ class FlaiMapper(FragmentContainer):
             self.alignment.fetch()
         except:
             logging.info(' - Indexing BAM file with samtools: '+self.alignment.filename)
-            subprocess.call(["samtools", "index", self.alignment.filename])# Create index
+            pysam.index(self.alignment.filename)
             self.alignment = pysam.AlignmentFile(self.alignment.filename)
         
         try:
