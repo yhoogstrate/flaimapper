@@ -37,7 +37,6 @@
 """
 
 
-
 import os,re,random,operator,argparse,sys,tempfile,textwrap,datetime
 import pysam
 

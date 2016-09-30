@@ -110,7 +110,6 @@ class FlaiMapper(FragmentContainer):
         
         self.fasta_file = fasta_file
         
-        
         for region in self.regions(filter_parameters):
             logging.debug("   - Masked region: "+region[0]+":"+str(region[1])+"-"+str(region[2]))
             logging.debug("     * Acquiring statistics")

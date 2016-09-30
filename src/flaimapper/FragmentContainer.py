@@ -59,7 +59,7 @@ class FragmentContainer():
         self.sequences[uid].append(fragment_finder_results)
         self.fasta_file = fasta_file
     
-    def export_table__per_fragment(self,filename):
+    def export_table(self,filename):
         """Exports the discovered fragments to a tab-delimited file.
         
         The following format is exported:
@@ -193,7 +193,7 @@ class FragmentContainer():
         
         if(export_format == 1):
             logging.info("   - Format: tab-delimited, per fragment")
-            self.export_table__per_fragment(output_filename)
+            self.export_table(output_filename)
         elif(export_format == 2):
             logging.info("   - Format: GTF")
             self.export_gtf(output_filename)

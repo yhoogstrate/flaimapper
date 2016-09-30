@@ -64,11 +64,13 @@ class TestFlaiMapper(unittest.TestCase):
                 
                 self.assertEqual(region[1], 43-1-args.parameters.left_padding)
                 self.assertEqual(region[2], 43+20+args.parameters.right_padding)
-            else:
+            elif i == 2:
                 self.assertEqual(region[0], 'chr2')
                 
                 self.assertEqual(region[1], 54-1-args.parameters.left_padding)
                 self.assertEqual(region[2], 54+26+args.parameters.right_padding)
+            else:
+                self.asserTrue(False,"Race condition?")
             
             i += 1
         
@@ -94,12 +96,13 @@ class TestFlaiMapper(unittest.TestCase):
                 
                 self.assertEqual(region[1], 43-1-args.parameters.left_padding)
                 self.assertEqual(region[2], 43+20+args.parameters.right_padding)
-            else:
+            elif i == 2:
                 self.assertEqual(region[0], 'chr2')
                 
                 self.assertEqual(region[1], 54-1-args.parameters.left_padding)
                 self.assertEqual(region[2], 54+26+args.parameters.right_padding)
-            
+            else:
+                self.assertTrue(False,"Race condition?")
             i += 1
         
         self.assertEqual(i, 3)

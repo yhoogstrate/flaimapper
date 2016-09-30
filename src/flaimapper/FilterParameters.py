@@ -53,10 +53,7 @@ Every line represents an offset from a peak, and the second column
 represents the percentage of reduction. The zero value is excluded.
     """
     def __init__(self,filename=None):
-        if filename == None:
-            filename = PARAMETERS_DEFAULT
-        
-        self.parse(filename)
+        self.parse(filename if filename != None else PARAMETERS_DEFAULT)
     
     def parse(self,filename):
         matrix = {}
