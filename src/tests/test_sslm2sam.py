@@ -38,29 +38,29 @@
 
 
 from flaimapper.CLI import CLI_sslm2sam
-from flaimapper.FragmentContainer import FragmentContainer
+from flaimapper.SSLMParser import SSLMParser
 
-import unittest,subprocess,os
+import unittest,subprocess,os,shutil
 
 
 class TestFlaiMapper(unittest.TestCase):
     def test_01_a(self):
-        os.chdir("../share/small_RNA-seq_alignments/SRP006788/")
-        subprocess.call(["tar","-xzf","SRR207111_HeLa18-30.tar.gz"])
+        os.chdir("../share/small_RNA-seq_alignments/SRP028959/")
+        subprocess.call(["tar","-xzf","SRR954958.tar.gz"])
         
-        args = CLI_sslm2sam(['-o','test.sam','SRR207111_HeLa18-30'])
-        sslm2bed_converter = FragmentContainer()
+        args = CLI_sslm2sam(['-o','test.sam','SRR954958'])
+        sslm2bed_converter = SSLMParser(args.sslm_directory)
         sslm2bed_converter.convert_to_sam(args.output)
-"""
-    sslm2bed_converter = FlaiMapperObject('sslm',args.verbosity)
-    for alignment_directory in args.alignment_directories:
-        sslm2bed_converter.add_alignment(alignment_directory)
-    
-    regions = parse_gff(args.mask)
-    
-    sslm2bed_converter.convert_to_sam(regions,args.output)
-
-        """
+        
+        assertion = os.stat("test.sam").st_size , 46985661
+        self.assertTrue(assertion,"Incorrect ../share/small_RNA-seq_alignments/SRP028959/test.sam")# Assume file size is sufficient :)
+        
+        if assertion:
+            os.remove("test.sam")
+        
+        os.remove("SRR954958.bam")
+        os.remove("SRR954958.bam.bai")
+        shutil.rmtree("SRR954958")
 
 
 

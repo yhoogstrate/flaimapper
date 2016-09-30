@@ -99,13 +99,15 @@ def CLI_sslm2sam(argv=None):
     
     parser.add_argument("-o","--output",help="output SAM-filename; '-' for stdout",default="-")
     
-    parser.add_argument("sslm_directory",nargs='+',help="SSLM formatted output directories")
+    parser.add_argument("sslm_directory",nargs=1,help="SSLM formatted output directories")
     
     # Parse parameters
     if argv == None:
         args = parser.parse_args()
     else:# Argumented parameters (only for testing)
         args = parser.parse_args(argv)
+    
+    args.sslm_directory = args.sslm_directory[0]
     
     # Set verbosity and logging
     if args.verbose:
