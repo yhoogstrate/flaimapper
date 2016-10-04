@@ -40,7 +40,9 @@ from flaimapper.FlaiMapper import FlaiMapper
 from flaimapper.CLI import CLI
 from flaimapper.Data import *
 
-import unittest,filecmp,os
+import unittest,filecmp,os,logging
+logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.DEBUG)
+
 
 
 class TestFlaiMapper(unittest.TestCase):
@@ -75,8 +77,36 @@ class TestFlaiMapper(unittest.TestCase):
             i += 1
         
         self.assertEqual(i, 3)
-    
+
     def test_01_b(self):
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'-p',TESTS_FUNCTIONAL_DUCK7_PARAMS,'--verbose'])
+        
+        # Use custom file that must be set to a padding of 7
+        self.assertEqual(args.parameters.left_padding, 7)
+        self.assertEqual(args.parameters.right_padding, 7)
+        
+        flaimapper = FlaiMapper(args.alignment_file)
+        
+        i = 0
+        for region in flaimapper.regions(args.parameters):
+            if i == 0:
+                self.assertEqual(region[0], 'chr1')
+                
+                self.assertEqual(region[1], 13-1-args.parameters.left_padding)
+                self.assertEqual(region[2], 43+20+args.parameters.right_padding)
+            elif i == 1:
+                self.assertEqual(region[0], 'chr2')
+                
+                self.assertEqual(region[1], 54-1-args.parameters.left_padding)
+                self.assertEqual(region[2], 54+26+args.parameters.right_padding)
+            else:
+                self.asserTrue(False,"Race condition?")
+            
+            i += 1
+        
+        self.assertEqual(i, 2)
+
+    def test_01_c(self):
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'--verbose'])
         
         args.parameters.left_padding = 2
@@ -107,7 +137,7 @@ class TestFlaiMapper(unittest.TestCase):
         
         self.assertEqual(i, 3)
     
-    def test_01_c(self):
+    def test_01_d(self):
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'--verbose'])
         
         args.parameters.left_padding = 3
@@ -137,7 +167,7 @@ class TestFlaiMapper(unittest.TestCase):
         
         self.assertEqual(i, 3)
     
-    def test_01_d(self):
+    def test_01_e(self):
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'--verbose'])
         
         args.parameters.left_padding = 3
@@ -162,7 +192,7 @@ class TestFlaiMapper(unittest.TestCase):
         
         self.assertEqual(i, 2)
     
-    def test_01_e(self):
+    def test_01_f(self):
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'--verbose'])
         
         args.parameters.left_padding = 4
@@ -187,7 +217,7 @@ class TestFlaiMapper(unittest.TestCase):
         
         self.assertEqual(i, 2)
     
-    def test_01_f(self):
+    def test_01_g(self):
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'--verbose'])
         
         args.parameters.left_padding = 4

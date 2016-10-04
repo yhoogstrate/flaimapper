@@ -36,6 +36,7 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
+import logging
 from flaimapper.Data import *
 
 class FilterParameters:
@@ -99,3 +100,4 @@ represents the percentage of reduction. The zero value is excluded.
         self.right_padding = len(neg)
         
         self.matrix = matrix
+        logging.debug("Parsed filter parameters: [-"+str(self.left_padding)+","+str(self.right_padding)+"]")

@@ -41,35 +41,32 @@ from flaimapper.FlaiMapper import FlaiMapper
 from flaimapper.Data import *
 
 
-import unittest#,filecmp,os
+import unittest,logging
+logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.DEBUG)
+
 
 
 class TestFunctional(unittest.TestCase):
     def test_01_a(self):
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'--verbose'])
         
-        args.parameters.left_padding = 1
-        args.parameters.right_padding = 1
-        
         flaimapper = FlaiMapper(args.alignment_file)
         
         i = 0
         for region in flaimapper.regions(args.parameters):
+            print "regions:",region
             if i == 0:
                 self.assertEqual(region[0], 'chr1')
                 
-                self.assertEqual(region[1], 13-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 13+20+4+args.parameters.right_padding)
-            elif i == 1:
-                self.assertEqual(region[0], 'chr1')
-                
-                self.assertEqual(region[1], 43-1-args.parameters.left_padding)
+                self.assertEqual(region[1], 0)
                 self.assertEqual(region[2], 43+20+args.parameters.right_padding)
-            elif i == 2:
+            elif i == 1:
                 self.assertEqual(region[0], 'chr2')
                 
                 self.assertEqual(region[1], 54-1-args.parameters.left_padding)
                 self.assertEqual(region[2], 54+26+args.parameters.right_padding)
+            else:
+                self.asserTrue(False,"Race condition?")
             
             i += 1
         
@@ -81,15 +78,10 @@ class TestFunctional(unittest.TestCase):
             for reference_sequence in flaimapper.sequences[uid]:
                 if(reference_sequence.results):
                     for fragment in reference_sequence.results:
-                        print ",,,,",fragment['start'],'..',fragment['stop']
+                        print "fragments:",reference_sequence.masked_region,":",fragment['start'],'..',fragment['stop']
     
     def test_01_b(self):
-        print "---------------------------- test2"
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'-p',TESTS_FUNCTIONAL_DUCK7_PARAMS,'--verbose'])
-        #args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'--verbose'])
-        
-        args.parameters.left_padding = 1
-        args.parameters.right_padding = 1
         
         flaimapper = FlaiMapper(args.alignment_file)
         
@@ -99,21 +91,18 @@ class TestFunctional(unittest.TestCase):
                 self.assertEqual(region[0], 'chr1')
                 
                 self.assertEqual(region[1], 13-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 13+20+4+args.parameters.right_padding)
-            elif i == 1:
-                self.assertEqual(region[0], 'chr1')
-                
-                self.assertEqual(region[1], 43-1-args.parameters.left_padding)
                 self.assertEqual(region[2], 43+20+args.parameters.right_padding)
-            elif i == 2:
+            elif i == 1:
                 self.assertEqual(region[0], 'chr2')
                 
                 self.assertEqual(region[1], 54-1-args.parameters.left_padding)
                 self.assertEqual(region[2], 54+26+args.parameters.right_padding)
+            else:
+                self.asserTrue(False,"Race condition?")
             
             i += 1
         
-        self.assertEqual(i, 3)
+        self.assertEqual(i, 2)
         
         flaimapper.run(args.fasta_handle,args.parameters)
         
@@ -121,7 +110,9 @@ class TestFunctional(unittest.TestCase):
             for reference_sequence in flaimapper.sequences[uid]:
                 if(reference_sequence.results):
                     for fragment in reference_sequence.results:
-                        print ",,,,",fragment['start'],'..',fragment['stop']
+                        print "fragments:",reference_sequence.masked_region,":",fragment['start'],'..',fragment['stop']
+        
+        self.assertTrue(1,2) # Check results
 
 
 def main():

@@ -37,8 +37,9 @@
 """
 
 from flaimapper.FilterParameters import FilterParameters
-
-import unittest
+from flaimapper.Data import *
+import unittest,logging
+logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.DEBUG)
 
 
 class TestFilterParameters(unittest.TestCase):
@@ -50,6 +51,18 @@ class TestFilterParameters(unittest.TestCase):
 
         keys = fp.matrix.keys()
         for i in range(-15,0):
+            self.assertTrue(i in keys)
+            self.assertTrue(fp.matrix[i] >= 0.0)
+            self.assertTrue(fp.matrix[i] <= 100.0)
+            
+    def test_02(self):
+        fp = FilterParameters(TESTS_FUNCTIONAL_DUCK7_PARAMS)
+        
+        self.assertEqual(fp.left_padding, 7)
+        self.assertEqual(fp.right_padding, 7)
+        
+        keys = fp.matrix.keys()
+        for i in range(-7,0):
             self.assertTrue(i in keys)
             self.assertTrue(fp.matrix[i] >= 0.0)
             self.assertTrue(fp.matrix[i] <= 100.0)
