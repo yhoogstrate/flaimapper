@@ -51,6 +51,9 @@ class FragmentFinder:
         self.masked_region = masked_region
         self.filter_parameters = filter_parameters
         
+        print len(readcount.start_positions),readcount.start_positions
+        print len(readcount.stop_positions),readcount.stop_positions
+        
         if(autorun):
             self.positions = {}
             self.positions['startPositions'] = readcount.start_positions
@@ -65,7 +68,21 @@ class FragmentFinder:
             self.correctedPeaksStop = False
             
             self.run()
+
+    def run(self):
+        # Finds peaks
+        self.peaksStart = self.findPeaks(self.positions['startPositions']+[0])
+        self.peaksStop = self.findPeaks(self.positions['stopPositions']+[0])
         
+        # Correct / filter noisy peaks
+        self.correctedPeaksStart = self.correctNeighbourPeaks(self.peaksStart)
+        self.correctedPeaksStop = self.correctNeighbourPeaks(self.peaksStop)
+        
+        # Trace start and stop positions together and obtain actual peaks
+        self.results = self.find_fragments(self.correctedPeaksStart,self.correctedPeaksStop,self.positions['startAvgLengths'],self.positions['stopAvgLengths'])
+        
+        return True
+    
     def findPeaks(self,plist,drop_cutoff=0.1):
         # Define variables:
         peaks = {}
@@ -222,20 +239,6 @@ class FragmentFinder:
                 }
         
         return fragments
-    
-    def run(self):
-        # Finds peaks
-        self.peaksStart = self.findPeaks(self.positions['startPositions']+[0])
-        self.peaksStop = self.findPeaks(self.positions['stopPositions']+[0])
-        
-        # Correct / filter noisy peaks
-        self.correctedPeaksStart = self.correctNeighbourPeaks(self.peaksStart)
-        self.correctedPeaksStop = self.correctNeighbourPeaks(self.peaksStop)
-        
-        # Trace start and stop positions together and obtain actual peaks
-        self.results = self.find_fragments(self.correctedPeaksStart,self.correctedPeaksStop,self.positions['startAvgLengths'],self.positions['stopAvgLengths'])
-        
-        return True
     
     def getResults(self):
         return self.results
