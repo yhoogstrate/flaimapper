@@ -37,7 +37,7 @@
 """
 
 
-import os,re,random,operator,argparse,sys
+import os,re,operator
 
 from flaimapper.ncRNAfragment import ncRNAfragment
 
