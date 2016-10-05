@@ -37,7 +37,7 @@
 """
 
 
-import os,re,random,operator,argparse,sys,tempfile,textwrap,datetime,logging
+import os,re,operator,argparse,sys,tempfile,textwrap,datetime,logging
 import pysam
 import flaimapper
 

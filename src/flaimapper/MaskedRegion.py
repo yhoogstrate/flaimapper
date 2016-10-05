@@ -36,7 +36,7 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-import os,re,random,operator,argparse,sys
+import os,re,operator,argparse,sys
 
 
 from flaimapper.Read import Read

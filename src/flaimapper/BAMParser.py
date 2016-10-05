@@ -37,7 +37,7 @@
 """
 
 
-import os,re,random,operator,argparse,sys,subprocess
+import os,re,operator,argparse,sys,subprocess
 import pysam
 
 

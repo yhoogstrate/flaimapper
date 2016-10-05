@@ -37,7 +37,7 @@
 """
 
 
-import os,re,random,operator,argparse,sys,logging
+import os,re,operator,argparse,sys,logging
 
 
 from flaimapper.Read import Read
