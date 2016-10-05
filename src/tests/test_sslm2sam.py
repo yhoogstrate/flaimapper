@@ -53,8 +53,8 @@ class TestFlaiMapper(unittest.TestCase):
         sslm2bed_converter = SSLMParser(args.sslm_directory)
         sslm2bed_converter.convert_to_sam(args.output)
         
-        assertion = os.stat("test.sam").st_size , 46985661
-        self.assertTrue(assertion,"Incorrect ../share/small_RNA-seq_alignments/SRP028959/test.sam")# Assume file size is sufficient :)
+        assertion = (os.stat("test.sam").st_size == 46985661)
+        self.assertTrue(assertion, "Incorrect ../share/small_RNA-seq_alignments/SRP028959/test.sam")# Assume file size is sufficient :)
         
         if assertion:
             os.remove("test.sam")
