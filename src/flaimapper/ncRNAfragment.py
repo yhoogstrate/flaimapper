@@ -101,13 +101,3 @@ class ncRNAfragment:
             self.stop + self.genomic_offset_masked_region
         else:
             return self.stop
-    
-    def __getitem__(self,key):
-        if(key == "start"):
-            return self.start
-        elif(key == "stop"):
-            return self.stop
-        elif(key == 'start_supporting_reads'):
-            return self.supporting_reads_start
-        elif(key == 'stop_supporting_reads'):
-            return self.supporting_reads_stop

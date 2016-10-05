@@ -97,7 +97,7 @@ class FragmentContainer():
                     if(result):
                         fragments_sorted_keys = {}
                         for fragment in result:
-                            fragments_sorted_keys[fragment['start']] = fragment
+                            fragments_sorted_keys[fragment.start] = fragment
                         
                         i = 0
                         for key in sorted(fragments_sorted_keys.keys()):	# Walk over i in the for-loop:
@@ -108,40 +108,40 @@ class FragmentContainer():
                             fh.write('FM_'+ name+'_'+str(i).zfill(12)+"\t")
                             
                             # Size
-                            fh.write(str(fragment['stop'] - fragment['start'] + 1) + "\t")
+                            fh.write(str(fragment.stop - fragment.start + 1) + "\t")
                             
                             # Reference sequence 
                             fh.write(name + "\t")
                             
                             # Start
-                            fh.write(str(fragment['start']) + "\t")
+                            fh.write(str(fragment.start) + "\t")
                             
                             # End
-                            fh.write(str(fragment['stop'])+"\t")
+                            fh.write(str(fragment.stop)+"\t")
                             
                             # Precursor
                             fh.write(fragment.masked_region[0])
                             
                             # Start in precursor
-                            fh.write("\t" + str(fragment['start']-fragment.masked_region[1])+ "\t")
+                            fh.write("\t" + str(fragment.start-fragment.masked_region[1])+ "\t")
                             
                             # End in precursor
-                            fh.write(str(fragment['stop']-fragment.masked_region[1])+"\t")
+                            fh.write(str(fragment.stop-fragment.masked_region[1])+"\t")
                             
                             # Sequence 
                             if(self.fasta_file):
                                 # PySam 0.8.2 claims to use 0-based coordinates pysam.FastaFile.fetch().
                                 # This is only true for the start position, the end-position is 1-based.
-                                fh.write(str(self.fasta_file.fetch(name,fragment['start'],fragment['stop']+1)))
+                                fh.write(str(self.fasta_file.fetch(name,fragment.start,fragment.stop+1)))
                             
                             # Start supporting reads
-                            fh.write("\t"+str(fragment['start_supporting_reads'])+"\t")
+                            fh.write("\t"+str(fragment.supporting_reads_start)+"\t")
                             
                             # Stop supporting reads
-                            fh.write(str(fragment['stop_supporting_reads'])+"\t")
+                            fh.write(str(fragment.supporting_reads_stop)+"\t")
                             
                             # Total supporting reads
-                            fh.write(str(fragment['stop_supporting_reads']+fragment['start_supporting_reads']) + "\n")
+                            fh.write(str(fragment.supporting_reads_stop+fragment.supporting_reads_start) + "\n")
             
             fh.close()
         
@@ -159,7 +159,7 @@ class FragmentContainer():
                 if(result):
                     fragments_sorted_keys = {}
                     for fragment in result:
-                        fragments_sorted_keys[fragment['start']] = fragment
+                        fragments_sorted_keys[fragment.start] = fragment
                     
                     i = 0
                     for key in sorted(fragments_sorted_keys.keys()):# Walk over i in the for-loop:
@@ -176,13 +176,13 @@ class FragmentContainer():
                         fh.write("sncdRNA\t")
                         
                         # Start
-                        fh.write(str(fragment['start']+1) + "\t")
+                        fh.write(str(fragment.start+1) + "\t")
                         
                         # End
-                        fh.write(str(fragment['stop']+1)+"\t")
+                        fh.write(str(fragment.stop+1)+"\t")
                         
                         # Score
-                        fh.write(str(fragment['stop_supporting_reads']+fragment['start_supporting_reads']) + "\t")
+                        fh.write(str(fragment.supporting_reads_stop+fragment.supporting_reads_start) + "\t")
                         
                         # Strand and Frame
                         fh.write(".\t.\t")

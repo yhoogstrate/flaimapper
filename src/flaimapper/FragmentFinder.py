@@ -199,8 +199,8 @@ class FragmentFinder:
                         highest = pstop[item]
                         
                         #fragment = {'start':pos,'stop':item,'sequence':None}
-                        #fragment['start_supporting_reads'] = pstart[fragment['start']]
-                        #fragment['stop_supporting_reads']  = pstop[fragment['stop']]
+                        #fragment['start_supporting_reads'] = pstart[fragment.start]
+                        #fragment['stop_supporting_reads']  = pstop[fragment.stop]
                         
                         fragment = ncRNAfragment(pos,item,None,self.masked_region,genomic_offset_masked_region)
                         fragment.supporting_reads_start = pstart[fragment.start]
@@ -210,33 +210,33 @@ class FragmentFinder:
                     fragments.append(fragment)
                     del(pstop[fragment.stop])
                     items = []
-        #(counter >= fragment['start']) and (counter < fragment['stop'])
+        #(counter >= fragment.start) and (counter < fragment.stop)
         
         for fragment in fragments:
-            #fragment['sequence'] = self.seq[fragment['start']:fragment['stop']]
+            #fragment['sequence'] = self.seq[fragment.start:fragment.stop]
             
             cut5 = prime_5_ext
             cut3 = prime_3_ext
             
             """
             @todo fix this:
-            diff = fragment['start']-prime_5_ext
+            diff = fragment.start-prime_5_ext
             cut5 = prime_5_ext
             if(diff < 0):
                 cut5 = prime_5_ext+diff
             
-            diff = len(self.seq)-(fragment['stop']+prime_3_ext)
+            diff = len(self.seq)-(fragment.stop+prime_3_ext)
             cut3 = prime_3_ext
             if(diff < 0):
                 cut3 = prime_3_ext + diff
             """
             
-            #fragment['extended'] = {'5_prime_cut':cut5,'3_prime_cut':cut3,'5_prime_pos':fragment['start']-cut5,'3_prime_pos':fragment['stop']+cut3,'sequence':self.seq[(fragment['start']-cut5):(fragment['stop']+cut3)]}
+            #fragment['extended'] = {'5_prime_cut':cut5,'3_prime_cut':cut3,'5_prime_pos':fragment.start-cut5,'3_prime_pos':fragment.stop+cut3,'sequence':self.seq[(fragment.start-cut5):(fragment.stop+cut3)]}
             fragment.extended = {
                 '5_prime_cut':cut5,
                 '3_prime_cut':cut3,
                 
-                '5_prime_pos':fragment['start']-cut5,
+                '5_prime_pos':fragment.start-cut5,
                 '3_prime_pos':fragment.stop+cut3
                 }
         
