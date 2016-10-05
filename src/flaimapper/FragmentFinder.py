@@ -50,9 +50,7 @@ class FragmentFinder:
     def __init__(self,masked_region,readcount,filter_parameters,autorun):
         self.masked_region = masked_region
         self.filter_parameters = filter_parameters
-        
-        print "1, init:",len(readcount.start_positions),readcount.start_positions
-        print "1, init:",len(readcount.stop_positions),readcount.stop_positions
+        self.results = []
         
         if(autorun):
             self.positions = {}
@@ -69,27 +67,25 @@ class FragmentFinder:
             
             self.run()
     
+    def __iter__(self):
+        for result in self.results:
+            yield result
+    
     def run(self):
         # Finds peaks
-        self.peaksStart = self.findPeaks(self.positions['startPositions']+[0])
-        self.peaksStop = self.findPeaks(self.positions['stopPositions']+[0])
-        
-        print "2, peaks:",self.peaksStart
-        print "2, peaks:",self.peaksStop
+        self.peaksStart = self.find_peaks(self.positions['startPositions']+[0])
+        self.peaksStop = self.find_peaks(self.positions['stopPositions']+[0])
         
         # Correct / filter noisy peaks
-        self.correctedPeaksStart = self.correctNeighbourPeaks(self.peaksStart)
-        self.correctedPeaksStop = self.correctNeighbourPeaks(self.peaksStop)
-        
-        print "3, peaks filtered:",len(self.correctedPeaksStart),self.correctedPeaksStart
-        print "3, peaks filtered:",len(self.correctedPeaksStop),self.correctedPeaksStop
+        self.correctedPeaksStart = self.smooth_filter_peaks(self.peaksStart)
+        self.correctedPeaksStop = self.smooth_filter_peaks(self.peaksStop)
         
         # Trace start and stop positions together and obtain actual peaks
         self.results = self.find_fragments(self.correctedPeaksStart,self.correctedPeaksStop,self.positions['startAvgLengths'],self.positions['stopAvgLengths'])
         
         return True
     
-    def findPeaks(self,plist,drop_cutoff=0.1):
+    def find_peaks(self,plist,drop_cutoff=0.1):
         # Define variables:
         peaks = {}
         
@@ -117,7 +113,7 @@ class FragmentFinder:
             previous = current
         return peaks
     
-    def correctNeighbourPeaks(self,plist):
+    def smooth_filter_peaks(self,plist):
         """Smooth filtering
         """
         
@@ -245,6 +241,3 @@ class FragmentFinder:
                 }
         
         return fragments
-    
-    def getResults(self):
-        return self.results

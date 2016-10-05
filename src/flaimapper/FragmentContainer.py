@@ -44,6 +44,12 @@ import flaimapper
 
 
 class FragmentContainer():
+    def __iter__(self):
+        for uid in sorted(self.sequences.keys()):
+            for reference_sequence in self.sequences[uid]:
+                for fragment in reference_sequence:
+                    yield fragment
+    
     def add_fragments(self,fragment_finder_results,fasta_file=None):
         """
         

@@ -37,77 +37,77 @@
 """
 
 class ncRNAfragment:
-	def __init__(self,start=None,stop=None,reference_sequence=None,masked_region=None,genomic_offset_masked_region=0):
-		self.name = False
-		
-		self.set_location(start,stop,reference_sequence)
-		self.genomic_offset_masked_region = genomic_offset_masked_region
-		
-		self.masked_region = masked_region
-		self.sequence = None
-		
-		self.reset_supporting_reads()
-		self.extended = {}
-		self.evidence = None
-	
-	def get_sequence(self,fasta_handler=None):
-		if(self.sequence):
-			return self.sequence
-		else:
-			pass
-	
-	def set_sequence(self,sequence):
-		self.sequence = sequence
-	
-	def set_name(self,name):
-		self.name = name
-	
-	def set_evidence(self,evidence):
-		self.evidence = evidence
-	
-	def get_name(self):
-		return self.name
-		
-	def add_supporting_reads(self,number):
-		self.supporting_reads += number
-		
-	def get_supporting_reads(self):
-		return self.supporting_reads
-	
-	def spans_read(self,read,offset_left=0,offset_right=0):
-		"""
-		no offset used..
-		"""
-		return (((read.start+offset_left) >= self.start) and ((read.stop-offset_right) <= self.stop))
-	
-	def reset_supporting_reads(self):
-		self.supporting_reads = 0										# all reads in-between the fragment
-		self.supporting_reads_start = 0									# The reads with the start-position aligned exactly to the 5' of the fragment
-		self.supporting_reads_stop = 0									# The reads with the end-position aligned exactly to the 3' of the fragment
-	
-	def set_location(self,start,stop,reference_sequence):
-		self.start = start
-		self.stop = stop
-		self.reference_sequence = reference_sequence
-	
-	def get_start_position(self,absolute=False):
-		if(absolute):
-			self.start + self.genomic_offset_masked_region
-		else:
-			return self.start
-	
-	def get_stop_position(self,absolute=False):
-		if(absolute):
-			self.stop + self.genomic_offset_masked_region
-		else:
-			return self.stop
-	
-	def __getitem__(self,key):
-		if(key == "start"):
-			return self.start
-		elif(key == "stop"):
-			return self.stop
-		elif(key == 'start_supporting_reads'):
-			return self.supporting_reads_start
-		elif(key == 'stop_supporting_reads'):
-			return self.supporting_reads_stop
+    def __init__(self,start=None,stop=None,reference_sequence=None,masked_region=None,genomic_offset_masked_region=0):
+        self.name = False
+        
+        self.set_location(start,stop,reference_sequence)
+        self.genomic_offset_masked_region = genomic_offset_masked_region
+        
+        self.masked_region = masked_region
+        self.sequence = None
+        
+        self.reset_supporting_reads()
+        self.extended = {}
+        self.evidence = None
+    
+    def get_sequence(self,fasta_handler=None):
+        if(self.sequence):
+            return self.sequence
+        else:
+            pass
+    
+    def set_sequence(self,sequence):
+        self.sequence = sequence
+    
+    def set_name(self,name):
+        self.name = name
+    
+    def set_evidence(self,evidence):
+        self.evidence = evidence
+    
+    def get_name(self):
+        return self.name
+        
+    def add_supporting_reads(self,number):
+        self.supporting_reads += number
+        
+    def get_supporting_reads(self):
+        return self.supporting_reads
+    
+    def spans_read(self,read,offset_left=0,offset_right=0):
+        """
+        no offset used..
+        """
+        return (((read.start+offset_left) >= self.start) and ((read.stop-offset_right) <= self.stop))
+    
+    def reset_supporting_reads(self):
+        self.supporting_reads = 0										# all reads in-between the fragment
+        self.supporting_reads_start = 0									# The reads with the start-position aligned exactly to the 5' of the fragment
+        self.supporting_reads_stop = 0									# The reads with the end-position aligned exactly to the 3' of the fragment
+    
+    def set_location(self,start,stop,reference_sequence):
+        self.start = start
+        self.stop = stop
+        self.reference_sequence = reference_sequence
+    
+    def get_start_position(self,absolute=False):
+        if(absolute):
+            self.start + self.genomic_offset_masked_region
+        else:
+            return self.start
+    
+    def get_stop_position(self,absolute=False):
+        if(absolute):
+            self.stop + self.genomic_offset_masked_region
+        else:
+            return self.stop
+    
+    def __getitem__(self,key):
+        if(key == "start"):
+            return self.start
+        elif(key == "stop"):
+            return self.stop
+        elif(key == 'start_supporting_reads'):
+            return self.supporting_reads_start
+        elif(key == 'stop_supporting_reads'):
+            return self.supporting_reads_stop

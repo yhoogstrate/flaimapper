@@ -146,7 +146,7 @@ class FlaiMapper(FragmentContainer):
                 
                 annotations = regions.index[links[ncRNA]]
                 
-                predicted_fragments = all_predicted_fragments[ncRNA].getResults()
+                predicted_fragments = all_predicted_fragments[ncRNA].results
                 
                 i += 1
                 
@@ -219,7 +219,7 @@ class FlaiMapper(FragmentContainer):
                 
                 annotations = regions.index[links[ncRNA]]
                 
-                predicted_fragments = all_predicted_fragments[ncRNA].getResults()
+                predicted_fragments = all_predicted_fragments[ncRNA].results
                 
                 
                 i += 1
@@ -344,9 +344,9 @@ class FlaiMapper(FragmentContainer):
                 
                 predicted_fragments_obj = FragmentFinder(ncRNA,aligned_reads)
                 predicted_fragments_obj.run()
-                predicted_fragments = predicted_fragments_obj.getResults()
+                predicted_fragments = predicted_fragments_obj.results
                 
-                aligned_reads.count_reads_per_region(predicted_fragments_obj.getResults())
+                aligned_reads.count_reads_per_region(predicted_fragments_obj.results)
                 
                 for mirna_annotation in annotations.fragments:
                     closest_fragment = self.find_closest_overlapping_fragment(mirna_annotation,predicted_fragments,reference_offset)
