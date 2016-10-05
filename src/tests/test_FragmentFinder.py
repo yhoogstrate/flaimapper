@@ -36,29 +36,36 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-
-import os,re,random,operator,argparse,sys,subprocess
-import pysam
-
-
-from flaimapper.Read import Read
-from flaimapper.ncRNAfragment import ncRNAfragment
+from flaimapper.FragmentFinder import FragmentFinder
 from flaimapper.MaskedRegion import MaskedRegion
+#from flaimapper.Data import *
+import flaimapper
+import unittest,logging
+logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
 
 
-class BAMParser(MaskedRegion):
-    """parseNcRNA is a class that parses the BAM alignment files using pysam.
-    """
-    def __init__(self,name,start,stop,alignment):
-        self.alignment = alignment
-        MaskedRegion.__init__(self,name,start,stop)
-    
-    def parse_reads(self):
-        if(self.name in self.alignment.references):
-            for read in self.alignment.fetch(self.name, self.start, self.stop):
-                
-                # First coordinate is given at 0 base, the second as 1
-                # Therefore the second is converted with "-1"
-                yield Read(read.blocks[0][0], read.blocks[-1][1]-1, read.qname, read.seq)
-        else:
-            raise Exception("Call to non-existing region")
+class TestFragmentFinder(unittest.TestCase):
+    def test_01(self):
+        """Test alignment:
+        
+        ..............
+         [----]
+         [----]
+               [----]
+        """
+        matrices = MaskedRegion('chr1',0,100)
+
+        matrices.start_positions =   [0,2,0,0,0,0,0,1,0,0,0,0,0,0]
+        matrices.stop_positions =    [0,0,0,0,0,0,2,0,0,0,0,0,1,0]
+        
+        matrices.start_avg_lengths = [0,6,0,0,0,0,0,6,0,0,0,0,0,0]
+        matrices.stop_avg_lengths =  [0,0,0,0,0,0,6,0,0,0,0,0,6,0]
+        
+        fm = FragmentFinder(matrices)
+
+
+def main():
+    unittest.main()
+
+if __name__ == '__main__':
+    main()

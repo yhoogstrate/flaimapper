@@ -39,16 +39,16 @@
 
 import os,re,random,operator,argparse,sys,tempfile,textwrap,datetime,logging
 import pysam
+import flaimapper
 
 
 def CLI(argv=None):
-    import flaimapper
     from flaimapper.FilterParameters import FilterParameters
     
-    parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,epilog="Further details can be found in the manual:\n<https://github.com/yhoogstrate/flaimapper>")
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,epilog="Further details can be found in the manual:\n<"+flaimapper.__homepage__+">")
     
     # Writing to stderr, python issue: https://hg.python.org/cpython/rev/ec9a4b77f37b
-    parser.add_argument('-V','--version', action='version', version=textwrap.dedent("%(prog)s "+flaimapper.__version__+"\nCopyright (C) 2011-"+str(datetime.datetime.now().year)+" Youri Hoogstrate.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n"))
+    parser.add_argument('-V','--version', action='version', version=textwrap.dedent("%(prog)s "+flaimapper.__version__+"\nCopyright (C) 2011-"+str(datetime.datetime.now().year)+" Youri Hoogstrate.\n\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n\nFurther details can be found and possible issues can be reported at our homepage:\n<"+flaimapper.__homepage__+">"))
     
     group = parser.add_mutually_exclusive_group()
     group.add_argument("-v","--verbose", action="store_true",default=False)
@@ -80,12 +80,12 @@ def CLI(argv=None):
     
     # Set verbosity and logging
     if args.verbose:
-        logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.DEBUG)
+        logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
         logging.info("Verbose output.")
     elif(args.quiet):
-        logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.CRITICAL)
+        logging.basicConfig(format=flaimapper.__log_format__, level=logging.CRITICAL)
     else:
-        logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)
+        logging.basicConfig(format=flaimapper.__log_format__, level=logging.INFO)
     
     return args
 
@@ -111,11 +111,11 @@ def CLI_sslm2sam(argv=None):
     
     # Set verbosity and logging
     if args.verbose:
-        logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.DEBUG)
+        logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
         logging.info("Verbose output.")
     elif(args.quiet):
-        logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.CRITICAL)
+        logging.basicConfig(format=flaimapper.__log_format__, level=logging.CRITICAL)
     else:
-        logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)
+        logging.basicConfig(format=flaimapper.__log_format__, level=logging.INFO)
     
     return args
