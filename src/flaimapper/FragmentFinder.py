@@ -51,8 +51,8 @@ class FragmentFinder:
         self.masked_region = masked_region
         self.filter_parameters = filter_parameters
         
-        print len(readcount.start_positions),readcount.start_positions
-        print len(readcount.stop_positions),readcount.stop_positions
+        print "1, init:",len(readcount.start_positions),readcount.start_positions
+        print "1, init:",len(readcount.stop_positions),readcount.stop_positions
         
         if(autorun):
             self.positions = {}
@@ -68,15 +68,21 @@ class FragmentFinder:
             self.correctedPeaksStop = False
             
             self.run()
-
+    
     def run(self):
         # Finds peaks
         self.peaksStart = self.findPeaks(self.positions['startPositions']+[0])
         self.peaksStop = self.findPeaks(self.positions['stopPositions']+[0])
         
+        print "2, peaks:",self.peaksStart
+        print "2, peaks:",self.peaksStop
+        
         # Correct / filter noisy peaks
         self.correctedPeaksStart = self.correctNeighbourPeaks(self.peaksStart)
         self.correctedPeaksStop = self.correctNeighbourPeaks(self.peaksStop)
+        
+        print "3, peaks filtered:",len(self.correctedPeaksStart),self.correctedPeaksStart
+        print "3, peaks filtered:",len(self.correctedPeaksStop),self.correctedPeaksStop
         
         # Trace start and stop positions together and obtain actual peaks
         self.results = self.find_fragments(self.correctedPeaksStart,self.correctedPeaksStop,self.positions['startAvgLengths'],self.positions['stopAvgLengths'])

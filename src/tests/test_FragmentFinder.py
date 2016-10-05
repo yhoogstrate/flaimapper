@@ -37,8 +37,9 @@
 """
 
 from flaimapper.FragmentFinder import FragmentFinder
+from flaimapper.FilterParameters import FilterParameters
 from flaimapper.MaskedRegion import MaskedRegion
-#from flaimapper.Data import *
+from flaimapper.Data import *
 import flaimapper
 import unittest,logging
 logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
@@ -55,13 +56,41 @@ class TestFragmentFinder(unittest.TestCase):
         """
         matrices = MaskedRegion('chr1',0,100)
 
-        matrices.start_positions =   [0,2,0,0,0,0,0,1,0,0,0,0,0,0]
-        matrices.stop_positions =    [0,0,0,0,0,0,2,0,0,0,0,0,1,0]
+        matrices.start_positions =   [0,2,0,0,0,0, 0,1,0,0,0,0, 0,0]
+        matrices.stop_positions =    [0,0,0,0,0,0, 2,0,0,0,0,0, 1,0]
         
-        matrices.start_avg_lengths = [0,6,0,0,0,0,0,6,0,0,0,0,0,0]
-        matrices.stop_avg_lengths =  [0,0,0,0,0,0,6,0,0,0,0,0,6,0]
+        matrices.start_avg_lengths = [0,6,0,0,0,0, 0,6,0,0,0,0, 0,0]
+        matrices.stop_avg_lengths =  [0,0,0,0,0,0,-6,0,0,0,0,0,-6,0]
         
-        fm = FragmentFinder(matrices)
+        # for the secoond fragment duck5 should work, duck6 should not.
+        fp5 = FilterParameters(TESTS_FUNCTIONAL_DUCK5_PARAMS)
+        ff5 = FragmentFinder(('chr1',0,100),matrices,fp5,True)
+        
+        self.assertEqual(len(ff5.results), 2)
+        
+        self.assertEqual(ff5.results[0].start, 1)
+        self.assertEqual(ff5.results[0].stop, 6)
+
+        self.assertEqual(ff5.results[1].start, 7)
+        self.assertEqual(ff5.results[1].stop, 12)
+        
+        
+        fp6 = FilterParameters(TESTS_FUNCTIONAL_DUCK6_PARAMS)
+        ff6 = FragmentFinder(('chr1',0,100),matrices,fp6,True)
+
+        self.assertEqual(len(ff6.results), 1)
+        
+        self.assertEqual(ff6.results[0].start, 1)
+        self.assertEqual(ff6.results[0].stop, 6)
+
+        
+        fp7 = FilterParameters(TESTS_FUNCTIONAL_DUCK7_PARAMS)
+        ff7 = FragmentFinder(('chr1',0,100),matrices,fp7,True)
+        
+        self.assertEqual(len(ff7.results), 1)
+        
+        self.assertEqual(ff7.results[0].start, 1)
+        self.assertEqual(ff7.results[0].stop, 6)
 
 
 def main():

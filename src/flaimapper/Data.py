@@ -49,5 +49,7 @@ TESTS_FLAIMAPPER_TEST_03_b_OUTPUT_TXT = resource_filename("flaimapper","data/tes
 
 TESTS_FLAIMAPPER_FA = resource_filename("flaimapper","data/tests/test_FlaiMapper.fa")
 
+TESTS_FUNCTIONAL_DUCK5_PARAMS = resource_filename("flaimapper","data/tests/test_functional.parameters.duck5.txt")
+TESTS_FUNCTIONAL_DUCK6_PARAMS = resource_filename("flaimapper","data/tests/test_functional.parameters.duck6.txt")
 TESTS_FUNCTIONAL_DUCK7_PARAMS = resource_filename("flaimapper","data/tests/test_functional.parameters.duck7.txt")
 TESTS_FUNCTIONAL_DUCK15_PARAMS = resource_filename("flaimapper","data/tests/test_functional.parameters.duck15.txt")
