@@ -82,10 +82,12 @@ def CLI(argv=None):
     if args.verbose:
         logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
         logging.info("Verbose output.")
-    elif(args.quiet):
+    elif args.quiet:
         logging.basicConfig(format=flaimapper.__log_format__, level=logging.CRITICAL)
+        print "A"
     else:
         logging.basicConfig(format=flaimapper.__log_format__, level=logging.INFO)
+        print "B"
     
     return args
 

@@ -48,7 +48,7 @@ setup(name='flaimapper',
         maintainer=flaimapper.__author__,
         url='https://github.com/yhoogstrate/flaimapper',
         
-        scripts=["bin/flaimapper","bin/sslm2bed","bin/sslm2sam","bin/gtf-from-fasta"],
+        scripts=["bin/flaimapper","bin/sslm2sam"],
         packages=['flaimapper'],
         #package_dir={'flaimapper': 'flaimapper'},
         package_data={'': ['data/*.*','data/tests/*.*']},
