@@ -70,14 +70,15 @@ class TestFunctional(unittest.TestCase):
     
     def test_03(self):
         # 01 extract BAM file:
-        os.chdir("../share/small_RNA-seq_alignments/SRP028959/")
-        subprocess.call(["tar","-xzf","SRR954958.tar.gz"])
+        os.chdir("../share/small_RNA-seq_alignments/SRP006788/")
+        subprocess.call(["tar","-xzf","SRR207111_HeLa18-30.tar.gz"])
         
-        pipe = subprocess.Popen(["flaimapper","-o","test.gtf","-f","1","SRR954958.bam"])
+        pipe = subprocess.Popen(["flaimapper","-o","test.gtf","-f","1","SRR207111_HeLa18-30.bam"])
         pipe.wait()
         exit_code = pipe.poll()
         
         self.assertEqual(exit_code, 0)
+        # test.gtf
         # @todo assert contents.. and remove interim files
 
 def main():
