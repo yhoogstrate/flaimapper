@@ -297,6 +297,135 @@ class TestFlaiMapper(unittest.TestCase):
         if assertion:
             os.remove(fname)
 
+    def test_04_a(self):
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'--verbose'])
+        
+        fm = FlaiMapper(args.alignment_file)
+        
+        # First check whether it's looking in the right regions
+        i = 0
+        for region in fm.regions(args.parameters):
+            if i == 0:
+                self.assertEqual(region[0], 'chr1')
+                self.assertEqual(region[1], max(0, 13-1-args.parameters.left_padding))
+                self.assertEqual(region[2], 43+20+args.parameters.right_padding)
+            elif i == 1:
+                self.assertEqual(region[0], 'chr2')
+                self.assertEqual(region[1], 54-1-args.parameters.left_padding)
+                self.assertEqual(region[2], 54+26+args.parameters.right_padding)
+            else:
+                self.asserTrue(False,"Race condition?")
+            i += 1
+        self.assertEqual(i, 2)
+        
+        # Then detect the fragments
+        i = 0
+        fm.run(args.fasta_handle,args.parameters)
+        for fragment in fm:
+            if i == 0:
+                self.assertEqual(fragment.masked_region[0], 'chr1')
+                self.assertEqual(fragment.start, 13)
+                self.assertEqual(fragment.stop, 36)
+            elif i == 1:
+                self.assertEqual(fragment.masked_region[0], 'chr1')
+                self.assertEqual(fragment.start, 43)
+                self.assertEqual(fragment.stop, 62)
+            elif i == 2:
+                self.assertEqual(fragment.masked_region[0], 'chr2')
+                self.assertEqual(fragment.start, 54)
+                self.assertEqual(fragment.stop, 79)
+            else:
+                self.asserTrue(False,"Race condition?")
+            i += 1
+        self.assertEqual(i, 3)
+    
+    def test_04_b(self):
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'-p',TESTS_FUNCTIONAL_DUCK7_PARAMS,'--verbose'])
+        
+        fm = FlaiMapper(args.alignment_file)
+        
+        # First check whether it's looking in the right regions
+        i = 0
+        for region in fm.regions(args.parameters):
+            if i == 0:
+                self.assertEqual(region[0], 'chr1')
+                
+                self.assertEqual(region[1], 13-1-args.parameters.left_padding)
+                self.assertEqual(region[2], 43+20+args.parameters.right_padding)
+            elif i == 1:
+                self.assertEqual(region[0], 'chr2')
+                
+                self.assertEqual(region[1], 54-1-args.parameters.left_padding)
+                self.assertEqual(region[2], 54+26+args.parameters.right_padding)
+            else:
+                self.asserTrue(False,"Race condition?")
+            i += 1
+        
+        self.assertEqual(i, 2)
+        
+        # Then detect the fragments
+        i = 0
+        fm.run(args.fasta_handle,args.parameters)
+        for fragment in fm:
+            if i == 0:
+                self.assertEqual(fragment.masked_region[0], 'chr1')
+                self.assertEqual(fragment.start, 13)
+                self.assertEqual(fragment.stop, 36)
+            elif i == 1:
+                self.assertEqual(fragment.masked_region[0], 'chr1')
+                self.assertEqual(fragment.start, 43)
+                self.assertEqual(fragment.stop, 62)
+            elif i == 2:
+                self.assertEqual(fragment.masked_region[0], 'chr2')
+                self.assertEqual(fragment.start, 54)
+                self.assertEqual(fragment.stop, 79)
+            else:
+                self.asserTrue(False,"Race condition?")
+            i += 1
+        self.assertEqual(i, 3)
+
+    def test_04_c(self):
+        """
+        This should filter out the second fragment because it's 26bp away.
+        """
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'-p',TESTS_FUNCTIONAL_DUCK26_PARAMS,'--verbose'])
+        
+        fm = FlaiMapper(args.alignment_file)
+        
+        # First check whether it's looking in the right regions
+        i = 0
+        for region in fm.regions(args.parameters):
+            if i == 0:
+                self.assertEqual(region[0], 'chr1')
+                
+                self.assertEqual(region[1], max(0, 13-1-args.parameters.left_padding))
+                self.assertEqual(region[2], 43+20+args.parameters.right_padding)
+            elif i == 1:
+                self.assertEqual(region[0], 'chr2')
+                
+                self.assertEqual(region[1], 54-1-args.parameters.left_padding)
+                self.assertEqual(region[2], 54+26+args.parameters.right_padding)
+            else:
+                self.asserTrue(False,"Race condition?")
+            i += 1
+        self.assertEqual(i, 2)
+        
+        # Then detect the fragments
+        i = 0
+        fm.run(args.fasta_handle,args.parameters)
+        for fragment in fm:
+            if i == 0:
+                self.assertEqual(fragment.masked_region[0], 'chr1')
+                self.assertEqual(fragment.start, 13)
+                self.assertEqual(fragment.stop, 36)
+            elif i == 1:
+                self.assertEqual(fragment.masked_region[0], 'chr2')
+                self.assertEqual(fragment.start, 54)
+                self.assertEqual(fragment.stop, 79)
+            else:
+                self.asserTrue(False,"Race condition?")
+            i += 1
+        self.assertEqual(i, 2)
 
 def main():
     unittest.main()
