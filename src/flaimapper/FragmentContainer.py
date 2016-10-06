@@ -144,7 +144,7 @@ class FragmentContainer():
                             fh.write(str(fragment.supporting_reads_stop+fragment.supporting_reads_start) + "\n")
             
             fh.close()
-        
+    
     def export_gtf(self,filename):
         if(filename == "-"):
             fh = sys.stdout

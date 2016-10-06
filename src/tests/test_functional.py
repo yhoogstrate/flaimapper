@@ -52,6 +52,7 @@ class TestFunctional(unittest.TestCase):
         pipe = subprocess.Popen(["flaimapper","-false-argument-"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout = pipe.stdout.read()
         stderr = pipe.stderr.read()
+        pipe.wait()
         exit_code = pipe.poll()
 
         self.assertTrue(exit_code != 0)
@@ -61,6 +62,7 @@ class TestFunctional(unittest.TestCase):
         pipe = subprocess.Popen(["flaimapper","--help"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout = pipe.stdout.read()
         stderr = pipe.stderr.read()
+        pipe.wait()
         exit_code = pipe.poll()
 
         self.assertEqual(exit_code, 0)
@@ -70,6 +72,13 @@ class TestFunctional(unittest.TestCase):
         # 01 extract BAM file:
         os.chdir("../share/small_RNA-seq_alignments/SRP028959/")
         subprocess.call(["tar","-xzf","SRR954958.tar.gz"])
+        
+        pipe = subprocess.Popen(["flaimapper","-o","test.gtf","-f","1","SRR954958.bam"])
+        pipe.wait()
+        exit_code = pipe.poll()
+        
+        self.assertEqual(exit_code, 0)
+        # @todo assert contents.. and remove interim files
 
 def main():
     unittest.main()

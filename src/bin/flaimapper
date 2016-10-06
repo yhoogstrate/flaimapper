@@ -51,13 +51,13 @@ def main():
     logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
     args = CLI()
     
-    print "?"
-    
     flaimapper = FlaiMapper(args.alignment_file)
     
     # Run analysis
     flaimapper.run(args.fasta_handle,args.parameters)
     flaimapper.write(args.format,args.output)
+    
+    return 0
 
 
 if __name__ == "__main__":
