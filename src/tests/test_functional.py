@@ -40,6 +40,7 @@ import flaimapper
 from flaimapper.CLI import CLI
 from flaimapper.FlaiMapper import FlaiMapper
 from flaimapper.Data import *
+from flaimapper.utils import *
 
 
 import unittest,logging,os,subprocess
@@ -71,15 +72,36 @@ class TestFunctional(unittest.TestCase):
     def test_03(self):
         # 01 extract BAM file:
         os.chdir("../share/small_RNA-seq_alignments/SRP006788/")
+        """
         subprocess.call(["tar","-xzf","SRR207111_HeLa18-30.tar.gz"])
         
-        pipe = subprocess.Popen(["flaimapper","-o","test.gtf","-f","1","SRR207111_HeLa18-30.bam"])
+        pipe = subprocess.Popen(["flaimapper","-o","test.tabular.txt","-f","1","SRR207111_HeLa18-30.bam"])
         pipe.wait()
         exit_code = pipe.poll()
         
         self.assertEqual(exit_code, 0)
+        """
+        
+        idx_test = parse_table('test.gtf')
+        idx_old = parse_table('../../../output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt',1,2,3,4)
+        
+        m = 0
+        mm = 0
+        for key in idx_test.keys():
+            if key in idx_old.keys():
+                m += 1
+            else:
+                print idx_test[key]
+                mm += 1
+        
+        print (m+mm),':',m,'/',mm,'    //',len(idx_old.keys())
+        
         # test.gtf
         # @todo assert contents.. and remove interim files
+        
+    #def test_04
+        #.... '-f','2'
+        #parse_gff('test.gtf')
 
 def main():
     unittest.main()
