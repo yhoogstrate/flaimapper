@@ -76,7 +76,7 @@ class TestFunctional(unittest.TestCase):
         subprocess.call(["tar","-xzf",sampledir+samplename+".tar.gz"])
         output_file = 'test.tabular.txt'
         
-        pipe = subprocess.Popen(["flaimapper","-o",output_file,"-f","1",samplename+".bam"])
+        pipe = subprocess.Popen(["flaimapper","-o",output_file,"-f","1",'-r','../annotations/ncRNA_annotation/ncrnadb09.fa',samplename+".bam"])
         pipe.wait()
         exit_code = pipe.poll()
         
@@ -99,6 +99,9 @@ class TestFunctional(unittest.TestCase):
                             else:
                                 mm_trna += 1
                 else:
+                    for key2 in idx_test[key]:
+                        for item in idx_test[key][key2]:
+                            self.assertTrue(item[3] != '','No sequence found for: %s' % item[0])# No empty sequences
                     m += 1
             else:
                 if key.find('TRNA') == -1:
@@ -130,16 +133,34 @@ class TestFunctional(unittest.TestCase):
         subprocess.call(["tar","-xzf",sampledir+samplename+".tar.gz"])
         output_file = 'test.gtf'
         
-        pipe = subprocess.Popen(["flaimapper","-o",output_file,'-r','../annotations/ncRNA_annotation/ncrnadb09.fa',"-f","2",samplename+".bam"])
+        pipe = subprocess.Popen(["flaimapper","-o",output_file,"-f","2",samplename+".bam"])
         pipe.wait()
         exit_code = pipe.poll()
         
         self.assertEqual(exit_code, 0)
-        #parse_gff('test.gtf')
+        data = parse_gff('test.gtf')
+        u81_14 = False
+        u81_46 = False
+        u81_54 = False
         
-        #if assertion1 and assertion2 and assertion3:
-        if True:
+        i = 0
+        for chunk in data:#range(len(data)):
+            chunk = data[i]
+            if chunk[0] == 'HGNC=10101&HUGO-Symbol=SNORD81&HUGO-Name=small_nucleolar_RNA,_C/D_box_81&LOCI=[chr1:173833274-173833370:strand=-]&SOURCE=RefSeq&SOURCE-ACCESSION=NR_003938&GENOME=hg19':
+                if chunk[1] == 14 and chunk[2] == 36:
+                    u81_14 = True
+                elif chunk[1] == 46 and chunk[2] == 67:
+                    u81_46 = True
+                elif chunk[1] == 54 and chunk[2] == 79:
+                    u81_54 = True
+            i += 1
+        
+        if u81_14 and u81_46 and u81_54:
             os.remove(output_file)
+        
+        self.assertTrue(u81_14, "The first of the three SNORD81 fragments was not detected")
+        self.assertTrue(u81_46, "The second of the three SNORD81 fragments was not detected")
+        self.assertTrue(u81_54, "The third of the three SNORD81 fragments was not detected")
         
         os.remove(samplename+".bam")
         os.remove(samplename+".bam.bai")
