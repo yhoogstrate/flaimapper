@@ -70,10 +70,10 @@ class TestFunctional(unittest.TestCase):
         self.assertEqual(stderr, '')
     
     def test_03(self):
-        samplename = "SRR207111_HeLa18-30"
+        samplename = 'SRR207111_HeLa18-30'
+        sampledir = 'SRP006788/'
         
-        os.chdir("../share/small_RNA-seq_alignments/SRP006788/")
-        subprocess.call(["tar","-xzf",samplename+".tar.gz"])
+        subprocess.call(["tar","-xzf",sampledir+samplename+".tar.gz"])
         output_file = 'test.tabular.txt'
         
         pipe = subprocess.Popen(["flaimapper","-o",output_file,"-f","1",samplename+".bam"])
@@ -83,12 +83,12 @@ class TestFunctional(unittest.TestCase):
         self.assertEqual(exit_code, 0)
         
         idx_test = parse_table(output_file)
-        idx_old = parse_table('../../../output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt',1,2,3,4)
+        idx_old = parse_table('../../output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt',1,2,3,4)
         
         m = 0
         mm = 0
         mm_trna = 0
-        """ finds new ones that were not found before"""
+        # finds new predictions that were not found in the results of the older versions
         for key in idx_test.keys():
             if key in idx_old.keys():
                 if len(idx_test[key]) != len(idx_old[key]):
@@ -123,11 +123,30 @@ class TestFunctional(unittest.TestCase):
         self.assertTrue(assertion2,"Too many discrepancies with original results were found: %i non tRNA mispredictions" % mm)# Latesr versions of FlaiMapper take into account the very last base as well, even if it's longer than the actual sequence length. This in particularly affected the results of tRNAs (due to CCA) 
         self.assertTrue(assertion3,"Too many discrepancies with original results were found; only: %d percent" % success)
 
-    #def test_04
-        #.... '-f','2'
+    def test_04(self):
+        samplename = "SRR207111_HeLa18-30"
+        sampledir = 'SRP006788/'
+        
+        subprocess.call(["tar","-xzf",sampledir+samplename+".tar.gz"])
+        output_file = 'test.gtf'
+        
+        pipe = subprocess.Popen(["flaimapper","-o",output_file,'-r','../annotations/ncRNA_annotation/ncrnadb09.fa',"-f","2",samplename+".bam"])
+        pipe.wait()
+        exit_code = pipe.poll()
+        
+        self.assertEqual(exit_code, 0)
         #parse_gff('test.gtf')
+        
+        #if assertion1 and assertion2 and assertion3:
+        if True:
+            os.remove(output_file)
+        
+        os.remove(samplename+".bam")
+        os.remove(samplename+".bam.bai")
+        shutil.rmtree(samplename)
 
 def main():
+    os.chdir("../share/small_RNA-seq_alignments/")
     unittest.main()
 
 if __name__ == '__main__':

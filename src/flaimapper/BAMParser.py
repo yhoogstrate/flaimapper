@@ -59,6 +59,6 @@ class BAMParser(MaskedRegion):
                 
                 # First coordinate is given at 0 base, the second as 1
                 # Therefore the second is converted with "-1"
-                yield Read(read.blocks[0][0], read.blocks[-1][1]-1, read.qname, read.seq)
+                yield Read(read.blocks[0][0], read.blocks[-1][1]-1, read.qname)
         else:
             raise Exception("Call to non-existing region")
