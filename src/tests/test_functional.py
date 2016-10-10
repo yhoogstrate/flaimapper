@@ -43,7 +43,7 @@ from flaimapper.Data import *
 from flaimapper.utils import *
 
 
-import unittest,logging,os,subprocess
+import unittest,logging,os,subprocess,shutil
 logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
 
 
@@ -70,35 +70,59 @@ class TestFunctional(unittest.TestCase):
         self.assertEqual(stderr, '')
     
     def test_03(self):
-        # 01 extract BAM file:
-        os.chdir("../share/small_RNA-seq_alignments/SRP006788/")
-        """
-        subprocess.call(["tar","-xzf","SRR207111_HeLa18-30.tar.gz"])
+        samplename = "SRR207111_HeLa18-30"
         
-        pipe = subprocess.Popen(["flaimapper","-o","test.tabular.txt","-f","1","SRR207111_HeLa18-30.bam"])
+        os.chdir("../share/small_RNA-seq_alignments/SRP006788/")
+        subprocess.call(["tar","-xzf",samplename+".tar.gz"])
+        output_file = 'test.tabular.txt'
+        
+        pipe = subprocess.Popen(["flaimapper","-o",output_file,"-f","1",samplename+".bam"])
         pipe.wait()
         exit_code = pipe.poll()
         
         self.assertEqual(exit_code, 0)
-        """
         
-        idx_test = parse_table('test.gtf')
+        idx_test = parse_table(output_file)
         idx_old = parse_table('../../../output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt',1,2,3,4)
         
         m = 0
         mm = 0
+        mm_trna = 0
+        """ finds new ones that were not found before"""
         for key in idx_test.keys():
             if key in idx_old.keys():
-                m += 1
+                if len(idx_test[key]) != len(idx_old[key]):
+                    for key2 in idx_test[key].keys():
+                        if key2 not in idx_old[key].keys():
+                            if key.find('TRNA') == -1:
+                                mm += 1
+                            else:
+                                mm_trna += 1
+                else:
+                    m += 1
             else:
-                print idx_test[key]
-                mm += 1
+                if key.find('TRNA') == -1:
+                    mm += 1
+                else:
+                    mm_trna += 1
         
-        print (m+mm),':',m,'/',mm,'    //',len(idx_old.keys())
+        total_evaluations = m+mm+mm_trna
+        success = 1.0 - (1.0*(mm+mm_trna)/(total_evaluations))
         
-        # test.gtf
-        # @todo assert contents.. and remove interim files
+        assertion1 = (mm <= 1)
+        assertion2 = (mm_trna <= 63)
+        assertion3 = (success >= 0.934)
+        if assertion1 and assertion2 and assertion3:
+            os.remove(output_file)
         
+        os.remove(samplename+".bam")
+        os.remove(samplename+".bam.bai")
+        shutil.rmtree(samplename)
+        
+        self.assertTrue(assertion1,"Too many discrepancies with original results were found: %i non tRNA mispredictions" % mm)
+        self.assertTrue(assertion2,"Too many discrepancies with original results were found: %i non tRNA mispredictions" % mm)# Latesr versions of FlaiMapper take into account the very last base as well, even if it's longer than the actual sequence length. This in particularly affected the results of tRNAs (due to CCA) 
+        self.assertTrue(assertion3,"Too many discrepancies with original results were found; only: %d percent" % success)
+
     #def test_04
         #.... '-f','2'
         #parse_gff('test.gtf')
