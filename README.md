@@ -14,11 +14,10 @@
 ---
 
 - [Download & Installation](#download--installation)
-    - [Install dependencies](#install-dependencies)
-    - [Download FlaiMapper](#download-flaimapper)
-        - [Latest version from GitHub](#latest-version-from-github)
-        - [Read & agree with GPL3 free software license](#read--agree-with-gpl3-free-software-license)
-    - [Compile & Install](#compile--install)
+    - [From source (native)(#from-source-native)
+    - [Install via bioconda](#install-via-bioconda)
+    - [Install via pip](#install-via-pip)
+    - [Read the GPL3 free software license](#read-the-gpl3-free-software-license)
     - [Check if it works!](#check-if-it-works)
     - [Uninstall FlaiMapper](#uninstall-flaimapper)
     - [Galaxy](#galaxy)
@@ -35,12 +34,11 @@
     - [Read collapsing](#read-collapsing)
     - [Multi-mapping](#multi-mapping)
     - [Alignment indexing](#alignment-indexing)
-- [Run FlaiMapper](#run-flaimapper)
+- [Run FlaiMapper-2](#run-flaimapper-2)
     - [Usage](#usage)
     - [Input: BAM](#input-bam)
+         - [The "\-\-parameters"-argument](#the---parameters-argument)
          - [The "\-\-fasta"-argument](#the---fasta-argument)
-    - [Input: SSLM](#input-sslm)
-    - [Input: multiple alignments](#input-multiple-alignments)
     - [Output: formats](#output-formats)
 - [Reproduce article data](#reproduce article data)
 - [Authors & Citing](#authors--citing)
@@ -142,6 +140,8 @@ You can find the Galaxy wrapper for FlaiMapper-2 at the following url:
 *	[https://github.com/galaxyproject/tools-iuc/tree/master/tools/flaimapper/](https://github.com/galaxyproject/tools-iuc/tree/master/tools/flaimapper/)
 
 ## Alignment
+
+A presentation on this topic available over here: [https://humgenprojects.lumc.nl/trac/humgenprojects/raw-attachment/wiki/RNA-seq-course/small_RNA_BioSB_RNA-Seq_2016.pdf](https://humgenprojects.lumc.nl/trac/humgenprojects/raw-attachment/wiki/RNA-seq-course/small_RNA_BioSB_RNA-Seq_2016.pdf)
 
 ### Obtain reference
 
