@@ -9,7 +9,7 @@
  Using small RNA-seq read alignments, FlaiMapper is able to annotate
  fragments primarily by peak-detection on the start and  end position
  densities followed by filtering and a reconstruction processes.
- Copyright (C) 2011-2014:
+ Copyright (C) 2011-2016:
  - Youri Hoogstrate
  - Elena S. Martens-Uzunova
  - Guido Jenster
@@ -36,28 +36,21 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-import os,re,random,operator,argparse,sys
+from pkg_resources import resource_filename
 
+PARAMETERS_DEFAULT = resource_filename("flaimapper","data/parameters.default.txt")
 
-from flaimapper.FlaiMapper import FlaiMapper
-from flaimapper.utils import parse_gff
-from flaimapper.CLI import CLI_sslm2sam
+TESTS_EXAMPLE_ALIGNMENT_01 = resource_filename("flaimapper","data/tests/alignment_gap_6bp.bam")
 
+TESTS_FLAIMAPPER_TEST_02_OUTPUT_GTF = resource_filename("flaimapper","data/tests/test_FlaiMapper_test_02_output.gtf")
 
-def main():
-    """	This program converts the alignments of the used format used in the
-    article (SSLM) to the SAM format.
-    """
-    args = CLI_sslm2sam()
-    
-    sslm2bed_converter = FlaiMapperObject('sslm',args.verbosity)
-    for alignment_directory in args.alignment_directories:
-        sslm2bed_converter.add_alignment(alignment_directory)
-    
-    regions = parse_gff(args.mask)
-    
-    sslm2bed_converter.convert_to_sam(regions,args.output)
+TESTS_FLAIMAPPER_TEST_03_a_OUTPUT_TXT = resource_filename("flaimapper","data/tests/test_FlaiMapper_test_03_output.txt")
+TESTS_FLAIMAPPER_TEST_03_b_OUTPUT_TXT = resource_filename("flaimapper","data/tests/test_FlaiMapper_test_03_fa_output.txt")
 
+TESTS_FLAIMAPPER_FA = resource_filename("flaimapper","data/tests/test_FlaiMapper.fa")
 
-if __name__ == "__main__":
-	sys.exit(main())
+TESTS_FUNCTIONAL_DUCK5_PARAMS = resource_filename("flaimapper","data/tests/test_functional.parameters.duck5.txt")
+TESTS_FUNCTIONAL_DUCK6_PARAMS = resource_filename("flaimapper","data/tests/test_functional.parameters.duck6.txt")
+TESTS_FUNCTIONAL_DUCK7_PARAMS = resource_filename("flaimapper","data/tests/test_functional.parameters.duck7.txt")
+TESTS_FUNCTIONAL_DUCK15_PARAMS = resource_filename("flaimapper","data/tests/test_functional.parameters.duck15.txt")
+TESTS_FUNCTIONAL_DUCK26_PARAMS = resource_filename("flaimapper","data/tests/test_functional.parameters.duck26.txt")

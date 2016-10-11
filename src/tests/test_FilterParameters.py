@@ -36,28 +36,39 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-import os,re,random,operator,argparse,sys
+from flaimapper.FilterParameters import FilterParameters
+from flaimapper.Data import *
+import unittest,logging
+logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.DEBUG)
 
 
-from flaimapper.FlaiMapper import FlaiMapper
-from flaimapper.utils import parse_gff
-from flaimapper.CLI import CLI_sslm2sam
+class TestFilterParameters(unittest.TestCase):
+    def test_01(self):
+        fp = FilterParameters()
+        
+        self.assertEqual(fp.left_padding, 15)
+        self.assertEqual(fp.right_padding, 15)
 
+        keys = fp.matrix.keys()
+        for i in range(-15,0):
+            self.assertTrue(i in keys)
+            self.assertTrue(fp.matrix[i] >= 0.0)
+            self.assertTrue(fp.matrix[i] <= 100.0)
+            
+    def test_02(self):
+        fp = FilterParameters(TESTS_FUNCTIONAL_DUCK7_PARAMS)
+        
+        self.assertEqual(fp.left_padding, 7)
+        self.assertEqual(fp.right_padding, 7)
+        
+        keys = fp.matrix.keys()
+        for i in range(-7,0):
+            self.assertTrue(i in keys)
+            self.assertTrue(fp.matrix[i] >= 0.0)
+            self.assertTrue(fp.matrix[i] <= 100.0)
 
 def main():
-    """	This program converts the alignments of the used format used in the
-    article (SSLM) to the SAM format.
-    """
-    args = CLI_sslm2sam()
-    
-    sslm2bed_converter = FlaiMapperObject('sslm',args.verbosity)
-    for alignment_directory in args.alignment_directories:
-        sslm2bed_converter.add_alignment(alignment_directory)
-    
-    regions = parse_gff(args.mask)
-    
-    sslm2bed_converter.convert_to_sam(regions,args.output)
+    unittest.main()
 
-
-if __name__ == "__main__":
-	sys.exit(main())
+if __name__ == '__main__':
+    main()

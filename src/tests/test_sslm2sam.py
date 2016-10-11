@@ -36,28 +36,36 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-import os,re,random,operator,argparse,sys
-
-
-from flaimapper.FlaiMapper import FlaiMapper
-from flaimapper.utils import parse_gff
+import flaimapper
 from flaimapper.CLI import CLI_sslm2sam
+from flaimapper.SSLMParser import SSLMParser
+
+import unittest,subprocess,os,shutil,logging
+logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
+
+
+class TestFlaiMapper(unittest.TestCase):
+    def test_01_a(self):
+        subprocess.call(["tar","-xzf","../share/small_RNA-seq_alignments/SRP028959/SRR954958.tar.gz"])
+        
+        args = CLI_sslm2sam(['-o','test.sam','SRR954958'])
+        sslm2bed_converter = SSLMParser(args.sslm_directory)
+        sslm2bed_converter.convert_to_sam(args.output)
+        
+        assertion = (os.stat("test.sam").st_size == 46985661)
+        self.assertTrue(assertion, "Incorrect ../share/small_RNA-seq_alignments/SRP028959/test.sam")# Assume file size is sufficient :)
+        
+        if assertion:
+            os.remove("test.sam")
+        
+        os.remove("SRR954958.bam")
+        os.remove("SRR954958.bam.bai")
+        shutil.rmtree("SRR954958")
 
 
 def main():
-    """	This program converts the alignments of the used format used in the
-    article (SSLM) to the SAM format.
-    """
-    args = CLI_sslm2sam()
-    
-    sslm2bed_converter = FlaiMapperObject('sslm',args.verbosity)
-    for alignment_directory in args.alignment_directories:
-        sslm2bed_converter.add_alignment(alignment_directory)
-    
-    regions = parse_gff(args.mask)
-    
-    sslm2bed_converter.convert_to_sam(regions,args.output)
+    unittest.main()
 
-
-if __name__ == "__main__":
-	sys.exit(main())
+# Tests fall outside __main__
+if __name__ == '__main__':
+    main()

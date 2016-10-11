@@ -36,9 +36,7 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-
-
-import os,re,random,operator,argparse,sys
+import os,re,operator,argparse,sys
 
 
 from flaimapper.Read import Read
@@ -49,15 +47,11 @@ class MaskedRegion:
 	"""A masked region is a region masked in the reference genome to 
 	indicate where ncRNAs are located.
 	"""
-	def __init__(self,name,start,stop,alignments,verbosity):
-		self.verbosity = verbosity
-		
+	def __init__(self,name,start,stop):
 		self.name = name
 		
 		self.start = start
 		self.stop = stop
-		
-		self.alignments = alignments
 	
 	def reset(self):
 		self.sequence = False
@@ -71,7 +65,7 @@ class MaskedRegion:
 		start_avg_lengths = []
 		stop_avg_lengths = []
 		
-		for read in self.parse_reads():
+		for read in self.parse_reads():#Relies on inherented class, e.g. BAMParser or SSLMParser
 			while(len(self.start_positions) < read.stop+1):				# Fix since 1.1.0: automatically scale  vector up if alignment falls outside range reference annotation
 				self.start_positions.append(0)
 				self.stop_positions.append(0)

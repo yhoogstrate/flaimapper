@@ -36,46 +36,30 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-import os,re,random,operator,argparse,sys
+from flaimapper.CLI import CLI
+from flaimapper.Data import *
+
+import unittest
 
 
+class TestCLI(unittest.TestCase):
+    def test_01(self):
+        cli = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
+        
+        self.assertTrue(cli.parameters.left_padding, 15)
+        self.assertTrue(cli.parameters.right_padding, 15)
 
-from flaimapper.FlaiMapperObject import FlaiMapperObject
-from flaimapper.utils import parse_gff
-
+    def test_02(self):
+        param_file = PARAMETERS_DEFAULT
+        
+        cli = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-p",param_file])
+        
+        self.assertTrue(cli.parameters.left_padding, 15)
+        self.assertTrue(cli.parameters.right_padding, 15)
 
 
 def main():
-	"""
-	This program converts the alignments of the used format used in the
-	article (SSLM) to BED format.
-	"""
-	parser = argparse.ArgumentParser()
-	
-	group = parser.add_mutually_exclusive_group()
-	group.add_argument("-v","--verbose", action="store_true",default=False)
-	group.add_argument("-q","--quiet", action="store_false",default=True)
-	
-	parser.add_argument("-o","--output",help="output BED-filename; '-' for stdout",default="-")
-	
-	parser.add_argument("-m","--mask",required=True,help="GTF/GFF3 mask file (precursors)")
-	
-	parser.add_argument("alignment_directories",nargs='+',help="SSLM formatted output directories")
-	
-	args = parser.parse_args()
-	if(args.verbose):
-		args.verbosity = "verbose"
-	elif(args.quiet):
-		args.verbosity = "quiet"
-	
-	sslm2bed_converter = FlaiMapperObject('sslm',args.verbosity)
-	for alignment_directory in args.alignment_directories:
-		sslm2bed_converter.add_alignment(alignment_directory)
-	
-	regions = parse_gff(args.mask)
-	
-	sslm2bed_converter.convert_to_bed(regions,args.output)
+    unittest.main()
 
-
-if __name__ == "__main__":
-	sys.exit(main())
+if __name__ == '__main__':
+    main()

@@ -39,11 +39,11 @@
 # @TODO figure out how this can be integrated with or replaced by the "AlignedRead"-class from the pysam library
 
 class Read:
-	def __init__(self,start,stop,name=None,sequence=None):
-		self.start = start
-		self.stop = stop
-		self.name = name
-		self.sequence = sequence
-	
-	def size(self):
-		return (self.stop - self.start) - 1
+    def __init__(self,start,stop,name=None,sequence=None):
+        self.start = start
+        self.stop = stop
+        self.name = name
+        self.sequence = sequence
+    
+    def size(self):
+        return (self.stop - self.start) - 1

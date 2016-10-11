@@ -1,0 +1,4 @@
+Fragment	Size	Reference sequence	Start	End	Precursor	Start in precursor	End in precursor	Sequence (no fasta file given)	Corresponding-reads (start)	Corresponding-reads (end)	Corresponding-reads (total)
+FM_chr1_000000000001	24	chr1	13	36	chr1	13	36	gccccccccccccccccccccccg	2	2	4
+FM_chr1_000000000002	20	chr1	43	62	chr1	43	62	gccccccccccccccccccg	1	1	2
+FM_chr2_000000000001	26	chr2	54	79	chr2	16	41	caaaaaaaaaaaaaaaaaaaaaaact	1	1	2

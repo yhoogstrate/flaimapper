@@ -37,31 +37,28 @@
 """
 
 
-
-import os,re,random,operator,argparse,sys,tempfile,textwrap,datetime
+import os,re,operator,argparse,sys,tempfile,textwrap,datetime,logging
 import pysam
 
 from flaimapper.CLI import CLI
 from flaimapper.FragmentFinder import FragmentFinder
-from flaimapper.FlaiMapperObject import FlaiMapperObject
+from flaimapper.FlaiMapper import FlaiMapper
 from flaimapper.utils import parse_gff
 
 def main():
-	args = CLI()
-	
-	# Load BAM Files
-	flaimapper = FlaiMapperObject('bam',args.verbosity)
-	for alignment_file in args.alignment_files:
-		flaimapper.add_alignment(alignment_file)
-	
-	# The genomic regions of the precursor sequence(s).
-	regions = parse_gff(args.mask)
-	fasta_ref = pysam.Fastafile(args.fasta)
-	
-	# Run analysis
-	flaimapper.run(regions,fasta_ref)
-	flaimapper.write(args.format,args.output)
+    import flaimapper
+    
+    logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
+    args = CLI()
+    
+    flaimapper = FlaiMapper(args.alignment_file)
+    
+    # Run analysis
+    flaimapper.run(args.fasta_handle,args.parameters)
+    flaimapper.write(args.format,args.output,args.offset5p,args.offset3p)
+    
+    return 0
 
 
 if __name__ == "__main__":
-	sys.exit(main())
+    sys.exit(main())

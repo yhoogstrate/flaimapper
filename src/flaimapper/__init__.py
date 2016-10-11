@@ -36,8 +36,10 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-__version_info__ = ('1', '2', '2')
+__version_info__ = ('2', '0', '0')
 __version__ = '.'.join(__version_info__)
 __author__ = 'Youri Hoogstrate'
 __homepage__ = 'https://github.com/yhoogstrate/flaimapper'
 __license__ = 'The GNU General Public License v3.0 (GPL3) - http://www.gnu.org/copyleft/gpl.html'
+
+__log_format__ = "[%(filename)s:%(lineno)s - %(funcName)s()] %(asctime)s - %(levelname)s - %(message)s"
