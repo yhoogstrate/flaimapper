@@ -44,5 +44,3 @@ nosetests.xml
 *.swp
 *.bai
 *.fai
-/share/small_RNA-seq_alignments/SRP006788/SRR207111_HeLa18-30.bam
-/share/small_RNA-seq_alignments/SRP006788/SRR207111_HeLa18-30/

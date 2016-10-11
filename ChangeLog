@@ -1,3 +1,24 @@
+2016-10-11  Youri Hoogstrate
+	* (v2.0.0) Large rewrite
+	  - Enable TravisCI for unit testing during further development
+	  - Written several tests (both unit as functional) including all parameters.
+	  - Refactored a lot of code, removed a lot of unused code
+	  - Removed SSLM binaries
+	  - Removed binary used to generate MASK files
+	  - Removed --mask argument
+	  - Wrote algorithm that replaces the MASK functionality
+	  - Added --parameters argument, allowing to customize the filter
+	  - Included data in pkg_resources that allow to grap default parameter file from there
+	  - Improved GTF output; two lines per detected fragment of which one (type=exon) can be used by expression estimation tools, new way of generating gene_id's
+	  - Added optional arguments `--offset5p` and `--offset3p`.
+	  - Dropped samtools dependency and rely completely on pysam
+	  - Replacement of tabs with spaces (s/\t/ /g)
+	  - Use a logging system to be able to get a verbose output, also for testing
+	  - Better way of trowining exceptions which shall cause more appropriate stack traces
+	  - Disabled possibility to use multiple BAM files - concatenation should be done with samtools merge
+	  - Made FlaiMapper available in pip and bioconda
+	  - Many cleanups, removal of unused properties, imports, functions and classes
+
 2015-09-02  Youri Hoogstrate
 	* (v1.2.2) Added GTF/GFF as output format.
 	

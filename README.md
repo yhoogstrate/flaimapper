@@ -1,11 +1,13 @@
+[![Build Status](https://travis-ci.org/yhoogstrate/flaimapper.svg?branch=master)](https://travis-ci.org/yhoogstrate/flaimapper) #
+
 # Fragment Location Annotation Identification Mapper #
 ---
-	 ___    _      _____  _         _____  ___    ___    ___    ___   
-	(  _`\ ( )    (  _  )(_)/'\_/`\(  _  )(  _`\ (  _`\ (  _`\ |  _`\ 
-	| (_(_)| |    | (_) || ||     || (_) || |_) )| |_) )| (_(_)| (_) )
-	|  _)  | |  _ |  _  || || (_) ||  _  || ,__/'| ,__/'|  _)_ | ,  / 
-	| |    | |_( )| | | || || | | || | | || |    | |    | (_( )| |\ \ 
-	(_)    (____/'(_) (_)(_)(_) (_)(_) (_)(_)    (_)    (____/'(_) (_)
+	 ___    _      _____  _         _____  ___    ___    ___    ___       _____  
+	(  _`\ ( )    (  _  )(_)/'\_/`\(  _  )(  _`\ (  _`\ (  _`\ |  _`\    / ___ `.
+	| (_(_)| |    | (_) || ||     || (_) || |_) )| |_) )| (_(_)| (_) )  |_/___) |
+	|  _)  | |  _ |  _  || || (_) ||  _  || ,__/'| ,__/'|  _)_ | ,  /    .'____.'
+	| |    | |_( )| | | || || | | || | | || |    | |    | (_( )| |\ \   / /____  
+	(_)    (____/'(_) (_)(_)(_) (_)(_) (_)(_)    (_)    (____/'(_) (_)  |_______|
 
 ---
 ![FlaiMapper](https://github.com/yhoogstrate/flaimapper/raw/master/share/flaimapper.png)
@@ -36,7 +38,6 @@
 - [Run FlaiMapper](#run-flaimapper)
     - [Usage](#usage)
     - [Input: BAM](#input-bam)
-         - [The "\-\-mask"-argument](#the---mask-argument)
          - [The "\-\-fasta"-argument](#the---fasta-argument)
     - [Input: SSLM](#input-sslm)
     - [Input: multiple alignments](#input-multiple-alignments)
@@ -45,87 +46,106 @@
 - [Authors & Citing](#authors--citing)
 
 ## Download & Installation
-### Install dependencies
+### From source (native) ####
+To get the latest version of FlaiMapper-2 please download with Git (make sure it is installed) from GitHub using the following terminal command:
 
-Make sure you have *python2*, *pip* and the *pysam* library installed. Pysam is not by default installed on many systems. You can find installation details on at the following urls:
+	git clone https://github.com/yhoogstrate/flaimapper.git
 
-*	[https://github.com/pysam-developers/pysam](https://github.com/pysam-developers/pysam)
-*	[https://github.com/pysam-developers/pysam/master/INSTALL](https://github.com/pysam-developers/pysam/master/INSTALL)
+You can install FlaiMapper-2 with corresponding dependencies via pip with the following terminal command:
 
-The easiest way to install the latest version of pysam is via pip using the following terminal command:
+	cd flaimapper
+	cd src
+	
+	sudo pip install .
 
-	sudo apt-get install python-dev python-pip
+If you are not admin or would rather like have a contained version of FlaiMapper-2 you can use a virtual environment as well:
 
-	sudo pip install --upgrade pyrex
+	cd flaimapper
+	cd src
+	
+	virtualenv -p python2 .
+	source activate .venv/activate/bin
+	
+	python setup.py build
+	python setup.py install
 
-	sudo pip install --upgrade pysam
+### Install via bioconda
 
+For any installed instance of (ana/mini/)conda, make sure you have the bioconda repository added:
 
-### Download FlaiMapper
-#### Latest version from GitHub
+	conda config --add channels r
+	conda config --add channels bioconda
+	conda config --add channels conda-forge
+	
+	# you can confirm this usually by reading the following file:
+	cat ~/.condarc
+	
+	# setup an environment with the latest version of flaimapper
+	conda create -n flaimapper flaimapper
+	source activate conda
 
-To get the latest version of FlaiMapper please download with Git (make sure it is installed) from GitHub using the following terminal command:
+### Install via pip
 
-	sudo apt-get install git
+To install FlaiMapper-2 via pip, proceed with:
 
-	git clone --recursive https://github.com/yhoogstrate/flaimapper.git
+	pip install flaimapper
 
-Or you can download the latest source as ZIP package from the following url: [here (right mouse click; save as)](https://github.com/yhoogstrate/flaimapper/archive/master.zip). Extract this package to a directory called "flaimapper".
+### Read the GPL3 free software license
 
-#### Read & agree with GPL3 free software license
-
-If you have downloaded FlaiMapper, you should read the GNU General Public License v3.0 to make sure you understand what you are allowed to do with the source files and what free software means. It also states that the software is distributed in the hope to be useful but without any warranty. The license can be accessed directly at the following url:
+If you have downloaded FlaiMapper-2, you automatically agree with the GNU General Public License v3.0. Please read the license to make sure you understand what you are allowed to do with it, and what free software means. It also states that the software is distributed in the hope to be useful, but without any warranty. The license can be accessed directly at the following url:
 
 *	[https://github.com/yhoogstrate/flaimapper/raw/master/LICENSE](https://github.com/yhoogstrate/flaimapper/raw/master/LICENSE)
 
-### Compile & Install
-Browse into the src directory you just have created: 
-
-	cd flaimapper/src
-
-The installation procedure of FlaiMapper first converts the python code into byte code, followed by a mechanism that installs flaimapper in the system directories. You can achieve this by running the following two commands: 
-
-	python setup.py build
-
-	sudo python setup.py install
-
 ### Check if it works!
 
-Last but not least, please check if FlaiMapper runs. You can do this by running either a full analysis or just run the following terminal command: 
+Last but not least, please check if FlaiMapper-2 runs. You can do this by running either a full analysis or just run the following terminal command: 
 
 	flaimapper --help
+	
+	# If you have installed nose2, you can automatically run the same test as Travis does
+	# Make sure you are in ./flaimapper/src and run:
+	nose2
 
-If FlaiMapper givers errors, warnings or does not install, please do not hazitate and either submit the bug or send a fix to the GitHub repository at the following url: <A HREF='https://github.com/yhoogstrate/flaimapper' TARGET='_new'>https://github.com/yhoogstrate/flaimapper</A>
+**If FlaiMapper-2 givers errors**, warnings or does not install, please do not hazitate and either **submit the bug** or send a fix to the GitHub repository at the following url: <A HREF='https://github.com/yhoogstrate/flaimapper' TARGET='_new'>https://github.com/yhoogstrate/flaimapper</A>.
 
-Otherwise: congratulations, you have just installed FlaiMapper!
+If you did not experience an error: congratulations, you have just installed FlaiMapper-2!
 
 ### Uninstall FlaiMapper
 
-To remove FlaiMapper automatically from your system directories (without removing your data files), proceed with the following terminal command:
+To remove FlaiMapper-2 from your system directories (without removing your data files), proceed with the following terminal command:
 
+	# Depending on whether you used su or sudo to install flaimapper:
 	sudo pip uninstall flaimapper
+	pip uninstall flaimapper
+	
+	# If you installed via virtualenv:
+	cd ~/flaimapper/src
+	rm -rf .venv
+	
+	# via conda
+	conda env remove -n flaimapper
 
-The downloaded source files can only be removed manually. Be aware that references files for *ncRNAdb09* and the data of the analysis as demonstrated in the corresponding article are also located within this directory.
+The downloaded source files can only be removed manually. Be aware that references files for *ncRNAdb09* and the data of the analysis as demonstrated in the corresponding article are also located within the FlaiMapper-2 root directory.
 
 ### Galaxy
 
-If you think installing, configuring FlaiMapper, creating references and understanding the commandline interface takes too long, you can make use of Galaxy. We have a public instance available at the following url:
+If you think installing, configuring FlaiMapper-2, creating references and understanding the commandline interface takes too long, or you just want to have a visual interface, you can make use of Galaxy. We have a public instance available at the following url:
 
 *	[http://bioinf-galaxian.erasmusmc.nl/galaxy/](http://bioinf-galaxian.erasmusmc.nl/galaxy/)
 
-If you have a personal galaxy instance, you can install FlaiMapper via the testoolshed at the following url:
+If you have a personal Galaxy instance, you can install FlaiMapper-2 via the toolshed at the following url:
 
 *	[https://toolshed.g2.bx.psu.edu/view/yhoogstrate/flaimapper](https://toolshed.g2.bx.psu.edu/view/yhoogstrate/flaimapper)
 
-If you want to improve upon the galaxy wrapper, you can find the wrapper at the following url:
+You can find the Galaxy wrapper for FlaiMapper-2 at the following url:
 
-*	[https://bitbucket.org/EMCbioinf/galaxy-tool-shed-tools/raw/master/flaimapper/](https://bitbucket.org/EMCbioinf/galaxy-tool-shed-tools/raw/master/flaimapper/)
+*	[https://github.com/galaxyproject/tools-iuc/tree/master/tools/flaimapper/](https://github.com/galaxyproject/tools-iuc/tree/master/tools/flaimapper/)
 
 ## Alignment
 
 ### Obtain reference
 
-We propose multiple reference strategies for alignment, but we let it up to the researcher to decide which strategy is preferred.
+There are multiple strategies for alignment in small RNA-Seq analysis, leaving it up to each researcher to decide which strategy fits best.
 
 #### Full genome alignment
 
@@ -154,25 +174,28 @@ In the first phase, align to targeted regions withing the genome (the ncRNAdb09 
 *	Pro's: you solve the issues addressed above.
 *	Con's: the alignment will take more time the and methodology is more complex which will probably require advanced scripting.
 
-Some aligners have a related feature implemented: an indexed transcriptome besides the indexed reference genome. You might think of tophat's "<CODE>--transcriptome-index</CODE>" and RNA-STAR's "<CODE>sjdbGTFfile</CODE>". However, idealy you want to have a three phase alignment: (1) ncRNAs, (2) transcriptome, (3) entire genome. We are not aware of software that is capable of doing this (yet?).
+Some aligners have a related feature implemented: an indexed transcriptome besides the indexed reference genome. You might think of tophat's "<CODE>--transcriptome-index</CODE>" and RNA-STAR's "<CODE>sjdbGTFfile</CODE>".
+However, idealy you want to have a three phase alignment: (1) ncRNAs, (2) transcriptome, (3) entire genome.
+We are not aware of software that is capable of doing this directly, but with `samtools view` you must be able to get pretty close.
 
 ### Trim adapters
 
-Small RNA-Seq protocols often provide reads that are contaminated with so called adapter sequences.
+Small RNA-Seq protocols often (always?) provide reads that are contaminated with so called adapter sequences.
 These sequences are manually added to your small ncRNAs and have to be removed in order to align properly.
 These adapter sequences are often specific per protocol/sequencer, so please ensure you have access to the correct adapters.
 There are several tools that can remove them.
 Here a list of some of the tools that can be used to remove adapters:
 
 *	CLC Bio (<FONT COLOR='red'>commercial</FONT>):	[http://www.clcbio.com/](http://www.clcbio.com/)
-*	FASTX toolkit:	[http://hannonlab.cshl.edu/fastx_toolkit/](http://hannonlab.cshl.edu/fastx_toolkit/)
-*	Scythe: [https://github.com/vsbuffalo/scythe](https://github.com/vsbuffalo/scythe)
+*	Cutadapt:	[https://cutadapt.readthedocs.io/en/stable/](https://cutadapt.readthedocs.io/en/stable/), [https://github.com/marcelm/cutadapt/](https://github.com/marcelm/cutadapt/)
 
 We are aware of samples that also have fixed-size random primers, besides their adapters (with a specific sequence). Be aware that these also have to be trimmed. This usually requires multiple trimming steps.
 
+It is also convenient to remove trimmed reads that are really small (e.g. <= 15bp).
+
 #### Quality trimming
 
-Although it is common in RNA-Seq to trim low quality bases from your reads, we strongly recommend you NOT to do this prior to FlaiMapper. This will introduce a bias; fragments will most likely become shortened. If you really doubt the quality of a read, we advise you to neglect and discard the entire read!
+Although it is common in RNA-Seq to trim low quality bases from your reads, we strongly recommend NOT to do this prior to running FlaiMapper-2. This will introduce a bias; fragments will most likely become shortened. If you really doubt the quality of a read, we advise you to neglect/discard the read.
 
 ### Choose aligner
 
@@ -197,15 +220,19 @@ If your reference consists of mature ncRNAs or you are sure you do not take resu
 *	SubRead: [http://subread.sourceforge.net/](http://subread.sourceforge.net/)
 *	NovoAlign (<FONT COLOR='red'>commercial</FONT>): [http://www.novocraft.com/](http://www.novocraft.com/)
 *	CLC Bio (small RNA-Seq module; <FONT COLOR='red'>commercial</FONT>):	 [http://www.clcbio.com/](http://www.clcbio.com/)
-	*	Although we have used CLC for our analysis, we **do not** recommend using it prior to FlaiMapper. Exporting to SAM/BAM file aggregates all reads with an identical sequence and exporting the tables does not provide the coordinates of the aligned reads. The SAM/BAM aggregation affects the peak-detection of FlaiMapper. We have solved this issue by doing a first alignment round in CLC, to link the reads to their corresponding pre-cursor ncRNAs. We then apply a second alignment using MUSCLE (http://nar.oxfordjournals.org/content/32/5/1792.long), wrapped by a program called SSLM (http://www.gatcplatform.nl/), to find the exact coordinates of the reads linked to their precursor. We wrote a program to converts the SSLM format into BAM to ensure compatibility with other tools. To convert MUSCLE's output as wrapped by SSLM into BAM proceed with the following command(s):
+	*	Although we have used CLC for our analysis, we **do not** recommend using it prior to FlaiMapper-2. Exporting to SAM/BAM file aggregates all reads with an identical sequence and exporting the tables does not provide the coordinates of the aligned reads. The SAM/BAM aggregation affects the peak-detection of FlaiMapper-2. We have solved this issue by doing a first alignment round in CLC, to link the reads to their corresponding pre-cursor ncRNAs. We then apply a second alignment using MUSCLE (http://nar.oxfordjournals.org/content/32/5/1792.long), wrapped by a program called SSLM (http://www.gatcplatform.nl/), to find the exact coordinates of the reads linked to their precursor. We wrote a program to converts the SSLM format into BAM to ensure compatibility with other tools. To convert MUSCLE's output as wrapped by SSLM into BAM proceed with the following command(s):
 
-			sslm2sam "output_sslm" -m ncrnadb09.gtf -o output_unsorted.sam
-		
-			samtools view -h -bS output_unsorted.sam > output_unsorted.bam
-		
-			samtools sort output_unsorted.bam output
-		
-			rm -r output_sslm; rm output_unsorted.bam
+	sslm2sam -o alignment.sam sslm_directory
+	samtools view -h -bS alignment.sam > alignment.unsorted.bam
+	
+	# Depending on version of samtools - 1.+:
+	samtools sort -o alignment.sorted.bam alignment.unsorted.bam
+	
+	# 0.18/0.19:
+	samtools sort alignment.unsorted.bam > alignment.sorted.bam
+	
+	# Cleanup
+	rm -r osslm_directory; rm alignment.unsorted.bam ; rm alignment.sam
 
 Most aligners require tool-specific reference files (indexed versions of the reference genome). You can find the ncRNAdb09 reference for the following aligners:
 
@@ -216,7 +243,7 @@ Most aligners require tool-specific reference files (indexed versions of the ref
 
 ### Read collapsing
 
-In small RNA-Seq it is not uncommon to apply read collapsing. This technique simply merges all reads with an identical sequence into one sequence, which sharply reduces the number of aligned reads. The consequence is that the peak detection will be applied upon much lower numbers, lowering the resolution of the experiment. This will most likely affect your results in a negative way. Therefore we advice you **not to use read collapsing** before FlaiMapper, unless you have a clear reason to believe it will give a better answer to your biological question(s) or improve your outcome.
+In small RNA-Seq it is not uncommon to apply read collapsing. This technique simply merges all reads with an identical sequence into one sequence, which sharply reduces the number of aligned reads. The consequence is that the peak detection will be applied upon much lower numbers, lowering the resolution of the experiment. This will most likely affect your results in a negative way. Therefore we advice you **not to use read collapsing** before FlaiMapper-2, unless you have a clear reason to believe it will give a better answer to your biological question(s) or improve your outcome.
 
 ### Multi-mapping
 
@@ -238,77 +265,53 @@ Only if a bam-file is position sorted it can be indexed. This is done using the 
 
 	samtools index output.bam
 
-## Run FlaiMapper
+## Run FlaiMapper-2
 
-After you have aligned your reads, you can proceed with FlaiFapper. Here we will explain which commands you need to type in your terminal to analyse your data using FlaiMapper.
+After you have aligned your reads, you can proceed with FlaiFapper. Here we will explain which commands you need to type in your terminal to analyse your data using FlaiMapper-2.
 
 ### Usage
 
-The usage of FlaiMapper (using BAM formatted files as input) is as follows:
+The usage of FlaiMapper-2 (using BAM formatted files as input) is as follows:
 
-	usage: flaimapper [-h] [-V] [-v | -q] [-o OUTPUT] [-f FORMAT] -m MASK
-	                  [-r FASTA]
-	                  alignment_files [alignment_files ...]
+	usage: flaimapper [-h] [-V] [-v | -q] [-p PARAMETERS] [-o OUTPUT] [-f {1,2}]
+	                  [-r FASTA] [--offset5p OFFSET5P] [--offset3p OFFSET3P]
+	                  alignment_file
 	
 	positional arguments:
-	  alignment_files       indexed SAM or BAM files compatible with pysam
+	  alignment_file        indexed SAM or BAM file
 	
 	optional arguments:
 	  -h, --help            show this help message and exit
 	  -V, --version         show program's version number and exit
 	  -v, --verbose
 	  -q, --quiet
+	  -p PARAMETERS, --parameters PARAMETERS
+	                        File containing the filtering parameters, using
+	                        default if none is provided
 	  -o OUTPUT, --output OUTPUT
 	                        output filename; '-' for stdout
-	  -f FORMAT, --format FORMAT
+	  -f {1,2}, --format {1,2}
 	                        file format of the output: [1: table; per fragment],
-	                        [2: table; per ncRNA], [3: genbank]
-	  -m MASK, --mask MASK  GTF/GFF3 mask file (precursors)
+	                        [2: GTF (default)]
 	  -r FASTA, --fasta FASTA
 	                        Single reference FASTA file (+faid index) containing
 	                        all genomic reference sequences
+	  --offset5p OFFSET5P   Offset in bp added to the exon-type annotations in the
+	                        GTF file. This offset is used in tools estimating the
+	                        expression levels (default=4)
+	  --offset3p OFFSET3P   Offset in bp added to the exon-type annotations in the
+	                        GTF file. This offset is used in tools estimating the
+	                        expression levels (default=4)
 
-The usage of FlaiMapper (using SSLM formatted data as input) is as follows:
-
-
-positional arguments:
-  alignment_directories
-                        SSLM formatted output directories
-
-	usage: flaimapper-sslm [-h] [-V] [-v | -q] [-o OUTPUT] [-f FORMAT]
-	                       alignment_directories [alignment_directories ...]
-	
-	optional arguments:
-	  -h, --help            show this help message and exit
-	  -V, --version         show program's version number and exit
-	  -v, --verbose
-	  -q, --quiet
-	  -o OUTPUT, --output OUTPUT
-	                        output filename; '-' for stdout
-	  -f FORMAT, --format FORMAT
-	                        file format of the output: [1: table; per fragment],
-	                        [2: table; per ncRNA], [3: genbank]
-	  -m MASK, --mask MASK  GTF/GFF3 mask file (precursors)
-	  -r FASTA, --fasta FASTA
-	                        Single reference FASTA file (+faid index) containing
-	                        all genomic reference sequences
-
-From this follows that you can find the version of your installed flaimapper with the following commands:
-
-	flaimapper --version
-
-	flaimapper-sslm --version
-
-The '<CODE>\-\-verbose</CODE>' and '<CODE>\-\-quiet</CODE>' arguments change the level of verbosity. If '<CODE>\-\-verbose</CODE>' is enabled, FlaiMapper will give more details about progress.
+The '<CODE>\-\-verbose</CODE>' and '<CODE>\-\-quiet</CODE>' arguments change the level of verbosity. If '<CODE>\-\-verbose</CODE>' is enabled, FlaiMapper-2 will give more details about progress.
 
 ### Input: BAM
 
-The FlaiMapper binary that uses BAM formatted input files is called '*flaimapper*' and can be executed with the following terminal command:
+The FlaiMapper-2 binary that uses BAM formatted input files is called '*flaimapper*' and can be executed with the following terminal command:
 
 For alignment **to reference genomes (e.g. hg19):**
 
 	flaimapper \
-	    -m ncrnadb09_hg19.gtf \
 	    -r hg19_full.fasta \
 	    -o results_flaimapper.tabular.txt \
 	    alignment_01.bam
@@ -316,45 +319,30 @@ For alignment **to reference genomes (e.g. hg19):**
 For alignment **to ncRNAdb09:**
 
 	flaimapper \
-	    -m ncrnadb09.gtf \
 	    -r ncrnadb09.fasta \
 	    -o results_flaimapper.tabular.txt \
 	    alignment_02.bam
 
 Remark that the backslashes are used to make the command continue at the next line and they can be removed when the command is written on a single line.
 
-#### The "<CODE>\-\-mask</CODE>"-argument
+#### The "<CODE>\-\-parameters</CODE>"-argument
 
-The BAM (and SAM) alignment formats are tabular file formats that store a reads absolute start position, and a formal description of how the alignment proceeds. This also includes the reads sequence and can be provided with a quality score.
-The BAM/SAM format describes the alignment of a read in relation to a so called *Reference sequence*.
-It is very important to understand this, because the reference sequences may have a different meaning in the two proposed types of experiments.
+The filter function uses a set of parameters, which after installation can be found by running the following python code:
 
- - In case you <U>align to a reference genome</U> (e.g. hg19), each *Reference sequence* represents a chromsome (or a contig). Within this chromosome, multiple ncRNAs can be located.
- - In case you <U>align to ncRNAdb09</U>, each *Reference sequence* represents exactly one mature ncRNA.
+	python
+	
+	>>> from pkg_resources import resource_filename
+	>>> print resource_filename("flaimapper","data/parameters.default.txt")
 
-The consequence of this is that FlaiMapper must know where in which Reference sequence the ncRNAs are located. In FlaiMapper these so called MASK regions are provided as GTF/GFF files with the '<CODE>\-m</CODE>' or '<CODE>\-\-mask</CODE>' argument. For alignment to reference genome hg19, you have to provide the following argument:
-
-	flaimapper -m ncrnadb09_hg19.gtf [...]
-
-In ncRNAdb09, each Reference sequence represent exactly single ncRNA.
-Therefore, the provided MASK for ncRNAdb09 describes only one ncRNA per (entire) reference sequence.
-
-For alignment to ncRNAdb09, you have to provide the following argument:
-
-	flaimapper -m ncrnadb09.gtf [...]
-
-Currently we serve the ncRNAdb09 MASK as a GTF/GFF file for the following reference genomes:
-
-| **Ref. Genome** | **Ref. Genome ID** | **GTF file** | **GTF index** |
-|:----------------|:--------------------|:--------------|:----------------|
-| ncRNAdb09 (Human) | ncrnadb09 | [ncrnadb09.gtf](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncRNA_annotation/ncrnadb09.gtf) | [ncrnadb09.gtf.tbi](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncRNA_annotation/ncrnadb09.gtf.tbi) |
-| Human Feb. 2009 \(GRCh37/hg19\) | hg19 | [ncrnadb09_hg19.gtf](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncRNA_annotation/ncrnadb09_hg19.gtf) | [ncrnadb09_hg19.gtf.tbi](https://github.com/yhoogstrate/flaimapper/raw/master/share/annotations/ncRNA_annotation/ncrnadb09_hg19.gtf.tbi) |
+This is a tabular file with in the first column the position relative to the peak and in the second column the percentage to duck the other peaks intensity.
+So, if at `-5` bases from your peak is another peak with an intensity of 200, and it will be filtered with 24.9%, the value after ducking will be 49,8.
 
 #### The "<CODE>\-\-fasta</CODE>"-argument
 
-In contrast to formats that only contrain genomic coordines, like BED and GTF, the tabular output formats and GenBank also provide the fragments sequences.
-It is important to understand is that within the BAM/SAM format no sequences of the reference genome are stored. Therefore it is not possible (feasible) to extract the sequence of a fragment from a BAM file.
-To ensure FlaiMapper has access to the reference sequence(s), you can provide the reference genome as a single indexed FASTA file using the '<CODE>\-\-fasta</CODE>' argument as follows:
+The tabular output formatsis able to provide the fragments sequences of a FASTA file is provided.
+If the file is not provided the program will not terminate, but will indicate wheterh the file was provided  in the header column and empty sequences shall be reported.
+This file needs to be given separately because the BAM format does not store actual referenec sequences.
+To ensure FlaiMapper-2 has access to the reference sequence(s), you can provide the reference genome as a single indexed FASTA file using the '<CODE>\-\-fasta</CODE>' argument as follows:
 
 	flaimapper -r ncrnadb09.fa [...]
 
@@ -366,134 +354,46 @@ For ncRNAdb09, the FASTA file (and corresponding index) are available at the fol
 
 [ncrnadb09.fa.fai](https://raw.github.com/yhoogstrate/flaimapper/master/share/annotations/ncRNA_annotation/ncrnadb09.fa.fai)
 
-You need to have a <U>corresponding index file</U> under the name '*<prefix>.fa.fai*' besides your FASTA reference file.
+You need to have a <U>corresponding index file</U> under the name '*<prefix>.fa.fai*' besides your FASTA reference file. From FlaiMapper-2 and onwards this file will be automatically generated.
 
 *Yet we do not provide any other reference genome than the Human ncRNAdb09.*
 
 ### Input: SSLM
+The SSLM input has been terminated. There is, however, a converter to SAM available. To convert any SSLM directory to BAM, proceed with:
 
-**<FONT COLOR="red">The SSLM format is deprecated. If possible, proceed with BAM/SAM files.</FONT>**
-
-The SSLM format is the output format of Short Sequence Location Mapper:
-
-[http://www.gatcplatform.nl/SSLM/index.html](http://www.gatcplatform.nl/SSLM/index.html)
-
-Earlier analysis made use of the ncRNA analysis program SSLM which wraps the aligner MUSCLE ([http://dx.doi.org/10.1093/nar/gkh340](http://dx.doi.org/10.1093/nar/gkh340)). We initially proceeded with SSLM's corresponding data format, because it provided all neccesairy information (including reference sequence, in contrast to BAM). Furher analysis made FlaiMapper evolve into a tool, still specific for SSLM data. Because the BAM format has become the de facto standards for alignment data we have changed the input format to BAM. Because we still want to keep our software backwards compatible with the initial analysis (in order to reproduce the results), we also want to keep the deprecated SSLM format supported. The directory structure of an SSLM experiment is as follows:
-
-	.
-	├── idreadable.txt
-	└── validated
-	    ├── file100.fa
-	    ├── file101.fa
-	    ├── file102.fa
-	    ├── file103.fa
-	    ├── file104.fa
-	    ├── file105.fa
-	    └── file106.fa
-
-The _idreable.txt_ is a tab-delimted file and links the name of a ncRNA to its alignment (as a 'validated/*.fa' file). The _idreadable.txt_ has a syntax comparable to:
-
-	sequence  »  filename
-	>NAME=TRNAValAAC&LOCI=[chr1:180184276-180184348:strand=-]&SOURCE=UCSC&SOURCE-ACCESSION=chr1.tRNA63-ValAAC&GENOME=hg19  »  file100
-	>HGNC=38236&HUGO-Symbol=MIR3198-1&HUGO-Name=microRNA_3198-1&LOCI=[chr22:18246936-18247035:strand=-]&SOURCE=RefSeq&SOURCE-ACCESSION=NR_036168&GENOME=hg19  »  file101
-
-An individual alignment file in the FASTA (_*.fa_) format corresponds to an alignment of one ncRNA sequence, is located in a directory valled '**validated**' and has a sytax comparable to:
-
-	>NAME=TRNAVALAAC&LOCI=[CHR1:180184276-180184348:STRAND=-]&SOURCE=UCSC&SOURCE-ACCESSION=CHR1.TRNA63-VALAAC&GENOME=HG19
-	GTTTCCATAGTGTACTGGTTATCACATTCACCTAACACGCGAAAGGTCCTTGGTTTGAAACCAGGCAGAAACACCA
-	>ReadID#1_GTTTCCATAGTGTAGTGGTTATC_hits8
-	GTTTCCATAGTGTAGTGGTTATC-----------------------------------------------------
-	>ReadID#2_GTTTCCATAGTGTAGTGG_HITS7
-	GTTTCCATAGTGTAGTGG----------------------------------------------------------
-	>ReadID#3_GTTTCCATAGTGTAGTGGTTAT_x6
-	GTTTCCATAGTGTAGTGGTTAT------------------------------------------------------
-
-The '<CODE>_hits...</CODE>' and '<CODE>_x...</CODE>' suffixes are indicators for the number of indentical copies of the read.
-
-To run flaimapper using SSLM data, we provide the paths of the directories that contain the SSLM data.
-In the article experiment '*[SRP006788](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788)*' was analysed.
-To analyse 1 of its 6 SSLM experiments '*[SRR207111_HeLa18-30](https://github.com/yhoogstrate/flaimapper/tree/master/share/small_RNA-seq_alignments/SRP006788/SRR207111_HeLa18-30)*', we run FlaiMapper (SSLM) as follows:
-
-	flaimapper-sslm \
-	    -m share/annotations/ncRNA_annotation/ncrnadb09.gtf
-	    -r share/annotations/ncRNA_annotation/ncrnadb09.fa
-	    -o output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt \
-	    share/small_RNA-seq_alignments/SRP006788/SRR207111_HeLa18-30
-
-FlaiMapper will export the results as table into '*[output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt](https://github.com/yhoogstrate/flaimapper/raw/master/output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt)*'.
-
-*The SSLM version of FlaiMapper does not support entire reference genome alignment.*
+	sslm2sam -o alignment.sam sslm_directory
+	samtools view -h -bS alignment.sam > alignment.unsorted.bam
+	
+	# Depending on version of samtools - 1.+:
+	samtools sort -o alignment.sorted.bam alignment.unsorted.bam
+	
+	# 0.18/0.19:
+	samtools sort alignment.unsorted.bam > alignment.sorted.bam
+	
+	# Cleanup
+	rm -r osslm_directory; rm alignment.unsorted.bam ; rm alignment.sam
 
 ### Input: multiple alignments
 
-FlaiMapper is able to deal with multiple input files. In certain situations you want to enhance your resulotion by combining datasets, multiple runs for example. You can simply enhance your resolution by stacking the alignment. Instead of creating merged BAM or SSLM files, you can simply tell FlaiMapper to use multiple alignments and FlaiMapper will simply reads through these alignments as if they were one alignment. So, if you provide multiple input files you will get only one output file based on the concatenated data. If you want to get **individual outputs for any of your samples**, you have to **run FlaiMapper separately on each sample!**
-
-The last argument of FlaiMapper is simply a 1-or-multiple. You can run FlaiMapper on multiple files by separating all desired files with a space:
-
-	flaimapper \
-	    -f 1 \
-	    -o output/FlaiMapper/SRP002175/01_output_flaimapper.txt \
-	    -m share/annotations/ncRNA_annotation/ncrnadb09.gtf \
-	    -r share/annotations/ncRNA_annotation/ncrnadb09.fa \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038852.bam \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038853.bam \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038854.bam \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038855.bam \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038856.bam \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038857.bam \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038858.bam \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038859.bam \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038860.bam \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038861.bam \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038862.bam \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038863.bam
-
-	flaimapper-sslm \
-	    -f 1 \
-	    -m share/annotations/ncRNA_annotation/ncrnadb09.gtf \
-	    -r share/annotations/ncRNA_annotation/ncrnadb09.fa \
-	    -o output/FlaiMapper/SRP002175/01_output_flaimapper.txt \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038852 \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038853 \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038854 \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038855 \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038856 \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038857 \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038858 \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038859 \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038860 \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038861 \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038862 \
-	        share/small_RNA-seq_alignments/SRP002175/SRR038863
-
-Remark that the backslashes are used to make the command continue at the next line and they can be removed when the command is written on a single line.
+FlaiMapper-2 is not able to deal with multiple input files anymore. Use `samtools merge prior` to running FlaiMapper-2 instead.
 
 ### Output: formats
 
-FlaiMapper can export results into the following formats:
+FlaiMapper-2 can export results into the following formats:
 
 - Tabular #1, per fragment
-  * This file format has changed from version 1.2.0: new columns have been added and the end-positions have become 0-based.
-- Tabular #2, per ncRNA
-- GenBank
-
-The implementation of the following formats is under development:
-
-- BED
+  * The start- and end-positions are 0-based.
 - GTF/GFF
+  * Every entry contains 2 lines: one of type *sncdRNA* (small non-coding derived RNA), which is the actual prediction and one of type *exon*, used by default by expression estimation tools.
 
 The output format can be chosen with the '<CODE>\-f</CODE>' or the '<CODE>\-\-format</CODE>' argument, where the following argument have the following meaning:
 
-- <CODE>\-f 1</CODE>&nbsp; &nbsp; &nbsp; &nbsp; Tabular #1: <CODE>Fragment&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Precursor&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-start&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-stop&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Sequence&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Corresponding-reads</CODE>
-- <CODE>\-f 2</CODE>&nbsp; &nbsp; &nbsp; &nbsp; Tabular #2: <CODE>Precursor&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Curated&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-1-start&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-1-stop&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-1-sequence&nbsp; <FONT COLOR="gray">&#187;</FONT>&nbsp; Fragment-2-...</CODE>
-- <CODE>\-f 3</CODE>&nbsp; &nbsp; &nbsp; &nbsp; GenBank
-
-The location of the output is defined with the '<CODE>\-o</CODE>' or '<CODE>\-\-output</CODE>' argument. If the argument is left empty or equal to '<CODE>\-</CODE>', FlaiMapper will write directly to stdout.
-
 ## Reproduce article data
 
-The raw figures used for the publication can be (re-)generated by running the scripts in the '*[scripts](https://github.com/yhoogstrate/flaimapper/tree/master/scripts/)*' directory.
-The master script '*[scripts/analysis.sh](https://github.com/yhoogstrate/flaimapper/blob/master/scripts/analysis.sh)*' should run all analysis sequentially and make the directory structure within FlaiMapper's '*[output](https://github.com/yhoogstrate/flaimapper/tree/master/output)*' directory.
+The raw figures used for the publication could be (re-)generated by running the scripts in the '*[scripts](https://github.com/yhoogstrate/flaimapper/tree/master/scripts/)*' directory.
+The master script '*[scripts/analysis.sh](https://github.com/yhoogstrate/flaimapper/blob/master/scripts/analysis.sh)*' should run all analysis sequentially and make the directory structure within FlaiMapper-2's '*[output](https://github.com/yhoogstrate/flaimapper/tree/master/output)*' directory.
+
+These files were generated using FlaiMapper-1. FlaiMapper-2 simplifies the interface but is backwards incompatible. You can still checkout older revisions of FlaiMapper in the git archive.
 
 ## Authors & Citing
 
