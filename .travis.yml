@@ -3,7 +3,7 @@ python:
   - "2.7"
 # HTSeq is not compatible with python3
 
-install: "cd src; virtualenv -p python2; python setup install; pip install nose2 -I"
+install: "cd src; virtualenv -p python2 .venv; python setup install; pip install nose2 -I"
 script: "nose2"
 
 notifications:
