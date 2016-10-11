@@ -46,8 +46,7 @@ logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
 
 class TestFlaiMapper(unittest.TestCase):
     def test_01_a(self):
-        os.chdir("../share/small_RNA-seq_alignments/SRP028959/")
-        subprocess.call(["tar","-xzf","SRR954958.tar.gz"])
+        subprocess.call(["tar","-xzf","../share/small_RNA-seq_alignments/SRP028959/SRR954958.tar.gz"])
         
         args = CLI_sslm2sam(['-o','test.sam','SRR954958'])
         sslm2bed_converter = SSLMParser(args.sslm_directory)
@@ -64,9 +63,9 @@ class TestFlaiMapper(unittest.TestCase):
         shutil.rmtree("SRR954958")
 
 
-
 def main():
     unittest.main()
 
+# Tests fall outside __main__
 if __name__ == '__main__':
     main()

@@ -43,14 +43,13 @@ from flaimapper.Data import *
 from flaimapper.utils import *
 
 
-import unittest,logging,os,subprocess,shutil
+import unittest,logging,os,subprocess,shutil,sys
 logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
-
-
 
 class TestFunctional(unittest.TestCase):
     def test_01(self):
-        pipe = subprocess.Popen(["flaimapper","-false-argument-"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        pipe = subprocess.Popen(["flaimapper","-false-argument-"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)#, shell=True, env=os.environ.copy()
+        
         stdout = pipe.stdout.read()
         stderr = pipe.stderr.read()
         pipe.wait()
@@ -60,9 +59,11 @@ class TestFunctional(unittest.TestCase):
         self.assertTrue(stderr != '')
     
     def test_02(self):
-        pipe = subprocess.Popen(["flaimapper","--help"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        pipe = subprocess.Popen(['flaimapper','--help'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)#, env=environment
+        
         stdout = pipe.stdout.read()
         stderr = pipe.stderr.read()
+        
         pipe.wait()
         exit_code = pipe.poll()
 
@@ -71,19 +72,19 @@ class TestFunctional(unittest.TestCase):
     
     def test_03(self):
         samplename = 'SRR207111_HeLa18-30'
-        sampledir = 'SRP006788/'
+        sampledir = '../share/small_RNA-seq_alignments/SRP006788/'
         
-        subprocess.call(["tar","-xzf",sampledir+samplename+".tar.gz"])
+        subprocess.call(["tar","-xzf",sampledir+samplename+".tar.gz"], env=os.environ.copy())
         output_file = 'test.tabular.txt'
         
-        pipe = subprocess.Popen(["flaimapper","-o",output_file,"-f","1",'-r','../annotations/ncRNA_annotation/ncrnadb09.fa',samplename+".bam"])
+        pipe = subprocess.Popen(["flaimapper","-o",output_file,"-f","1",'-r','../share/annotations/ncRNA_annotation/ncrnadb09.fa',samplename+".bam"])
         pipe.wait()
         exit_code = pipe.poll()
         
         self.assertEqual(exit_code, 0)
         
         idx_test = parse_table(output_file)
-        idx_old = parse_table('../../output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt',1,2,3,4)
+        idx_old = parse_table('../output/FlaiMapper/SRP006788/01.a_output_flaimapper.txt',1,2,3,4)
         
         m = 0
         mm = 0
@@ -115,8 +116,8 @@ class TestFunctional(unittest.TestCase):
         assertion1 = (mm <= 1)
         assertion2 = (mm_trna <= 63)
         assertion3 = (success >= 0.934)
-        if assertion1 and assertion2 and assertion3:
-            os.remove(output_file)
+        #if assertion1 and assertion2 and assertion3:
+        #    os.remove(output_file)
         
         os.remove(samplename+".bam")
         os.remove(samplename+".bam.bai")
@@ -128,7 +129,7 @@ class TestFunctional(unittest.TestCase):
 
     def test_04(self):
         samplename = "SRR207111_HeLa18-30"
-        sampledir = 'SRP006788/'
+        sampledir = '../share/small_RNA-seq_alignments/SRP006788/'
         
         subprocess.call(["tar","-xzf",sampledir+samplename+".tar.gz"])
         output_file = 'test.gtf'
@@ -144,9 +145,11 @@ class TestFunctional(unittest.TestCase):
         u81_54 = False
         
         i = 0
+        k = 0
         for chunk in data:#range(len(data)):
             chunk = data[i]
             if chunk[0] == 'HGNC=10101&HUGO-Symbol=SNORD81&HUGO-Name=small_nucleolar_RNA,_C/D_box_81&LOCI=[chr1:173833274-173833370:strand=-]&SOURCE=RefSeq&SOURCE-ACCESSION=NR_003938&GENOME=hg19':
+                k += 1
                 if chunk[1] == 14 and chunk[2] == 36:
                     u81_14 = True
                 elif chunk[1] == 46 and chunk[2] == 67:
@@ -161,14 +164,16 @@ class TestFunctional(unittest.TestCase):
         self.assertTrue(u81_14, "The first of the three SNORD81 fragments was not detected")
         self.assertTrue(u81_46, "The second of the three SNORD81 fragments was not detected")
         self.assertTrue(u81_54, "The third of the three SNORD81 fragments was not detected")
+        self.assertTrue(k == 3, "More than 3 fragments (%i) of SNORD81 were detected" % k)
         
         os.remove(samplename+".bam")
         os.remove(samplename+".bam.bai")
         shutil.rmtree(samplename)
 
 def main():
-    os.chdir("../share/small_RNA-seq_alignments/")
     unittest.main()
 
+
+environment = os.environ.copy()
 if __name__ == '__main__':
     main()
