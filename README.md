@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/yhoogstrate/flaimapper.svg?branch=master)](https://travis-ci.org/yhoogstrate/flaimapper) #
+[![Build Status](https://travis-ci.org/yhoogstrate/flaimapper.svg?branch=master)](https://travis-ci.org/yhoogstrate/flaimapper)
 
 # Fragment Location Annotation Identification Mapper #
 ---
@@ -14,7 +14,7 @@
 ---
 
 - [Download & Installation](#download--installation)
-    - [From source (native)(#from-source-native)
+    - [From source (native)](#from-source-native)
     - [Install via bioconda](#install-via-bioconda)
     - [Install via pip](#install-via-pip)
     - [Read the GPL3 free software license](#read-the-gpl3-free-software-license)
@@ -40,7 +40,7 @@
          - [The "\-\-parameters"-argument](#the---parameters-argument)
          - [The "\-\-fasta"-argument](#the---fasta-argument)
     - [Output: formats](#output-formats)
-- [Reproduce article data](#reproduce article data)
+- [Reproduce article data](#reproduce-article-data)
 - [Authors & Citing](#authors--citing)
 
 ## Download & Installation
@@ -222,17 +222,17 @@ If your reference consists of mature ncRNAs or you are sure you do not take resu
 *	CLC Bio (small RNA-Seq module; <FONT COLOR='red'>commercial</FONT>):	 [http://www.clcbio.com/](http://www.clcbio.com/)
 	*	Although we have used CLC for our analysis, we **do not** recommend using it prior to FlaiMapper-2. Exporting to SAM/BAM file aggregates all reads with an identical sequence and exporting the tables does not provide the coordinates of the aligned reads. The SAM/BAM aggregation affects the peak-detection of FlaiMapper-2. We have solved this issue by doing a first alignment round in CLC, to link the reads to their corresponding pre-cursor ncRNAs. We then apply a second alignment using MUSCLE (http://nar.oxfordjournals.org/content/32/5/1792.long), wrapped by a program called SSLM (http://www.gatcplatform.nl/), to find the exact coordinates of the reads linked to their precursor. We wrote a program to converts the SSLM format into BAM to ensure compatibility with other tools. To convert MUSCLE's output as wrapped by SSLM into BAM proceed with the following command(s):
 
-	sslm2sam -o alignment.sam sslm_directory
-	samtools view -h -bS alignment.sam > alignment.unsorted.bam
-	
-	# Depending on version of samtools - 1.+:
-	samtools sort -o alignment.sorted.bam alignment.unsorted.bam
-	
-	# 0.18/0.19:
-	samtools sort alignment.unsorted.bam > alignment.sorted.bam
-	
-	# Cleanup
-	rm -r osslm_directory; rm alignment.unsorted.bam ; rm alignment.sam
+		sslm2sam -o alignment.sam sslm_directory
+		samtools view -h -bS alignment.sam > alignment.unsorted.bam
+		
+		# Depending on version of samtools - 1.+:
+		samtools sort -o alignment.sorted.bam alignment.unsorted.bam
+		
+		# 0.18/0.19:
+		samtools sort alignment.unsorted.bam > alignment.sorted.bam
+		
+		# Cleanup
+		rm -r osslm_directory; rm alignment.unsorted.bam ; rm alignment.sam
 
 Most aligners require tool-specific reference files (indexed versions of the reference genome). You can find the ncRNAdb09 reference for the following aligners:
 
