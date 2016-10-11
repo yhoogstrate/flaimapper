@@ -252,10 +252,29 @@ class TestFlaiMapper(unittest.TestCase):
         # Run analysis
         flaimapper.run(args.fasta_handle,args.parameters)
 
-        flaimapper.write(args.format, args.output)
+        flaimapper.write(args.format, args.output, 4, 4)
         
         # assert Contents:
         assertion = filecmp.cmp(fname , TESTS_FLAIMAPPER_TEST_02_OUTPUT_GTF)
+        self.assertTrue(assertion)
+        
+        if assertion:
+            os.remove(fname)
+
+    def test_02b(self):
+        fname = 'test_FlaiMapper_test_02b_output.gtf'
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,'--verbose'])
+        
+        flaimapper = FlaiMapper(args.alignment_file)
+        
+        # Run analysis
+        flaimapper.run(args.fasta_handle,args.parameters)
+        
+        # Test if changing the offset changes the outcome - should be different result file than the test above
+        flaimapper.write(args.format, args.output, 5, 5)
+        
+        # assert Contents:
+        assertion = (not filecmp.cmp(fname , TESTS_FLAIMAPPER_TEST_02_OUTPUT_GTF))
         self.assertTrue(assertion)
         
         if assertion:
@@ -270,7 +289,7 @@ class TestFlaiMapper(unittest.TestCase):
         # Run analysis
         flaimapper.run(args.fasta_handle,args.parameters)
 
-        flaimapper.write(args.format, args.output)
+        flaimapper.write(args.format, args.output, 4, 4)
         
         # assert Contents:
         assertion = filecmp.cmp(fname , TESTS_FLAIMAPPER_TEST_03_a_OUTPUT_TXT)
@@ -288,7 +307,7 @@ class TestFlaiMapper(unittest.TestCase):
         # Run analysis
         flaimapper.run(args.fasta_handle,args.parameters)
 
-        flaimapper.write(args.format, args.output)
+        flaimapper.write(args.format, args.output, 4, 4)
         
         # assert Contents:
         assertion = filecmp.cmp(fname , TESTS_FLAIMAPPER_TEST_03_b_OUTPUT_TXT)

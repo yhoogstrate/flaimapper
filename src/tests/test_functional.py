@@ -164,7 +164,7 @@ class TestFunctional(unittest.TestCase):
         self.assertTrue(u81_14, "The first of the three SNORD81 fragments was not detected")
         self.assertTrue(u81_46, "The second of the three SNORD81 fragments was not detected")
         self.assertTrue(u81_54, "The third of the three SNORD81 fragments was not detected")
-        self.assertTrue(k == 3, "More than 3 fragments (%i) of SNORD81 were detected" % k)
+        self.assertTrue(k == (3*2), "More than 3 fragments (%i) of SNORD81 were detected" % k)#*2 because every entry generates two GTF lines
         
         os.remove(samplename+".bam")
         os.remove(samplename+".bam.bai")

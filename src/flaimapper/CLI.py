@@ -61,6 +61,9 @@ def CLI(argv=None):
     
     parser.add_argument("-r","--fasta",help="Single reference FASTA file (+faid index) containing all genomic reference sequences")
     
+    parser.add_argument("--offset5p",help="Offset in bp added to the exon-type annotations in the GTF file. This offset is used in tools estimating the expression levels (default=4)",type=int,default=4)
+    parser.add_argument("--offset3p",help="Offset in bp added to the exon-type annotations in the GTF file. This offset is used in tools estimating the expression levels (default=4)",type=int,default=4)
+    
     parser.add_argument("alignment_file",help="indexed SAM or BAM file",nargs=1)
     
     # Parse parameters

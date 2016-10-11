@@ -145,7 +145,7 @@ class FragmentContainer():
             
             fh.close()
     
-    def export_gtf(self,filename):
+    def export_gtf(self,filename,offset5p,offset3p):
         if(filename == "-"):
             fh = sys.stdout
         else:
@@ -166,6 +166,7 @@ class FragmentContainer():
                         i += 1
                         fragment = fragments_sorted_keys[key]
                         
+                        ## Line 1: type sncdRNA
                         # Seq-name
                         fh.write(name + "\t")
                         
@@ -192,9 +193,41 @@ class FragmentContainer():
                         attributes.append('gene_id "FM_'+ name+'_'+str(i).zfill(12)+'"' )
                         
                         fh.write(", ".join(attributes)+"\n")
+                        
+                        
+                        ## Line 2: type exon, with offset used for counting in e.g. HTSeq-count / featureCounts
+                        
+                        ## Line 1: type sncdRNA
+                        # Seq-name
+                        fh.write(name + "\t")
+                        
+                        # Source
+                        fh.write("flaimapper-v"+flaimapper.__version__+"\t")
+                        
+                        # Feature
+                        fh.write("exon\t")
+                        
+                        # Start
+                        fh.write(str(max(1,fragment.start+1-offset5p))+"\t")
+                        
+                        # End
+                        fh.write(str(max(1,fragment.stop+1+offset3p))+"\t")
+                        
+                        # Score
+                        fh.write(str(fragment.supporting_reads_stop+fragment.supporting_reads_start) + "\t")
+                        
+                        # Strand and Frame
+                        fh.write(".\t.\t")
+                        
+                        # Attribute
+                        attributes = []
+                        attributes.append('gene_id "FM_'+ name+'_'+str(i).zfill(12)+'"' )
+                        
+                        fh.write(", ".join(attributes)+"\n")
+                        
         fh.close()
     
-    def write(self,export_format,output_filename):
+    def write(self,export_format,output_filename,offset5p,offset3p):
         logging.debug(" - Exporting results to: "+output_filename)
         
         if(export_format == 1):
@@ -202,4 +235,4 @@ class FragmentContainer():
             self.export_table(output_filename)
         elif(export_format == 2):
             logging.info("   - Format: GTF")
-            self.export_gtf(output_filename)
+            self.export_gtf(output_filename,offset5p,offset3p)
