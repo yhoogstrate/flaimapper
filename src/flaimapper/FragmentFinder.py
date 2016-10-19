@@ -77,11 +77,16 @@ class FragmentFinder:
         peaksStop = self.find_peaks(self.positions['stopPositions']+[0])
         
         # Correct / filter noisy peaks
-        self.correctedPeaksStart = self.smooth_filter_peaks(peaksStart)
-        self.correctedPeaksStop = self.smooth_filter_peaks(peaksStop)
+        correctedPeaksStart = self.smooth_filter_peaks(peaksStart)
+        correctedPeaksStop = self.smooth_filter_peaks(peaksStop)
         
         # Trace start and stop positions together and obtain actual peaks
-        self.results = self.find_fragments(self.correctedPeaksStart,self.correctedPeaksStop,self.positions['startAvgLengths'],self.positions['stopAvgLengths'])
+        self.results = self.find_fragments(
+            correctedPeaksStart,
+            correctedPeaksStop,
+        
+            self.positions['startAvgLengths'],
+            self.positions['stopAvgLengths'])
         
         return True
     
