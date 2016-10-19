@@ -90,17 +90,18 @@ class FlaiMapper(FragmentContainer):
             ss = [None,None]
             
             for r in self.alignment.fetch(s_name):
-                if ss[0] == None:
-                    ss = [r.blocks[0][0],r.blocks[-1][1]-1]
-                else:
-                    if r.blocks[-1][1]-1 > ss[1]:
-                        if r.blocks[0][0] - ss[1] <= i_dist:
-                            m  = max(ss[1],r.blocks[-1][1]-1)
-                            ss[1] = m
-                        else:
-                            yield (s_name, max(0, ss[0] - i_dist_l - 1), max(0, ss[1] + i_dist_r + 1))
-                            
-                            ss = [r.blocks[0][0],r.blocks[-1][1]-1]
+                if len(r.blocks) > 0:
+                    if ss[0] == None:
+                        ss = [r.blocks[0][0],r.blocks[-1][1]-1]
+                    else:
+                        if r.blocks[-1][1]-1 > ss[1]:
+                            if r.blocks[0][0] - ss[1] <= i_dist:
+                                m  = max(ss[1],r.blocks[-1][1]-1)
+                                ss[1] = m
+                            else:
+                                yield (s_name, max(0, ss[0] - i_dist_l - 1), max(0, ss[1] + i_dist_r + 1))
+                                
+                                ss = [r.blocks[0][0],r.blocks[-1][1]-1]
         
             if ss[0] != None:
                 yield (s_name, max(0, ss[0] - i_dist_l - 1), max(0, ss[1] + i_dist_r + 1))
