@@ -40,7 +40,7 @@ from flaimapper.FlaiMapper import FlaiMapper
 from flaimapper.CLI import CLI
 from flaimapper.Data import *
 
-import unittest,filecmp,os,logging
+import unittest,filecmp,os,logging,subprocess
 logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.DEBUG)
 
 
@@ -255,11 +255,9 @@ class TestFlaiMapper(unittest.TestCase):
         flaimapper.write(args.format, args.output, 4, 4)
         
         # assert Contents:
-        assertion = filecmp.cmp(fname , TESTS_FLAIMAPPER_TEST_02_OUTPUT_GTF)
-        self.assertTrue(assertion)
+        self.assertTrue(filecmp.cmp(TESTS_FLAIMAPPER_TEST_02_OUTPUT_GTF, fname),msg="diff '"+TESTS_FLAIMAPPER_TEST_02_OUTPUT_GTF+"' '"+fname+"':\n"+subprocess.Popen(['diff',TESTS_FLAIMAPPER_TEST_02_OUTPUT_GTF,fname], stdout=subprocess.PIPE).stdout.read())
         
-        if assertion:
-            os.remove(fname)
+        os.remove(fname)# does not get executed if assertion is False
 
     def test_02b(self):
         fname = 'test_FlaiMapper_test_02b_output.gtf'
