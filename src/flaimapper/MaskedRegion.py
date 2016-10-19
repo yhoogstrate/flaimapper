@@ -43,10 +43,6 @@ class MaskedRegion:
     """
     def __init__(self,region):
         self.region = region
-        #self.name = name
-        
-        #self.start = start
-        #self.stop = stop
     
     def reset(self):
         self.start_positions = []

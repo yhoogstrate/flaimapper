@@ -108,7 +108,6 @@ class FlaiMapper(FragmentContainer):
     
     def run(self,fasta_file,filter_parameters):
         logging.debug(" - Running fragment detection")
-        
         self.fasta_file = fasta_file
         
         for region in self.regions(filter_parameters):
@@ -118,9 +117,8 @@ class FlaiMapper(FragmentContainer):
             # BAM
             aligned_reads = BAMParser(region,self.alignment)
             aligned_reads.parse_stats()
-            
             logging.debug("     * Detecting fragments")
             
-            predicted_fragments = FragmentFinder(region, aligned_reads, filter_parameters, True)
-            self.add_fragments(predicted_fragments, fasta_file)
+            fragments = FragmentFinder(aligned_reads, filter_parameters, True)
+            self.add_fragments(fragments)
  

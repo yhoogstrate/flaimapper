@@ -51,15 +51,9 @@ class FragmentContainer():
                     yield fragment
     
     #@tofo get rid of inserting fasta_file HERE 
-    def add_fragments(self,fragment_finder_results,fasta_file=None):
-        """
-        
-        ----
-        @param fragment_finder_results: 
-        """
-        
+    def add_fragments(self,fragment_finder_results):
         #for fragment in fragment_finder_results.results:
-        uid = fragment_finder_results.masked_region[0]+"_"+str(fragment_finder_results.masked_region[1])+"_"+str(fragment_finder_results.masked_region[2])
+        uid = fragment_finder_results.masked_region.region[0]+"_"+str(fragment_finder_results.masked_region.region[1])+"_"+str(fragment_finder_results.masked_region.region[2])
         if(uid not in self.sequences.keys()):
             self.sequences[uid] = []
         
@@ -92,7 +86,7 @@ class FragmentContainer():
             
             for uid in sorted(self.sequences.keys()):
                 for reference_sequence in self.sequences[uid]:
-                    name = reference_sequence.masked_region[0]
+                    name = reference_sequence.masked_region.region[0]
                     result = reference_sequence.results
                     if(result):
                         fragments_sorted_keys = {}
@@ -153,7 +147,7 @@ class FragmentContainer():
         
         for uid in sorted(self.sequences.keys()):
             for reference_sequence in self.sequences[uid]:
-                name = reference_sequence.masked_region[0]
+                name = reference_sequence.masked_region.region[0]
                 result = reference_sequence.results
                 
                 if(result):

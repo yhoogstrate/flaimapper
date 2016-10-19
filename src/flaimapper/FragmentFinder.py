@@ -37,16 +37,16 @@
 """
 
 
-import os,re,operator
+import operator
 
-from flaimapper.ncRNAfragment import ncRNAfragment
+from .ncRNAfragment import ncRNAfragment
 
 
 class FragmentFinder:
     """Class Flaimapper Finds fragments in alignment files.
     """
     
-    def __init__(self,masked_region,readcount,filter_parameters,autorun):
+    def __init__(self,masked_region,filter_parameters,autorun):
         #@todo Don't save this info indefinitely!!
         self.masked_region = masked_region
         self.filter_parameters = filter_parameters
@@ -60,10 +60,10 @@ class FragmentFinder:
         
         if(autorun):
             self.positions = {}
-            self.positions['startPositions'] = readcount.start_positions
-            self.positions['stopPositions'] = readcount.stop_positions
-            self.positions['startAvgLengths'] = readcount.start_avg_lengths
-            self.positions['stopAvgLengths'] = readcount.stop_avg_lengths
+            self.positions['startPositions'] = self.masked_region.start_positions
+            self.positions['stopPositions'] = self.masked_region.stop_positions
+            self.positions['startAvgLengths'] = self.masked_region.start_avg_lengths
+            self.positions['stopAvgLengths'] = self.masked_region.stop_avg_lengths
             
             self.peaksStart = False
             self.peaksStop = False
@@ -122,7 +122,7 @@ class FragmentFinder:
     def smooth_filter_peaks(self,plist):
         """Smooth filtering
         """
-        
+
         psorted = sorted(plist.iteritems(),key=operator.itemgetter(1),reverse=True)
         
         # There is a small mistake in the algorithm,
@@ -175,7 +175,7 @@ class FragmentFinder:
                     score = pstart[item]*penalty 
                     if(score >= highest):
                         highest = pstart[item]
-                        fragment = ncRNAfragment(item,pos,self.masked_region)
+                        fragment = ncRNAfragment(item,pos,self.masked_region.region)
                         fragment.supporting_reads_start = pstart[fragment.start]
                         fragment.supporting_reads_stop = pstop[fragment.stop]
                 
