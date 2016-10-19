@@ -65,28 +65,28 @@ class MaskedRegion:
         start_avg_lengths = []
         stop_avg_lengths = []
         
-        for read in self.parse_reads():#Relies on inherented class, e.g. BAMParser or SSLMParser
-            while(len(self.start_positions) < read.stop+1):				# Fix since 1.1.0: automatically scale  vector up if alignment falls outside range reference annotation
+        for read in self.parse_reads():#read = (start, stop)
+            while(len(self.start_positions) < read[1]+1):				# Fix since 1.1.0: automatically scale  vector up if alignment falls outside range reference annotation
                 self.start_positions.append(0)
                 self.stop_positions.append(0)
                 
                 start_avg_lengths.append({})# Do an aggregated vector {21:10243} for 10243 observations of length 21
                 stop_avg_lengths.append({})
             
-            self.start_positions[read.start] += 1
-            self.stop_positions[read.stop] += 1
+            self.start_positions[read[0]] += 1
+            self.stop_positions[read[1]] += 1
             
-            len_start = read.stop-read.start
-            len_stop = read.start-read.stop
+            len_start = read[1]-read[0]
+            len_stop = read[0]-read[1]
             
-            if not start_avg_lengths[read.start].has_key(len_start):
-                start_avg_lengths[read.start][len_start] = 0
+            if not start_avg_lengths[read[0]].has_key(len_start):
+                start_avg_lengths[read[0]][len_start] = 0
             
-            if not stop_avg_lengths[read.stop].has_key(len_stop):
-                stop_avg_lengths[read.stop][len_stop] = 0
+            if not stop_avg_lengths[read[1]].has_key(len_stop):
+                stop_avg_lengths[read[1]][len_stop] = 0
             
-            start_avg_lengths[read.start][len_start] += 1
-            stop_avg_lengths[read.stop][len_stop] += 1
+            start_avg_lengths[read[0]][len_start] += 1
+            stop_avg_lengths[read[1]][len_stop] += 1
         
         self.start_avg_lengths = []
         self.stop_avg_lengths = []

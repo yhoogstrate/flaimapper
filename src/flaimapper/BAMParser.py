@@ -39,9 +39,9 @@
 
 import os,re,operator,argparse,sys,subprocess
 import pysam
+from argparse import Namespace
 
 
-from flaimapper.Read import Read
 from flaimapper.ncRNAfragment import ncRNAfragment
 from flaimapper.MaskedRegion import MaskedRegion
 
@@ -60,6 +60,6 @@ class BAMParser(MaskedRegion):
                 if len(read.blocks) > 0:# ensure the read is acutally aligned
                     # First coordinate is given at 0 base, the second as 1
                     # Therefore the second is converted with "-1"
-                    yield Read(read.blocks[0][0], read.blocks[-1][1]-1, read.qname)
+                    yield (read.blocks[0][0], read.blocks[-1][1]-1)
         else:
             raise Exception("Call to non-existing region")
