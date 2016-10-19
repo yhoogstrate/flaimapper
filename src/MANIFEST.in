@@ -1,0 +1,7 @@
+recursive-include flaimapper *.py *.txt *.bam *.bai *.gtf *.fa *.fai
+recursive-include tests *.py
+recursive-include bin *
+include *.py
+include MANIFEST.in
+include LICENSE
+include ChangeLog
