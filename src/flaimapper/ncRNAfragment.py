@@ -47,9 +47,6 @@ class ncRNAfragment:
         
         self.reset_supporting_reads()
     
-    def get_name(self):
-        return self.name
-        
     def add_supporting_reads(self,number):
         self.supporting_reads += number
         
@@ -58,9 +55,9 @@ class ncRNAfragment:
     
     def spans_read(self,read,offset_left=0,offset_right=0):
         """
-        no offset used..
+        @todo no offset used.. - try to remove this?
         """
-        return (((read.start+offset_left) >= self.start) and ((read.stop-offset_right) <= self.stop))
+        return (read.start+offset_left) >= self.start and (read.stop-offset_right) <= self.stop
     
     def reset_supporting_reads(self):
         self.supporting_reads = 0										# all reads in-between the fragment

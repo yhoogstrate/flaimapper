@@ -50,6 +50,7 @@ class FragmentContainer():
                 for fragment in reference_sequence:
                     yield fragment
     
+    #@tofo get rid of inserting fasta_file HERE 
     def add_fragments(self,fragment_finder_results,fasta_file=None):
         """
         
@@ -63,7 +64,6 @@ class FragmentContainer():
             self.sequences[uid] = []
         
         self.sequences[uid].append(fragment_finder_results)
-        self.fasta_file = fasta_file
     
     def export_table(self,filename):
         """Exports the discovered fragments to a tab-delimited file.

@@ -54,7 +54,7 @@ class TestFragmentFinder(unittest.TestCase):
          [----]
                [----]
         """
-        matrices = MaskedRegion('chr1',0,100)
+        matrices = MaskedRegion(('chr1',0,100))
 
         matrices.start_positions =   [0,2,0,0,0,0, 0,1,0,0,0,0, 0,0]
         matrices.stop_positions =    [0,0,0,0,0,0, 2,0,0,0,0,0, 1,0]

@@ -44,13 +44,13 @@ import pysam
 class BAMParser(MaskedRegion):
     """parseNcRNA is a class that parses the BAM alignment files using pysam.
     """
-    def __init__(self,name,start,stop,alignment):
+    def __init__(self,region,alignment):
         self.alignment = alignment
-        MaskedRegion.__init__(self,name,start,stop)
+        MaskedRegion.__init__(self,region)
     
     def parse_reads(self):
-        if(self.name in self.alignment.references):
-            for read in self.alignment.fetch(self.name, self.start, self.stop):
+        if(self.region[0] in self.alignment.references):
+            for read in self.alignment.fetch(self.region[0], self.region[1], self.region[2]):
                 
                 if len(read.blocks) > 0:# ensure the read is acutally aligned
                     # First coordinate is given at 0 base, the second as 1

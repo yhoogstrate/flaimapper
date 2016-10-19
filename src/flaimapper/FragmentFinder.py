@@ -47,6 +47,7 @@ class FragmentFinder:
     
     @todo merge masked_region
     """
+    
     def __init__(self,masked_region,readcount,filter_parameters,autorun):
         self.masked_region = masked_region
         self.filter_parameters = filter_parameters

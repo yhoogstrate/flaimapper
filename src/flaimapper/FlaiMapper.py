@@ -36,7 +36,7 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-import os,re,operator,argparse,sys,logging,subprocess
+import logging
 
 import pysam
 
@@ -116,47 +116,11 @@ class FlaiMapper(FragmentContainer):
             logging.debug("     * Acquiring statistics")
             
             # BAM
-            aligned_reads = BAMParser(region[0],region[1],region[2],self.alignment)
+            aligned_reads = BAMParser(region,self.alignment)
             aligned_reads.parse_stats()
             
             logging.debug("     * Detecting fragments")
             
             predicted_fragments = FragmentFinder(region, aligned_reads, filter_parameters, True)
-            self.add_fragments(predicted_fragments, self.fasta_file)
-    
-    def find_closest_overlapping_fragment(self,annotated_fragment,predicted_fragments,reference_offset=0):
-        closest = False
-        closest_overlapping_bases = 0
-        for predicted_fragment in predicted_fragments:
-            #predicted = [(predicted_fragment["start"] - reference_offset), (predicted_fragment["stop"] - reference_offset),predicted_fragment.start_supporting_reads,predicted_fragment.stop_supporting_reads]
-            overlap = self.find_overlapping_bases([annotated_fragment.start,annotated_fragment.stop],[(predicted_fragment["start"] - reference_offset), (predicted_fragment["stop"] - reference_offset)])
-            if(overlap > 0 and overlap > closest_overlapping_bases):
-                closest_overlapping_bases = overlap
-                closest = predicted_fragment
-        
-        return closest
-    
-    def find_overlapping_bases(self,fragment_1,fragment_2):
-        if(fragment_2[0] < fragment_1[0]):
-            return self.find_overlapping_bases(fragment_2,fragment_1)
-        else:
-            return fragment_1[1] - fragment_2[0]
-    
-    def find_errors(self,annotated_fragment,predicted_fragment,reference_offset=0):
-        """
-        Example:
-               [ miRNA ]
-            [ fragment* ]
-        
-        mirna: 4,12
-        fragment: 0,14
-        
-        error_5p = 0 - 4 = -4
-        error_3p = 13 - 12 = 1
-        
-        """
-        
-        error_5p = predicted_fragment.start - annotated_fragment.start - reference_offset
-        error_3p = predicted_fragment.stop - annotated_fragment.stop - reference_offset
-        
-        return [error_5p,error_3p]
+            self.add_fragments(predicted_fragments, fasta_file)
+ 

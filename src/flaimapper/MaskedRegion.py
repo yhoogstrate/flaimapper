@@ -41,11 +41,12 @@ class MaskedRegion:
     """A masked region is a region masked in the reference genome to 
     indicate where ncRNAs are located.
     """
-    def __init__(self,name,start,stop):
-        self.name = name
+    def __init__(self,region):
+        self.region = region
+        #self.name = name
         
-        self.start = start
-        self.stop = stop
+        #self.start = start
+        #self.stop = stop
     
     def reset(self):
         self.start_positions = []
