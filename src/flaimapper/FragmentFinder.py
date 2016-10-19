@@ -59,12 +59,6 @@ class FragmentFinder:
         self.results = []
         
         if(autorun):
-            self.peaksStart = False
-            self.peaksStop = False
-            
-            self.correctedPeaksStart = False
-            self.correctedPeaksStop = False
-            
             self.run()
     
     def __iter__(self):
