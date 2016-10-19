@@ -114,13 +114,13 @@ class FragmentContainer():
                             fh.write(str(fragment.stop)+"\t")
                             
                             # Precursor
-                            fh.write(fragment.masked_region[0])
+                            fh.write(reference_sequence.masked_region.region[0])
                             
                             # Start in precursor
-                            fh.write("\t" + str(fragment.start-fragment.masked_region[1])+ "\t")
+                            fh.write("\t" + str(fragment.start-reference_sequence.masked_region.region[1])+ "\t")
                             
                             # End in precursor
-                            fh.write(str(fragment.stop-fragment.masked_region[1])+"\t")
+                            fh.write(str(fragment.stop-reference_sequence.masked_region.region[1])+"\t")
                             
                             # Sequence 
                             if(self.fasta_file):

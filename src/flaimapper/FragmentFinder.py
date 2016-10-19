@@ -59,12 +59,6 @@ class FragmentFinder:
         self.results = []
         
         if(autorun):
-            self.positions = {}
-            self.positions['startPositions'] = self.masked_region.start_positions
-            self.positions['stopPositions'] = self.masked_region.stop_positions
-            self.positions['startAvgLengths'] = self.masked_region.start_avg_lengths
-            self.positions['stopAvgLengths'] = self.masked_region.stop_avg_lengths
-            
             self.peaksStart = False
             self.peaksStop = False
             
@@ -78,6 +72,12 @@ class FragmentFinder:
             yield result
     
     def run(self):
+        self.positions = {}
+        self.positions['startPositions'] = self.masked_region.start_positions
+        self.positions['stopPositions'] = self.masked_region.stop_positions
+        self.positions['startAvgLengths'] = self.masked_region.start_avg_lengths
+        self.positions['stopAvgLengths'] = self.masked_region.stop_avg_lengths
+    
         # Finds peaks
         self.peaksStart = self.find_peaks(self.positions['startPositions']+[0])
         self.peaksStop = self.find_peaks(self.positions['stopPositions']+[0])
