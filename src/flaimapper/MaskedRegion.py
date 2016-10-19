@@ -36,12 +36,6 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-import os,re,operator,argparse,sys
-
-
-from flaimapper.Read import Read
-from flaimapper.ncRNAfragment import ncRNAfragment
-
 
 class MaskedRegion:
     """A masked region is a region masked in the reference genome to 
@@ -54,10 +48,11 @@ class MaskedRegion:
         self.stop = stop
     
     def reset(self):
-        self.sequence = False
-        
         self.start_positions = []
         self.stop_positions = []
+        
+        self.start_avg_lengths = []
+        self.stop_avg_lengths = []
     
     def parse_stats(self):
         self.reset()
@@ -88,9 +83,6 @@ class MaskedRegion:
             start_avg_lengths[read[0]][len_start] += 1
             stop_avg_lengths[read[1]][len_stop] += 1
         
-        self.start_avg_lengths = []
-        self.stop_avg_lengths = []
-        
         for i in range(len(stop_avg_lengths)):
             avgLenF = self.get_median_of_map(start_avg_lengths[i])
             avgLenR = self.get_median_of_map(stop_avg_lengths[i])
@@ -100,8 +92,6 @@ class MaskedRegion:
                 avgLenR = round(avgLenR-0.5)							# Why -0.5 -> because of rounding a negative number
             self.start_avg_lengths.append(avgLenF)
             self.stop_avg_lengths.append(avgLenR)
-        
-        return [self.start_positions,self.stop_positions,self.start_avg_lengths,self.stop_avg_lengths]
     
     def get_median_of_map(self,value_map):
         """
@@ -186,12 +176,3 @@ class MaskedRegion:
             return keys[0]
         else:
             return None
-    
-    def count_reads_per_region(self,fragments):							# @TODO change to 'sequencing_depth()'
-        for fragment in fragments:
-            fragment.supporting_reads = 0
-        
-        for read in self.parse_reads():
-            for fragment in fragments:
-                if(fragment.spans_read(read)):
-                    fragment.add_supporting_reads(1)

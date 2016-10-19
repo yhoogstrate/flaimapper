@@ -37,13 +37,8 @@
 """
 
 
-import os,re,operator,argparse,sys,subprocess
-import pysam
-from argparse import Namespace
-
-
-from flaimapper.ncRNAfragment import ncRNAfragment
 from flaimapper.MaskedRegion import MaskedRegion
+import pysam
 
 
 class BAMParser(MaskedRegion):
