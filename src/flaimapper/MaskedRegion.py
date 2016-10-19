@@ -103,36 +103,6 @@ class MaskedRegion:
         
         return [self.start_positions,self.stop_positions,self.start_avg_lengths,self.stop_avg_lengths]
     
-    def parse_reads_stacked(self,return_sorted = True):
-        if(return_sorted):
-            index = {}
-            for read in self.parse_reads():
-                if(not read.start in index.keys()):
-                    index[read.start] = {}
-                
-                if(read.stop in index[read.start].keys()):
-                    index[read.start][read.stop] += 1
-                else:
-                    index[read.start][read.stop] = 1
-            
-            for start in sorted(index.keys()):
-                for stop in sorted(index[start].keys()):
-                    yield [Read(start,stop,None),index[start][stop]]
-        else:
-            index = {}
-            for read in self.parse_reads():
-                if(not read.start in index.keys()):
-                    index[read.start] = {}
-                
-                if(read.stop in index[read.start].keys()):
-                    index[read.start][read.stop] += 1
-                else:
-                    index[read.start][read.stop] = 1
-            
-            for start in index.keys():
-                for stop in index[start].keys():
-                    yield [Read(start,stop,None),index[start][stop]]
-    
     def get_median_of_map(self,value_map):
         """
         input: 
