@@ -88,19 +88,6 @@ def parse_gff(gff_file):
     
     return regions
 
-def link_mirbase_to_ncrnadb09(mirbase,ncrnadb09):
-    links = {}
-    
-    for miRNA in mirbase.get_miRNAs():
-        for name in ncrnadb09:
-            if(name.lower().find("mir") > -1):
-                flaimapper_name_raw = name.split("HUGO-Symbol=")[1].split("&")[0]
-                
-                if(flaimapper_name_raw in miRNA.get_parameter("aliases")):
-                    links[name] = miRNA.params["name"]
-    
-    return links
-
 def parse_table(filename,column_reference=2,column_start=3, column_end=4, column_sequence=8):
     idx = {}
     k=0

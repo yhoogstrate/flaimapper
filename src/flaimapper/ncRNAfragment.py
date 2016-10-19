@@ -44,26 +44,8 @@ class ncRNAfragment:
         self.genomic_offset_masked_region = genomic_offset_masked_region
         
         self.masked_region = masked_region
-        self.sequence = None
         
         self.reset_supporting_reads()
-        self.extended = {}
-        self.evidence = None
-    
-    def get_sequence(self,fasta_handler=None):
-        if(self.sequence):
-            return self.sequence
-        else:
-            pass
-    
-    def set_sequence(self,sequence):
-        self.sequence = sequence
-    
-    def set_name(self,name):
-        self.name = name
-    
-    def set_evidence(self,evidence):
-        self.evidence = evidence
     
     def get_name(self):
         return self.name
