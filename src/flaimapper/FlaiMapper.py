@@ -397,33 +397,3 @@ class FlaiMapper(FragmentContainer):
         error_3p = predicted_fragment.stop - annotated_fragment.stop - reference_offset
         
         return [error_5p,error_3p]
-    
-    def convert_to_bed(self,regions,output):
-        logging.debug("   - Converting to BED: "+output)
-        
-        if(output == "-"):
-            fh = sys.stdout
-        else:
-            fh = open(output,"w")
-        
-        i = 0
-        
-        for region in regions:
-            logging.debug("   - Masked region: "+region[0]+":"+str(region[1])+"-"+str(region[2]))
-            
-            if(self.input_format == 'bam'):
-                aligned_reads = BAMParser(region[0],region[1],region[2],self.alignments)
-            elif(self.input_format == 'sslm'):
-                aligned_reads = SSLMParser(region[0],region[1],region[2],self.alignments)
-            
-            for read_stacked in aligned_reads.parse_reads_stacked():
-                read = read_stacked[0]
-                numberofhits = read_stacked[1]
-                
-                if(read.name):
-                    fh.write(region[0]+"\t"+str(read.start)+"\t"+str(read.stop)+"\t"+read.name+"\t"+str(numberofhits)+"\t-\n")
-                else:
-                    fh.write(region[0]+"\t"+str(read.start)+"\t"+str(read.stop)+"\tunknown_read_"+str(i)+"\t"+str(numberofhits)+"\t-\n")
-                    i += 1
-        
-        fh.close()

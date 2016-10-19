@@ -1,3 +1,8 @@
+2016-10-1y  Youri Hoogstrate
+* (v2.1.0) Reduction of memory footprint
+	  - Uses a different data structure and new method that estimates the median
+	    values in a much sparser way.
+
 2016-10-11  Youri Hoogstrate
 	* (v2.0.0) Large rewrite
 	  - Enable TravisCI for unit testing during further development
