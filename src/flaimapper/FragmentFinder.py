@@ -73,12 +73,12 @@ class FragmentFinder:
         self.positions['stopAvgLengths'] = self.masked_region.stop_avg_lengths
     
         # Finds peaks
-        self.peaksStart = self.find_peaks(self.positions['startPositions']+[0])
-        self.peaksStop = self.find_peaks(self.positions['stopPositions']+[0])
+        peaksStart = self.find_peaks(self.positions['startPositions']+[0])
+        peaksStop = self.find_peaks(self.positions['stopPositions']+[0])
         
         # Correct / filter noisy peaks
-        self.correctedPeaksStart = self.smooth_filter_peaks(self.peaksStart)
-        self.correctedPeaksStop = self.smooth_filter_peaks(self.peaksStop)
+        self.correctedPeaksStart = self.smooth_filter_peaks(peaksStart)
+        self.correctedPeaksStop = self.smooth_filter_peaks(peaksStop)
         
         # Trace start and stop positions together and obtain actual peaks
         self.results = self.find_fragments(self.correctedPeaksStart,self.correctedPeaksStop,self.positions['startAvgLengths'],self.positions['stopAvgLengths'])
@@ -96,11 +96,11 @@ class FragmentFinder:
         # Walk over list of [start/stop]-position counts:
         for pos in range(len(plist)):
             current = plist[pos]
-            if((current > previous) ):# and (current > (noise_type_alpha_cutoff/100.0*max(plist)))):  
+            if current > previous:# and (current > (noise_type_alpha_cutoff/100.0*max(plist)))):  
                 if current > highest:
                     highest = current
                     highestPos = pos
-            elif (current < previous):
+            elif current < previous:
                 #if (current < (drop_cutoff*highest)) and (highestPos != -1):
                 #if (current < (100.0*drop_cutoff*highest)) and (highestPos != -1):   #
                 #if (current < (10.0*highest)) and (highestPos != -1):   # 
