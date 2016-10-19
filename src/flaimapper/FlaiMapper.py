@@ -119,6 +119,7 @@ class FlaiMapper(FragmentContainer):
             aligned_reads.parse_stats()
             logging.debug("     * Detecting fragments")
             
-            fragments = FragmentFinder(aligned_reads, filter_parameters, True)
+            fragments = FragmentFinder(aligned_reads, filter_parameters)
+            fragments.run()
             self.add_fragments(fragments)
  

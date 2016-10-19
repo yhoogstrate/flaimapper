@@ -46,7 +46,7 @@ class FragmentFinder:
     """Class Flaimapper Finds fragments in alignment files.
     """
     
-    def __init__(self,masked_region,filter_parameters,autorun):
+    def __init__(self,masked_region,filter_parameters):
         #@todo Don't save this info indefinitely!!
         self.masked_region = masked_region
         self.filter_parameters = filter_parameters
@@ -57,24 +57,15 @@ class FragmentFinder:
         #         if output.format == gtf:
         #         fh.write(fragment.to_gtf())
         self.results = []
-        
-        if(autorun):
-            self.run()
     
     def __iter__(self):
         for result in self.results:
             yield result
     
     def run(self):
-        self.positions = {}
-        self.positions['startPositions'] = self.masked_region.start_positions
-        self.positions['stopPositions'] = self.masked_region.stop_positions
-        #self.positions['startAvgLengths'] = self.masked_region.start_avg_lengths
-        #self.positions['stopAvgLengths'] = self.masked_region.stop_avg_lengths
-    
         # Finds peaks
-        peaksStart = self.find_peaks(self.positions['startPositions']+[0])
-        peaksStop = self.find_peaks(self.positions['stopPositions']+[0])
+        peaksStart = self.find_peaks(self.masked_region.start_positions+[0])
+        peaksStop = self.find_peaks(self.masked_region.stop_positions+[0])
         
         # Correct / filter noisy peaks
         peaksStart = self.smooth_filter_peaks(peaksStart)
