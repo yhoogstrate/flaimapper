@@ -44,13 +44,18 @@ from flaimapper.ncRNAfragment import ncRNAfragment
 
 class FragmentFinder:
     """Class Flaimapper Finds fragments in alignment files.
-    
-    @todo merge masked_region
     """
     
     def __init__(self,masked_region,readcount,filter_parameters,autorun):
+        #@todo Don't save this info indefinitely!!
         self.masked_region = masked_region
         self.filter_parameters = filter_parameters
+        
+        #@todo yield only, disable autorun, incorporate into bamparser or something to get:
+        # for region in ...:
+        #     for fragment in region.find_fragments():
+        #         if output.format == gtf:
+        #         fh.write(fragment.to_gtf())
         self.results = []
         
         if(autorun):
@@ -118,7 +123,7 @@ class FragmentFinder:
         """Smooth filtering
         """
         
-        psorted = sorted(plist.iteritems(),key=operator.itemgetter(1))[::-1]
+        psorted = sorted(plist.iteritems(),key=operator.itemgetter(1),reverse=True)
         
         # There is a small mistake in the algorithm,
         # it should search not for ALL peaks
@@ -170,8 +175,7 @@ class FragmentFinder:
                     score = pstart[item]*penalty 
                     if(score >= highest):
                         highest = pstart[item]
-                        
-                        fragment = ncRNAfragment(item,pos,None,self.masked_region,genomic_offset_masked_region)
+                        fragment = ncRNAfragment(item,pos,self.masked_region)
                         fragment.supporting_reads_start = pstart[fragment.start]
                         fragment.supporting_reads_stop = pstop[fragment.stop]
                 
@@ -199,11 +203,7 @@ class FragmentFinder:
                     if(score >= highest):
                         highest = pstop[item]
                         
-                        #fragment = {'start':pos,'stop':item,'sequence':None}
-                        #fragment['start_supporting_reads'] = pstart[fragment.start]
-                        #fragment['stop_supporting_reads']  = pstop[fragment.stop]
-                        
-                        fragment = ncRNAfragment(pos,item,None,self.masked_region,genomic_offset_masked_region)
+                        fragment = ncRNAfragment(pos,item,self.masked_region)
                         fragment.supporting_reads_start = pstart[fragment.start]
                         fragment.supporting_reads_stop = pstop[fragment.stop]
                 
