@@ -38,7 +38,7 @@
 
 import flaimapper
 
-from distutils.core import setup
+#from distutils.core import setup
 from setuptools import setup, find_packages
 
 setup(name='flaimapper',
