@@ -45,23 +45,24 @@ from .FragmentFinder import FragmentFinder
 
 
 class FlaiMapper():
-    def __init__(self,alignment_file):
-        self.alignment = alignment_file
+    def __init__(self,settings):
+        self.settings = settings
+        self.settings.alignment_file = self.settings.alignment_file
         self.sequences = {}
         
         logging.info(" - Initiated FlaiMapper Object")
         
         try:
-            self.alignment.fetch()
+            self.settings.alignment_file.fetch()
         except:
-            logging.info(' - Indexing BAM file with samtools: '+self.alignment.filename)
-            pysam.index(self.alignment.filename)
-            self.alignment = pysam.AlignmentFile(self.alignment.filename)
+            logging.info(' - Indexing BAM file with samtools: '+self.settings.alignment_file.filename)
+            pysam.index(self.settings.alignment_file.filename)
+            self.settings.alignment_file = pysam.AlignmentFile(self.settings.alignment_file.filename)
         
         try:
-            self.alignment.fetch()
+            self.settings.alignment_file.fetch()
         except:
-            raise Exception('Couldn\'t indexing BAM file with samtools: '+self.alignment.filename+'\nAre you sure samtools is installed?\n')
+            raise Exception('Couldn\'t indexing BAM file with samtools: '+self.settings.alignment_file.filename+'\nAre you sure samtools is installed?\n')
 
     def __iter__(self):
         for uid in sorted(self.sequences.keys()):
@@ -89,11 +90,11 @@ class FlaiMapper():
         i_dist_r = abs(filter_parameters.right_padding)
         i_dist = i_dist_l + i_dist_r
         
-        for i in range(self.alignment.nreferences):
-            s_name = self.alignment.references[i]
+        for i in range(self.settings.alignment_file.nreferences):
+            s_name = self.settings.alignment_file.references[i]
             ss = [None,None]
             
-            for r in self.alignment.fetch(s_name):
+            for r in self.settings.alignment_file.fetch(s_name):
                 if len(r.blocks) > 0:
                     if ss[0] == None:
                         ss = [r.blocks[0][0],r.blocks[-1][1]-1]
@@ -110,21 +111,20 @@ class FlaiMapper():
             if ss[0] != None:
                 yield (s_name, max(0, ss[0] - i_dist_l - 1), max(0, ss[1] + i_dist_r + 1))
     
-    def run(self,fasta_file,filter_parameters):
+    def run(self):#,fasta_file,filter_parameters):
         logging.debug(" - Running fragment detection")
-        self.fasta_file = fasta_file
         
         i = 0
-        for region in self.regions(filter_parameters):
+        for region in self.regions(self.settings.parameters):#@todo remove argument - it's part of self/settings anyway
             logging.debug("   - Masked region: "+region[0]+":"+str(region[1])+"-"+str(region[2]))
             logging.debug("     * Acquiring statistics")
             
             # BAM
-            aligned_reads = BAMParser(region,self.alignment)
+            aligned_reads = BAMParser(region,self.settings.alignment_file)
             aligned_reads.parse_stats()
             logging.debug("     * Detecting fragments")
             
-            fragments = FragmentFinder(aligned_reads, filter_parameters)
+            fragments = FragmentFinder(aligned_reads, self.settings.parameters)
             fragments.run()
             self.add_fragments(fragments.results)
             i += len(fragments.results)
@@ -162,8 +162,7 @@ class FlaiMapper():
             else:
                 fh = open(filename,'w')
             
-            
-            if(self.fasta_file):
+            if(self.settings.fasta_handle):
                 fh.write("Fragment\tSize\tReference sequence\tStart\tEnd\tPrecursor\tStart in precursor\tEnd in precursor\tSequence (no fasta file given)\tCorresponding-reads (start)\tCorresponding-reads (end)\tCorresponding-reads (total)\n")
             else:
                 fh.write("Fragment\tSize\tReference sequence\tStart\tEnd\tPrecursor\tStart in precursor\tEnd in precursor\tSequence\tCorresponding-reads (start)\tCorresponding-reads (end)\tCorresponding-reads (total)\n")
@@ -181,9 +180,17 @@ class FlaiMapper():
                             i += 1
                             fragment = fragments_sorted_keys[key]
                             fragment_uid = 'FM_'+result[0].masked_region[0]+'_'+str(i).zfill(12)
-                            fh.write(fragment.to_table_entry(fragment_uid, result[0].masked_region, self.fasta_file))
+                            fh.write(fragment.to_table_entry(fragment_uid, result[0].masked_region, self.settings.fasta_handle))
             
             fh.close()
+    
+    def open_gtf(self,filename):
+        if(filename == "-"):
+            fh = sys.stdout
+        else:
+            fh = open(filename,'w')
+        
+        return fh
     
     def export_gtf(self,filename,offset5p,offset3p):
         if(filename == "-"):

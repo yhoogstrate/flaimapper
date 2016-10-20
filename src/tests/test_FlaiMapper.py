@@ -52,7 +52,7 @@ class TestFlaiMapper(unittest.TestCase):
         args.parameters.left_padding = 1
         args.parameters.right_padding = 1
         
-        flaimapper = FlaiMapper(args.alignment_file)
+        flaimapper = FlaiMapper(args)
         
         i = 0
         for region in flaimapper.regions(args.parameters):
@@ -85,7 +85,7 @@ class TestFlaiMapper(unittest.TestCase):
         self.assertEqual(args.parameters.left_padding, 7)
         self.assertEqual(args.parameters.right_padding, 7)
         
-        flaimapper = FlaiMapper(args.alignment_file)
+        flaimapper = FlaiMapper(args)
         
         i = 0
         for region in flaimapper.regions(args.parameters):
@@ -112,7 +112,7 @@ class TestFlaiMapper(unittest.TestCase):
         args.parameters.left_padding = 2
         args.parameters.right_padding = 2
         
-        flaimapper = FlaiMapper(args.alignment_file)
+        flaimapper = FlaiMapper(args)
         
         i = 0
         for region in flaimapper.regions(args.parameters):
@@ -143,7 +143,7 @@ class TestFlaiMapper(unittest.TestCase):
         args.parameters.left_padding = 3
         args.parameters.right_padding = 3
         
-        flaimapper = FlaiMapper(args.alignment_file)
+        flaimapper = FlaiMapper(args)
         
         i = 0
         for region in flaimapper.regions(args.parameters):
@@ -173,7 +173,7 @@ class TestFlaiMapper(unittest.TestCase):
         args.parameters.left_padding = 3
         args.parameters.right_padding = 4
         
-        flaimapper = FlaiMapper(args.alignment_file)
+        flaimapper = FlaiMapper(args)
         
         i = 0
         for region in flaimapper.regions(args.parameters):
@@ -198,7 +198,7 @@ class TestFlaiMapper(unittest.TestCase):
         args.parameters.left_padding = 4
         args.parameters.right_padding = 3
         
-        flaimapper = FlaiMapper(args.alignment_file)
+        flaimapper = FlaiMapper(args)
         
         i = 0
         for region in flaimapper.regions(args.parameters):
@@ -223,7 +223,7 @@ class TestFlaiMapper(unittest.TestCase):
         args.parameters.left_padding = 4
         args.parameters.right_padding = 4
         
-        flaimapper = FlaiMapper(args.alignment_file)
+        flaimapper = FlaiMapper(args)
         
         i = 0
         for region in flaimapper.regions(args.parameters):
@@ -247,11 +247,10 @@ class TestFlaiMapper(unittest.TestCase):
         fname = 'test_FlaiMapper_test_02_output.gtf'
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,'--verbose'])
         
-        flaimapper = FlaiMapper(args.alignment_file)
+        flaimapper = FlaiMapper(args)
         
         # Run analysis
-        flaimapper.run(args.fasta_handle,args.parameters)
-
+        flaimapper.run()
         flaimapper.write(args.format, args.output, 4, 4)
         
         # assert Contents:
@@ -263,13 +262,11 @@ class TestFlaiMapper(unittest.TestCase):
         fname = 'test_FlaiMapper_test_02b_output.gtf'
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,'--verbose'])
         
-        flaimapper = FlaiMapper(args.alignment_file)
+        flaimapper = FlaiMapper(args)
         
         # Run analysis
-        flaimapper.run(args.fasta_handle,args.parameters)
-        
-        # Test if changing the offset changes the outcome - should be different result file than the test above
-        flaimapper.write(args.format, args.output, 5, 5)
+        flaimapper.run()#
+        flaimapper.write(args.format, args.output, 5, 5)# Test if changing the offset changes the outcome - should be different result file than the test above
         
         # assert Contents:
         assertion = (not filecmp.cmp(fname , TESTS_FLAIMAPPER_TEST_02_OUTPUT_GTF))
@@ -282,11 +279,10 @@ class TestFlaiMapper(unittest.TestCase):
         fname = 'test_FlaiMapper_test_03_output.txt'
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,"-f","1",'--verbose'])
         
-        flaimapper = FlaiMapper(args.alignment_file)
+        flaimapper = FlaiMapper(args)
         
         # Run analysis
-        flaimapper.run(args.fasta_handle,args.parameters)
-
+        flaimapper.run()
         flaimapper.write(args.format, args.output, 4, 4)
         
         # assert Contents:
@@ -300,11 +296,10 @@ class TestFlaiMapper(unittest.TestCase):
         fname = 'test_FlaiMapper_test_03_fa_output.txt'
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,"-f","1","--fasta",TESTS_FLAIMAPPER_FA,'--verbose'])
         
-        flaimapper = FlaiMapper(args.alignment_file)
+        flaimapper = FlaiMapper(args)
         
         # Run analysis
-        flaimapper.run(args.fasta_handle,args.parameters)
-
+        flaimapper.run()
         flaimapper.write(args.format, args.output, 4, 4)
         
         # assert Contents:
@@ -317,7 +312,7 @@ class TestFlaiMapper(unittest.TestCase):
     def test_04_a(self):
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'--verbose'])
         
-        fm = FlaiMapper(args.alignment_file)
+        fm = FlaiMapper(args)
         
         # First check whether it's looking in the right regions
         i = 0
@@ -337,7 +332,7 @@ class TestFlaiMapper(unittest.TestCase):
         
         # Then detect the fragments
         i = 0
-        fm.run(args.fasta_handle,args.parameters)
+        fm.run()
         for fragment in fm:
             if i == 0:
                 self.assertEqual(fragment.masked_region[0], 'chr1')
@@ -359,7 +354,7 @@ class TestFlaiMapper(unittest.TestCase):
     def test_04_b(self):
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'-p',TESTS_FUNCTIONAL_DUCK7_PARAMS,'--verbose'])
         
-        fm = FlaiMapper(args.alignment_file)
+        fm = FlaiMapper(args)
         
         # First check whether it's looking in the right regions
         i = 0
@@ -382,7 +377,7 @@ class TestFlaiMapper(unittest.TestCase):
         
         # Then detect the fragments
         i = 0
-        fm.run(args.fasta_handle,args.parameters)
+        fm.run()
         for fragment in fm:
             if i == 0:
                 self.assertEqual(fragment.masked_region[0], 'chr1')
@@ -407,7 +402,7 @@ class TestFlaiMapper(unittest.TestCase):
         """
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'-p',TESTS_FUNCTIONAL_DUCK26_PARAMS,'--verbose'])
         
-        fm = FlaiMapper(args.alignment_file)
+        fm = FlaiMapper(args)
         
         # First check whether it's looking in the right regions
         i = 0
@@ -429,7 +424,7 @@ class TestFlaiMapper(unittest.TestCase):
         
         # Then detect the fragments
         i = 0
-        fm.run(args.fasta_handle,args.parameters)
+        fm.run()
         for fragment in fm:
             if i == 0:
                 self.assertEqual(fragment.masked_region[0], 'chr1')

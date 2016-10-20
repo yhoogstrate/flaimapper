@@ -40,7 +40,7 @@
 import flaimapper
 
 
-class ncRNAfragment:
+class ncRNAFragment:
     def __init__(self,start,stop,masked_region):
         self.start = start
         self.stop = stop

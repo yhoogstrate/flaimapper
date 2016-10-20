@@ -39,7 +39,7 @@
 
 import operator
 
-from .ncRNAfragment import ncRNAfragment
+from .ncRNAFragment import ncRNAFragment
 
 
 class FragmentFinder:
@@ -164,7 +164,7 @@ class FragmentFinder:
                     score = pstart[item]*penalty 
                     if(score >= highest):
                         highest = pstart[item]
-                        fragment = ncRNAfragment(item,pos,self.masked_region.region)
+                        fragment = ncRNAFragment(item,pos,self.masked_region.region)
                         fragment.supporting_reads_start = pstart[fragment.start]
                         fragment.supporting_reads_stop = pstop[fragment.stop]
                 
@@ -192,7 +192,7 @@ class FragmentFinder:
                     if(score >= highest):
                         highest = pstop[item]
                         
-                        fragment = ncRNAfragment(pos,item,self.masked_region.region)
+                        fragment = ncRNAFragment(pos,item,self.masked_region.region)
                         fragment.supporting_reads_start = pstart[fragment.start]
                         fragment.supporting_reads_stop = pstop[fragment.stop]
                 
