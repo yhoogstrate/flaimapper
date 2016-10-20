@@ -53,11 +53,13 @@ class FragmentContainer():
     #@tofo get rid of inserting fasta_file HERE 
     def add_fragments(self,fragment_finder_results):
         #for fragment in fragment_finder_results.results:
-        uid = fragment_finder_results.masked_region.region[0]+"_"+str(fragment_finder_results.masked_region.region[1])+"_"+str(fragment_finder_results.masked_region.region[2])
-        if(uid not in self.sequences.keys()):
-            self.sequences[uid] = []
-        
-        self.sequences[uid].append(fragment_finder_results)
+        if len(fragment_finder_results) > 0:
+            region = fragment_finder_results[0].masked_region
+            uid = region[0]+"_"+str(region[1])+"_"+str(region[2])
+            if(uid not in self.sequences.keys()):
+                self.sequences[uid] = []
+            
+            self.sequences[uid].append(fragment_finder_results)
     
     def export_table(self,filename):
         """Exports the discovered fragments to a tab-delimited file.
@@ -85,10 +87,9 @@ class FragmentContainer():
                 fh.write("Fragment\tSize\tReference sequence\tStart\tEnd\tPrecursor\tStart in precursor\tEnd in precursor\tSequence\tCorresponding-reads (start)\tCorresponding-reads (end)\tCorresponding-reads (total)\n")
             
             for uid in sorted(self.sequences.keys()):
-                for reference_sequence in self.sequences[uid]:
-                    name = reference_sequence.masked_region.region[0]
-                    result = reference_sequence.results
-                    if(result):
+                for result in self.sequences[uid]:
+                    if result:
+                        name = result[0].masked_region[0]
                         fragments_sorted_keys = {}
                         for fragment in result:
                             fragments_sorted_keys[fragment.start] = fragment
@@ -114,13 +115,13 @@ class FragmentContainer():
                             fh.write(str(fragment.stop)+"\t")
                             
                             # Precursor
-                            fh.write(reference_sequence.masked_region.region[0])
+                            fh.write(name)
                             
                             # Start in precursor
-                            fh.write("\t" + str(fragment.start-reference_sequence.masked_region.region[1])+ "\t")
+                            fh.write("\t" + str(fragment.start-fragment.masked_region[1])+ "\t")
                             
                             # End in precursor
-                            fh.write(str(fragment.stop-reference_sequence.masked_region.region[1])+"\t")
+                            fh.write(str(fragment.stop-fragment.masked_region[1])+"\t")
                             
                             # Sequence 
                             if(self.fasta_file):
@@ -146,11 +147,9 @@ class FragmentContainer():
             fh = open(filename,'w')
         
         for uid in sorted(self.sequences.keys()):
-            for reference_sequence in self.sequences[uid]:
-                name = reference_sequence.masked_region.region[0]
-                result = reference_sequence.results
-                
-                if(result):
+            for result in self.sequences[uid]:
+                if result:
+                    name = result[0].masked_region[0]
                     fragments_sorted_keys = {}
                     for fragment in result:
                         fragments_sorted_keys[fragment.start] = fragment

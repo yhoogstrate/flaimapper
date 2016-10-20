@@ -121,5 +121,4 @@ class FlaiMapper(FragmentContainer):
             
             fragments = FragmentFinder(aligned_reads, filter_parameters)
             fragments.run()
-            self.add_fragments(fragments)
- 
+            self.add_fragments(fragments.results)

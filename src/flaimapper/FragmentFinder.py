@@ -78,8 +78,6 @@ class FragmentFinder:
         
             self.masked_region.start_avg_lengths,
             self.masked_region.stop_avg_lengths)
-        
-        return True
     
     def find_peaks(self,plist,drop_cutoff=0.1):
         # Define variables:
@@ -107,12 +105,13 @@ class FragmentFinder:
                     highest = 0
             
             previous = current
+        
         return peaks
     
     def smooth_filter_peaks(self,plist):
         """Smooth filtering
         """
-
+        
         psorted = sorted(plist.iteritems(),key=operator.itemgetter(1),reverse=True)
         
         # There is a small mistake in the algorithm,
@@ -193,7 +192,7 @@ class FragmentFinder:
                     if(score >= highest):
                         highest = pstop[item]
                         
-                        fragment = ncRNAfragment(pos,item,self.masked_region)
+                        fragment = ncRNAfragment(pos,item,self.masked_region.region)
                         fragment.supporting_reads_start = pstart[fragment.start]
                         fragment.supporting_reads_stop = pstop[fragment.stop]
                 
