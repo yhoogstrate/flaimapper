@@ -47,7 +47,6 @@ from .FragmentFinder import FragmentFinder
 class FlaiMapper():
     def __init__(self,settings):
         self.settings = settings
-        self.settings.alignment_file = self.settings.alignment_file
         self.sequences = {}
         
         logging.info(" - Initiated FlaiMapper Object")
@@ -143,60 +142,49 @@ class FlaiMapper():
             
             self.sequences[uid].append(fragment_finder_results)
     
-    def export_table(self,filename):
-        """Exports the discovered fragments to a tab-delimited file.
+    def export_table(self):
+        fh = self.open_table()
         
-        The following format is exported:
+        for uid in sorted(self.sequences.keys()):
+            for result in self.sequences[uid]:
+                if result:
+                    name = result[0].masked_region[0]
+                    fragments_sorted_keys = {}
+                    for fragment in result:
+                        fragments_sorted_keys[fragment.start] = fragment
+                    
+                    i = 0
+                    for key in sorted(fragments_sorted_keys.keys()):	# Walk over i in the for-loop:
+                        i += 1
+                        fragment = fragments_sorted_keys[key]
+                        fragment_uid = 'FM_'+result[0].masked_region[0]+'_'+str(i).zfill(12)
+                        fh.write(fragment.to_table_entry(fragment_uid, result[0].masked_region, self.settings.fasta_handle))
         
-        ----
-        @param filename The target file.
-        
-        @return:
-        @rtype:
-        """
-        if(not self.sequences):
-            logging.warning("     * Warning: no fragments detected")
-        else:
-            if(filename == "-"):
-                fh = sys.stdout
-            else:
-                fh = open(filename,'w')
-            
-            if(self.settings.fasta_handle):
-                fh.write("Fragment\tSize\tReference sequence\tStart\tEnd\tPrecursor\tStart in precursor\tEnd in precursor\tSequence (no fasta file given)\tCorresponding-reads (start)\tCorresponding-reads (end)\tCorresponding-reads (total)\n")
-            else:
-                fh.write("Fragment\tSize\tReference sequence\tStart\tEnd\tPrecursor\tStart in precursor\tEnd in precursor\tSequence\tCorresponding-reads (start)\tCorresponding-reads (end)\tCorresponding-reads (total)\n")
-            
-            for uid in sorted(self.sequences.keys()):
-                for result in self.sequences[uid]:
-                    if result:
-                        name = result[0].masked_region[0]
-                        fragments_sorted_keys = {}
-                        for fragment in result:
-                            fragments_sorted_keys[fragment.start] = fragment
-                        
-                        i = 0
-                        for key in sorted(fragments_sorted_keys.keys()):	# Walk over i in the for-loop:
-                            i += 1
-                            fragment = fragments_sorted_keys[key]
-                            fragment_uid = 'FM_'+result[0].masked_region[0]+'_'+str(i).zfill(12)
-                            fh.write(fragment.to_table_entry(fragment_uid, result[0].masked_region, self.settings.fasta_handle))
-            
-            fh.close()
-    
-    def open_gtf(self,filename):
-        if(filename == "-"):
+        fh.close()
+
+    def open_gtf(self):
+        if(self.settings.output == "-"):
             fh = sys.stdout
         else:
-            fh = open(filename,'w')
+            fh = open(self.settings.output,'w')
         
         return fh
     
-    def export_gtf(self,filename,offset5p,offset3p):
-        if(filename == "-"):
+    def open_table(self):
+        if(self.settings.output == "-"):
             fh = sys.stdout
         else:
-            fh = open(filename,'w')
+            fh = open(self.settings.output,'w')
+        
+        if(self.settings.fasta_handle):
+            fh.write("Fragment\tSize\tReference sequence\tStart\tEnd\tPrecursor\tStart in precursor\tEnd in precursor\tSequence (no fasta file given)\tCorresponding-reads (start)\tCorresponding-reads (end)\tCorresponding-reads (total)\n")
+        else:
+            fh.write("Fragment\tSize\tReference sequence\tStart\tEnd\tPrecursor\tStart in precursor\tEnd in precursor\tSequence\tCorresponding-reads (start)\tCorresponding-reads (end)\tCorresponding-reads (total)\n")
+        
+        return fh
+
+    def export_gtf(self,offset5p,offset3p):
+        fh = self.open_gtf()
         
         for uid in sorted(self.sequences.keys()):
             for result in self.sequences[uid]:
@@ -220,7 +208,7 @@ class FlaiMapper():
         
         if(export_format == 1):
             logging.info("   - Format: tab-delimited, per fragment")
-            self.export_table(output_filename)
+            self.export_table()
         elif(export_format == 2):
             logging.info("   - Format: GTF")
-            self.export_gtf(output_filename,offset5p,offset3p)
+            self.export_gtf(offset5p,offset3p)
