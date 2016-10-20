@@ -38,12 +38,9 @@
 
 import logging
 
-import pysam
-
-from flaimapper.BAMParser import BAMParser
-from flaimapper.SSLMParser import SSLMParser
-from flaimapper.FragmentContainer import FragmentContainer
-from flaimapper.FragmentFinder import FragmentFinder
+from .BAMParser import BAMParser
+from .FragmentContainer import FragmentContainer
+from .FragmentFinder import FragmentFinder
 
 
 class FlaiMapper(FragmentContainer):

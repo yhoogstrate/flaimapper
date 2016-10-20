@@ -37,9 +37,7 @@
 """
 
 
-import os,re,operator,argparse,sys,logging
-import pysam
-
+import logging
 import flaimapper
 
 

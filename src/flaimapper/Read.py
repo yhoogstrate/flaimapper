@@ -36,10 +36,12 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-# @TODO figure out how this can be integrated with or replaced by the "AlignedRead"-class from the pysam library
 
 class Read:
-    def __init__(self,start,stop,name=None,sequence=None):
+    """
+    Describes an aligned read as part of SSLM data
+    """
+    def __init__(self,start,stop,name,sequence):
         self.start = start
         self.stop = stop
         self.name = name
