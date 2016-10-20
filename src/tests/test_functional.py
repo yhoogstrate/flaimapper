@@ -126,7 +126,7 @@ class TestFunctional(unittest.TestCase):
         shutil.rmtree(samplename)
         
         self.assertTrue(assertion1,"Too many discrepancies with original results were found: %i non tRNA mispredictions" % mm)
-        self.assertTrue(assertion2,"Too many discrepancies with original results were found: %i non tRNA mispredictions" % mm)# Latesr versions of FlaiMapper take into account the very last base as well, even if it's longer than the actual sequence length. This in particularly affected the results of tRNAs (due to CCA) 
+        self.assertTrue(assertion2,"Too many discrepancies with original results were found: %i non tRNA mispredictions" % mm)# Latest versions of FlaiMapper take into account the very last base as well, even if it's longer than the actual sequence length. This in particularly affected the results of tRNAs (due to CCA) 
         self.assertTrue(assertion3,"Too many discrepancies with original results were found; only: %d percent" % success)
 
     def test_04(self):

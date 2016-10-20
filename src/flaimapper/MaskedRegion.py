@@ -142,36 +142,29 @@ class MaskedRegion:
     def predict_fragments(self):
         def step_01__parse_stats():
             logging.debug("     * Acquiring statistics")
+            n = self.region[2]-self.region[1]+1# both zero based; 0-0=0 while that should be 1, so 0-0+1=1
             
-            self_start_positions = []
-            self_stop_positions = []
+            self_start_positions = [0]*n
+            self_stop_positions = [0]*n
             
-            tmp_start_avg_lengths = []
-            tmp_stop_avg_lengths = []
+            tmp_start_avg_lengths = [{}]*n
+            tmp_stop_avg_lengths = [{}]*n
             
             for read in BAMParser(self.region,self.settings.alignment_file):
-                while(len(self_start_positions) < read[1]+1):				# Fix since 1.1.0: automatically scale  vector up if alignment falls outside range reference annotation
-                    self_start_positions.append(0)
-                    self_stop_positions.append(0)
-                    
-                    tmp_start_avg_lengths.append({})# Do an aggregated vector {21:10243} for 10243 observations of length 21
-                    tmp_stop_avg_lengths.append({})
-                
-                self_start_positions[read[0]] += 1
-                self_stop_positions[read[1]] += 1
+                self_start_positions[read[0]-self.region[1]] += 1
+                self_stop_positions[read[1]-self.region[1]] += 1
                 
                 len_start = read[1]-read[0]
                 len_stop = read[0]-read[1]
                 
-                if not tmp_start_avg_lengths[read[0]].has_key(len_start):
-                    tmp_start_avg_lengths[read[0]][len_start] = 0
+                if not tmp_start_avg_lengths[read[0]-self.region[1]].has_key(len_start):
+                    tmp_start_avg_lengths[read[0]-self.region[1]][len_start] = 0
                 
-                if not tmp_stop_avg_lengths[read[1]].has_key(len_stop):
-                    tmp_stop_avg_lengths[read[1]][len_stop] = 0
+                if not tmp_stop_avg_lengths[read[1]-self.region[1]].has_key(len_stop):
+                    tmp_stop_avg_lengths[read[1]-self.region[1]][len_stop] = 0
                 
-                tmp_start_avg_lengths[read[0]][len_start] += 1
-                tmp_stop_avg_lengths[read[1]][len_stop] += 1
-            
+                tmp_start_avg_lengths[read[0]-self.region[1]][len_start] += 1
+                tmp_stop_avg_lengths[read[1]-self.region[1]][len_stop] += 1
             
             # Calc medians
             self_start_avg_lengths = []
@@ -182,9 +175,9 @@ class MaskedRegion:
                 avgLenR = self.get_median_of_map(tmp_stop_avg_lengths[i])
                 
                 if(avgLenF):
-                    avgLenF = round(avgLenF+1)
+                    avgLenF = int(round(avgLenF+1))
                 if(avgLenR):
-                    avgLenR = round(avgLenR-0.5)							# Why -0.5 -> because of rounding a negative number
+                    avgLenR = int(round(avgLenR-0.5))							# Why -0.5 -> because of rounding a negative number
                 
                 self_start_avg_lengths.append(avgLenF)
                 self_stop_avg_lengths.append(avgLenR)
@@ -277,7 +270,7 @@ class MaskedRegion:
                         score = pstart[item]*penalty 
                         if(score >= highest):
                             highest = pstart[item]
-                            fragment = ncRNAFragment(self.region[0],item,pos)
+                            fragment = ncRNAFragment(item,pos)
                             fragment.supporting_reads_start = pstart[fragment.start]
                             fragment.supporting_reads_stop = pstop[fragment.stop]
                     
@@ -305,7 +298,7 @@ class MaskedRegion:
                         if(score >= highest):
                             highest = pstop[item]
                             
-                            fragment = ncRNAFragment(self.region[0],pos,item)
+                            fragment = ncRNAFragment(pos,item)
                             fragment.supporting_reads_start = pstart[fragment.start]
                             fragment.supporting_reads_stop = pstop[fragment.stop]
                     

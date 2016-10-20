@@ -41,8 +41,7 @@ import flaimapper
 
 
 class ncRNAFragment:
-    def __init__(self,reference,start,stop):
-        self.reference = reference
+    def __init__(self,start,stop):
         self.start = start
         self.stop = stop
         
@@ -50,7 +49,7 @@ class ncRNAFragment:
         self.supporting_reads_start = 0		# The reads with the start-position aligned exactly to the 5' of the fragment
         self.supporting_reads_stop = 0		# The reads with the end-position aligned exactly to the 3' of the fragment
     
-    def to_gtf_entry(self, uid, type_exon_offset5p, type_exon_offset3p):
+    def to_gtf_entry(self, uid, masked_region, type_exon_offset5p, type_exon_offset3p):
         ## Line 1: type sncdRNA
         out_str = ("%s\t" # Reference
                    "flaimapper-v%s\t" # Source
@@ -60,10 +59,10 @@ class ncRNAFragment:
                    "%i\t"# Score
                    ".\t.\t"# Strand and Frame
                    'gene_id "%s"\n' # Attributes (gene_id only)
-                   ) % (self.reference,
+                   ) % (masked_region.region[0],
                         flaimapper.__version__,
-                        self.start+1,
-                        self.stop+1,
+                        masked_region.region[1] + self.start + 1,
+                        masked_region.region[1] + self.stop  + 1,
                         self.supporting_reads_stop+self.supporting_reads_start,
                         uid)
         
@@ -76,10 +75,10 @@ class ncRNAFragment:
                     "%i\t"# Score
                     ".\t.\t"# Strand and Frame
                     'gene_id "%s"\n' # Attributes (gene_id only)
-                    ) % (self.reference,
+                    ) % (masked_region.region[0],
                          flaimapper.__version__,
-                         max(1,self.start+1-type_exon_offset5p),
-                         max(1,self.stop+1+type_exon_offset3p),
+                         max(1,masked_region.region[1] + self.start + 1 - type_exon_offset5p),
+                         max(1,masked_region.region[1] + self.stop  + 1 + type_exon_offset3p),
                          self.supporting_reads_stop+self.supporting_reads_start,
                          uid)
         
@@ -100,13 +99,13 @@ class ncRNAFragment:
                    "%i\n"
                    ) % (uid,
                         self.stop - self.start + 1,
-                        self.reference,
+                        masked_region.region[0],
+                        masked_region.region[1] + self.start,
+                        masked_region.region[1] + self.stop,
+                        masked_region.region[0],
                         self.start,
                         self.stop,
-                        self.reference,
-                        self.start-masked_region.region[1],
-                        self.stop-masked_region.region[1],
-                        fasta_file.fetch(self.reference,self.start,self.stop+1) if fasta_file else '',
+                        fasta_file.fetch(masked_region.region[0],masked_region.region[1] + self.start,masked_region.region[1] + self.stop+1) if fasta_file else '',
                         self.supporting_reads_start,
                         self.supporting_reads_stop,
                         self.supporting_reads_stop+self.supporting_reads_start)

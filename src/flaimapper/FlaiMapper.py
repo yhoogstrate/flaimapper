@@ -128,7 +128,7 @@ class FlaiMapper():
                 if(self.settings.format == 1):
                     fh.write(fragment.to_table_entry(fragment_uid, region, self.settings.fasta_handle))
                 elif(self.settings.format == 2):
-                    fh.write(fragment.to_gtf_entry(fragment_uid, self.settings.offset5p, self.settings.offset3p))
+                    fh.write(fragment.to_gtf_entry(fragment_uid, region, self.settings.offset5p, self.settings.offset3p))
             
             k += i
         

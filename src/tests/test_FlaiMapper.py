@@ -285,11 +285,9 @@ class TestFlaiMapper(unittest.TestCase):
         flaimapper.run()
         
         # assert Contents:
-        assertion = filecmp.cmp(fname , TESTS_FLAIMAPPER_TEST_03_a_OUTPUT_TXT)
-        self.assertTrue(assertion)
-        
-        if assertion:
-            os.remove(fname)
+        self.assertTrue(filecmp.cmp(TESTS_FLAIMAPPER_TEST_03_a_OUTPUT_TXT, fname),msg="diff '"+TESTS_FLAIMAPPER_TEST_03_a_OUTPUT_TXT+"' '"+fname+"':\n"+subprocess.Popen(['diff',TESTS_FLAIMAPPER_TEST_03_a_OUTPUT_TXT,fname], stdout=subprocess.PIPE).stdout.read())
+
+        os.remove(fname)
     
     def test_03_b(self):
         fname = 'test_FlaiMapper_test_03_fa_output.txt'
@@ -301,11 +299,9 @@ class TestFlaiMapper(unittest.TestCase):
         flaimapper.run()
         
         # assert Contents:
-        assertion = filecmp.cmp(fname , TESTS_FLAIMAPPER_TEST_03_b_OUTPUT_TXT)
-        self.assertTrue(assertion)
+        self.assertTrue(filecmp.cmp(TESTS_FLAIMAPPER_TEST_03_b_OUTPUT_TXT, fname),msg="diff '"+TESTS_FLAIMAPPER_TEST_03_b_OUTPUT_TXT+"' '"+fname+"':\n"+subprocess.Popen(['diff',TESTS_FLAIMAPPER_TEST_03_b_OUTPUT_TXT,fname], stdout=subprocess.PIPE).stdout.read())
         
-        if assertion:
-            os.remove(fname)
+        os.remove(fname)
 
     def test_04_a(self):
         args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,'--verbose'])
@@ -333,17 +329,14 @@ class TestFlaiMapper(unittest.TestCase):
         for region in fm:
             for fragment in region:
                 if i == 0:
-                    self.assertEqual(fragment.reference, 'chr1')
-                    self.assertEqual(fragment.start, 13)
-                    self.assertEqual(fragment.stop, 36)
+                    self.assertEqual(region.region[1] + fragment.start, 13)
+                    self.assertEqual(region.region[1] + fragment.stop, 36)
                 elif i == 1:
-                    self.assertEqual(fragment.reference, 'chr1')
-                    self.assertEqual(fragment.start, 43)
-                    self.assertEqual(fragment.stop, 62)
+                    self.assertEqual(region.region[1] + fragment.start, 43)
+                    self.assertEqual(region.region[1] + fragment.stop, 62)
                 elif i == 2:
-                    self.assertEqual(fragment.reference, 'chr2')
-                    self.assertEqual(fragment.start, 54)
-                    self.assertEqual(fragment.stop, 79)
+                    self.assertEqual(region.region[1] + fragment.start, 54)
+                    self.assertEqual(region.region[1] + fragment.stop, 79)
                 else:
                     self.asserTrue(False,"Race condition?")
                 i += 1
@@ -378,17 +371,14 @@ class TestFlaiMapper(unittest.TestCase):
         for region in fm:
             for fragment in region:
                 if i == 0:
-                    self.assertEqual(fragment.reference, 'chr1')
-                    self.assertEqual(fragment.start, 13)
-                    self.assertEqual(fragment.stop, 36)
+                    self.assertEqual(region.region[1] + fragment.start, 13)
+                    self.assertEqual(region.region[1] + fragment.stop, 36)
                 elif i == 1:
-                    self.assertEqual(fragment.reference, 'chr1')
-                    self.assertEqual(fragment.start, 43)
-                    self.assertEqual(fragment.stop, 62)
+                    self.assertEqual(region.region[1] + fragment.start, 43)
+                    self.assertEqual(region.region[1] + fragment.stop, 62)
                 elif i == 2:
-                    self.assertEqual(fragment.reference, 'chr2')
-                    self.assertEqual(fragment.start, 54)
-                    self.assertEqual(fragment.stop, 79)
+                    self.assertEqual(region.region[1] + fragment.start, 54)
+                    self.assertEqual(region.region[1] + fragment.stop, 79)
                 else:
                     self.asserTrue(False,"Race condition?")
                 i += 1
@@ -426,13 +416,11 @@ class TestFlaiMapper(unittest.TestCase):
         for region in fm:
             for fragment in region:
                 if i == 0:
-                    self.assertEqual(fragment.reference, 'chr1')
-                    self.assertEqual(fragment.start, 13)
-                    self.assertEqual(fragment.stop, 36)
+                    self.assertEqual(region.region[1] + fragment.start, 13)
+                    self.assertEqual(region.region[1] + fragment.stop, 36)
                 elif i == 1:
-                    self.assertEqual(fragment.reference, 'chr2')
-                    self.assertEqual(fragment.start, 54)
-                    self.assertEqual(fragment.stop, 79)
+                    self.assertEqual(region.region[1] + fragment.start, 54)
+                    self.assertEqual(region.region[1] + fragment.stop, 79)
                 else:
                     self.asserTrue(False,"Race condition?")
                 i += 1
