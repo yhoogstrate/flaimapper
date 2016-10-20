@@ -37,12 +37,76 @@
 """
 
 
+import flaimapper
+
+
 class ncRNAfragment:
     def __init__(self,start,stop,masked_region):
         self.start = start
         self.stop = stop
         self.masked_region = masked_region
         
-        self.supporting_reads = 0					# all reads in-between the fragment
-        self.supporting_reads_start = 0				# The reads with the start-position aligned exactly to the 5' of the fragment
-        self.supporting_reads_stop = 0				# The reads with the end-position aligned exactly to the 3' of the fragment
+        self.supporting_reads = 0			# all reads in-between the fragment
+        self.supporting_reads_start = 0		# The reads with the start-position aligned exactly to the 5' of the fragment
+        self.supporting_reads_stop = 0		# The reads with the end-position aligned exactly to the 3' of the fragment
+    
+    def to_gtf_entry(self, uid, masked_region, type_exon_offset5p, type_exon_offset3p):
+        ## Line 1: type sncdRNA
+        out_str = ("%s\t" # Reference
+                   "flaimapper-v%s\t" # Source
+                   "sncdRNA\t"
+                   "%i\t"# Start
+                   "%i\t"# End
+                   "%i\t"# Score
+                   ".\t.\t"# Strand and Frame
+                   'gene_id "%s"\n' # Attributes (gene_id only)
+                   ) % (masked_region[0],
+                        flaimapper.__version__,
+                        self.start+1,
+                        self.stop+1,
+                        self.supporting_reads_stop+self.supporting_reads_start,
+                        uid)
+        
+        ## Line 2: type exon, with offset used for counting in e.g. HTSeq-count / featureCounts
+        out_str += ("%s\t" # Reference
+                    "flaimapper-v%s\t" # Source
+                    "exon\t"
+                    "%i\t"# Start
+                    "%i\t"# End
+                    "%i\t"# Score
+                    ".\t.\t"# Strand and Frame
+                    'gene_id "%s"\n' # Attributes (gene_id only)
+                    ) % (masked_region[0],
+                         flaimapper.__version__,
+                         max(1,self.start+1-type_exon_offset5p),
+                         max(1,self.stop+1+type_exon_offset3p),
+                         self.supporting_reads_stop+self.supporting_reads_start,
+                         uid)
+        
+        return out_str
+    
+    def to_table_entry(self, uid, masked_region, fasta_file):
+        return ("%s\t"
+                   "%i\t"
+                   "%s\t"
+                   "%i\t"
+                   "%i\t"
+                   "%s\t"
+                   "%i\t"
+                   "%i\t"
+                   "%s\t"
+                   "%i\t"
+                   "%i\t"
+                   "%i\n"
+                   ) % (uid,
+                        self.stop - self.start + 1,
+                        masked_region[0],
+                        self.start,
+                        self.stop,
+                        masked_region[0],
+                        self.start-masked_region[1],
+                        self.stop-masked_region[1],
+                        fasta_file.fetch(masked_region[0],self.start,self.stop+1) if fasta_file else '',
+                        self.supporting_reads_start,
+                        self.supporting_reads_stop,
+                        self.supporting_reads_stop+self.supporting_reads_start)

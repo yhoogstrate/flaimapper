@@ -114,6 +114,7 @@ class FlaiMapper():
         logging.debug(" - Running fragment detection")
         self.fasta_file = fasta_file
         
+        i = 0
         for region in self.regions(filter_parameters):
             logging.debug("   - Masked region: "+region[0]+":"+str(region[1])+"-"+str(region[2]))
             logging.debug("     * Acquiring statistics")
@@ -126,7 +127,9 @@ class FlaiMapper():
             fragments = FragmentFinder(aligned_reads, filter_parameters)
             fragments.run()
             self.add_fragments(fragments.results)
-
+            i += len(fragments.results)
+        
+        logging.info(' - Detected %i fragments' % i)
 
     
     #@tofo get rid of inserting fasta_file HERE 
@@ -177,45 +180,8 @@ class FlaiMapper():
                         for key in sorted(fragments_sorted_keys.keys()):	# Walk over i in the for-loop:
                             i += 1
                             fragment = fragments_sorted_keys[key]
-                            
-                            # Fragment uid
-                            fh.write('FM_'+ name+'_'+str(i).zfill(12)+"\t")
-                            
-                            # Size
-                            fh.write(str(fragment.stop - fragment.start + 1) + "\t")
-                            
-                            # Reference sequence 
-                            fh.write(name + "\t")
-                            
-                            # Start
-                            fh.write(str(fragment.start) + "\t")
-                            
-                            # End
-                            fh.write(str(fragment.stop)+"\t")
-                            
-                            # Precursor
-                            fh.write(name)
-                            
-                            # Start in precursor
-                            fh.write("\t" + str(fragment.start-fragment.masked_region[1])+ "\t")
-                            
-                            # End in precursor
-                            fh.write(str(fragment.stop-fragment.masked_region[1])+"\t")
-                            
-                            # Sequence 
-                            if(self.fasta_file):
-                                # PySam 0.8.2 claims to use 0-based coordinates pysam.FastaFile.fetch().
-                                # This is only true for the start position, the end-position is 1-based.
-                                fh.write(str(self.fasta_file.fetch(name,fragment.start,fragment.stop+1)))
-                            
-                            # Start supporting reads
-                            fh.write("\t"+str(fragment.supporting_reads_start)+"\t")
-                            
-                            # Stop supporting reads
-                            fh.write(str(fragment.supporting_reads_stop)+"\t")
-                            
-                            # Total supporting reads
-                            fh.write(str(fragment.supporting_reads_stop+fragment.supporting_reads_start) + "\n")
+                            fragment_uid = 'FM_'+result[0].masked_region[0]+'_'+str(i).zfill(12)
+                            fh.write(fragment.to_table_entry(fragment_uid, result[0].masked_region, self.fasta_file))
             
             fh.close()
     
@@ -237,66 +203,9 @@ class FlaiMapper():
                     for key in sorted(fragments_sorted_keys.keys()):# Walk over i in the for-loop:
                         i += 1
                         fragment = fragments_sorted_keys[key]
-                        
-                        ## Line 1: type sncdRNA
-                        # Seq-name
-                        fh.write(name + "\t")
-                        
-                        # Source
-                        fh.write("flaimapper-v"+flaimapper.__version__+"\t")
-                        
-                        # Feature
-                        fh.write("sncdRNA\t")
-                        
-                        # Start
-                        fh.write(str(fragment.start+1) + "\t")
-                        
-                        # End
-                        fh.write(str(fragment.stop+1)+"\t")
-                        
-                        # Score
-                        fh.write(str(fragment.supporting_reads_stop+fragment.supporting_reads_start) + "\t")
-                        
-                        # Strand and Frame
-                        fh.write(".\t.\t")
-                        
-                        # Attribute
-                        attributes = []
-                        attributes.append('gene_id "FM_'+ name+'_'+str(i).zfill(12)+'"' )
-                        
-                        fh.write(", ".join(attributes)+"\n")
-                        
-                        
-                        ## Line 2: type exon, with offset used for counting in e.g. HTSeq-count / featureCounts
-                        
-                        ## Line 1: type sncdRNA
-                        # Seq-name
-                        fh.write(name + "\t")
-                        
-                        # Source
-                        fh.write("flaimapper-v"+flaimapper.__version__+"\t")
-                        
-                        # Feature
-                        fh.write("exon\t")
-                        
-                        # Start
-                        fh.write(str(max(1,fragment.start+1-offset5p))+"\t")
-                        
-                        # End
-                        fh.write(str(max(1,fragment.stop+1+offset3p))+"\t")
-                        
-                        # Score
-                        fh.write(str(fragment.supporting_reads_stop+fragment.supporting_reads_start) + "\t")
-                        
-                        # Strand and Frame
-                        fh.write(".\t.\t")
-                        
-                        # Attribute
-                        attributes = []
-                        attributes.append('gene_id "FM_'+ name+'_'+str(i).zfill(12)+'"' )
-                        
-                        fh.write(", ".join(attributes)+"\n")
-                        
+                        fragment_uid = 'FM_'+result[0].masked_region[0]+'_'+str(i).zfill(12)
+                        fh.write(fragment.to_gtf_entry(fragment_uid, result[0].masked_region, offset5p, offset3p))
+        
         fh.close()
     
     def write(self,export_format,output_filename,offset5p,offset3p):
