@@ -37,8 +37,9 @@
 """
 
 
-from flaimapper.MaskedRegion import MaskedRegion
 import pysam
+
+from .MaskedRegion import MaskedRegion
 
 
 class BAMParser(MaskedRegion):

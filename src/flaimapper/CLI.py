@@ -37,7 +37,8 @@
 """
 
 
-import os,re,operator,argparse,sys,tempfile,textwrap,datetime,logging
+import argparse,logging,textwrap,datetime
+
 import pysam
 import flaimapper
 
