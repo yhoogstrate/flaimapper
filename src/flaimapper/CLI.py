@@ -88,10 +88,8 @@ def CLI(argv=None):
         logging.info("Verbose output.")
     elif args.quiet:
         logging.basicConfig(format=flaimapper.__log_format__, level=logging.CRITICAL)
-        print "A"
     else:
         logging.basicConfig(format=flaimapper.__log_format__, level=logging.INFO)
-        print "B"
     
     return args
 

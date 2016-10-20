@@ -36,34 +36,36 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-import logging
+import flaimapper
+import logging,sys
+logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
+
 import pysam
 
-from .BAMParser import BAMParser
-from .FragmentContainer import FragmentContainer
-from .FragmentFinder import FragmentFinder
+from .MaskedRegion import MaskedRegion
 
 
-class FlaiMapper(FragmentContainer):
-    def __init__(self,alignment_file):
-        self.alignment = alignment_file
-        self.sequences = {}
+class FlaiMapper():
+    def __init__(self,settings):
+        self.settings = settings
         
         logging.info(" - Initiated FlaiMapper Object")
-        
-        try:
-            self.alignment.fetch()
-        except:
-            logging.info(' - Indexing BAM file with samtools: '+self.alignment.filename)
-            pysam.index(self.alignment.filename)
-            self.alignment = pysam.AlignmentFile(self.alignment.filename)
-        
-        try:
-            self.alignment.fetch()
-        except:
-            raise Exception('Couldn\'t indexing BAM file with samtools: '+self.alignment.filename+'\nAre you sure samtools is installed?\n')
+        self.check_alignment_index()
     
-    def regions(self,filter_parameters):
+    def check_alignment_index(self):
+        try:
+            self.settings.alignment_file.fetch()
+        except:
+            logging.info(' - Indexing BAM file with samtools: '+self.settings.alignment_file.filename)
+            pysam.index(self.settings.alignment_file.filename)
+            self.settings.alignment_file = pysam.AlignmentFile(self.settings.alignment_file.filename)
+        
+        try:
+            self.settings.alignment_file.fetch()
+        except:
+            raise Exception('Couldn\'t indexing BAM file with samtools: '+self.settings.alignment_file.filename+'\nAre you sure samtools is installed?\n')
+    
+    def regions(self):
         """
         Needs to find chunks of all consequently aligned blocks (+left
         and right padding distance of the filter)
@@ -79,15 +81,15 @@ class FlaiMapper(FragmentContainer):
         two regions to be yielded
         """
         
-        i_dist_l = abs(filter_parameters.left_padding)
-        i_dist_r = abs(filter_parameters.right_padding)
+        i_dist_l = abs(self.settings.parameters.left_padding)
+        i_dist_r = abs(self.settings.parameters.right_padding)
         i_dist = i_dist_l + i_dist_r
         
-        for i in range(self.alignment.nreferences):
-            s_name = self.alignment.references[i]
+        for i in range(self.settings.alignment_file.nreferences):
+            s_name = self.settings.alignment_file.references[i]
             ss = [None,None]
             
-            for r in self.alignment.fetch(s_name):
+            for r in self.settings.alignment_file.fetch(s_name):
                 if len(r.blocks) > 0:
                     if ss[0] == None:
                         ss = [r.blocks[0][0],r.blocks[-1][1]-1]
@@ -97,26 +99,63 @@ class FlaiMapper(FragmentContainer):
                                 m  = max(ss[1],r.blocks[-1][1]-1)
                                 ss[1] = m
                             else:
-                                yield (s_name, max(0, ss[0] - i_dist_l - 1), max(0, ss[1] + i_dist_r + 1))
+                                yield MaskedRegion((s_name, max(0, ss[0] - i_dist_l - 1), max(0, ss[1] + i_dist_r + 1)),self.settings)
                                 
                                 ss = [r.blocks[0][0],r.blocks[-1][1]-1]
-        
+            
             if ss[0] != None:
-                yield (s_name, max(0, ss[0] - i_dist_l - 1), max(0, ss[1] + i_dist_r + 1))
+                yield MaskedRegion((s_name, max(0, ss[0] - i_dist_l - 1), max(0, ss[1] + i_dist_r + 1)),self.settings)
     
-    def run(self,fasta_file,filter_parameters):
-        logging.debug(" - Running fragment detection")
-        self.fasta_file = fasta_file
+    def __iter__(self):
+        for region in self.regions():
+            yield region
+    
+    def run(self):
+        if(self.settings.format == 1):
+            fh = self.open_table()
+        elif(self.settings.format == 2):
+            fh = self.open_gtf()
         
-        for region in self.regions(filter_parameters):
-            logging.debug("   - Masked region: "+region[0]+":"+str(region[1])+"-"+str(region[2]))
-            logging.debug("     * Acquiring statistics")
+        logging.debug(" - Starting fragment detection")
+        
+        k = 0
+        for region in self:
+            i = 0
+            for fragment in region:
+                i += 1
+                fragment_uid = 'FM_'+region.region[0]+'_'+str(i).zfill(12)
+                
+                if(self.settings.format == 1):
+                    fh.write(fragment.to_table_entry(fragment_uid, region, self.settings.fasta_handle))
+                elif(self.settings.format == 2):
+                    fh.write(fragment.to_gtf_entry(fragment_uid, self.settings.offset5p, self.settings.offset3p))
             
-            # BAM
-            aligned_reads = BAMParser(region,self.alignment)
-            aligned_reads.parse_stats()
-            logging.debug("     * Detecting fragments")
-            
-            fragments = FragmentFinder(aligned_reads, filter_parameters)
-            fragments.run()
-            self.add_fragments(fragments.results)
+            k += i
+        
+        fh.close()
+        logging.info(' - Detected %i fragments' % k)
+
+    def open_gtf(self):
+        logging.info(" - Exporting results to: "+self.settings.output+" (GTF)")
+        
+        if(self.settings.output == "-"):
+            fh = sys.stdout
+        else:
+            fh = open(self.settings.output,'w')
+        
+        return fh
+    
+    def open_table(self):
+        logging.info(" - Exporting results to: "+self.settings.output+" (tab-delimited, per fragment)")
+        
+        if(self.settings.output == "-"):
+            fh = sys.stdout
+        else:
+            fh = open(self.settings.output,'w')
+        
+        if(self.settings.fasta_handle):
+            fh.write("Fragment\tSize\tReference sequence\tStart\tEnd\tPrecursor\tStart in precursor\tEnd in precursor\tSequence (no fasta file given)\tCorresponding-reads (start)\tCorresponding-reads (end)\tCorresponding-reads (total)\n")
+        else:
+            fh.write("Fragment\tSize\tReference sequence\tStart\tEnd\tPrecursor\tStart in precursor\tEnd in precursor\tSequence\tCorresponding-reads (start)\tCorresponding-reads (end)\tCorresponding-reads (total)\n")
+        
+        return fh

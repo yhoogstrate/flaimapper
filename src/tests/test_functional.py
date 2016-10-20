@@ -36,15 +36,17 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
+
 import flaimapper
+import unittest,logging,os,subprocess,shutil,sys
+
+logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
+
 from flaimapper.CLI import CLI
 from flaimapper.FlaiMapper import FlaiMapper
 from flaimapper.Data import *
 from flaimapper.utils import *
 
-
-import unittest,logging,os,subprocess,shutil,sys
-logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
 
 class TestFunctional(unittest.TestCase):
     def test_01(self):
@@ -170,10 +172,10 @@ class TestFunctional(unittest.TestCase):
         os.remove(samplename+".bam.bai")
         shutil.rmtree(samplename)
 
+
 def main():
     unittest.main()
 
-
-environment = os.environ.copy()
+#environment = os.environ.copy()
 if __name__ == '__main__':
     main()

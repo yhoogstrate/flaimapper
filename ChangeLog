@@ -1,4 +1,8 @@
 2016-10-20  Youri Hoogstrate
+	* (v2.2.0) Many extra cleanups, reorganization of classes to get rid of a linear
+	  increase of memory usage with respect to the number of output entities.
+
+2016-10-20  Youri Hoogstrate
 	* (v2.1.5) Cleanups and large reduction of memory footprint
 
 2016-10-19  Youri Hoogstrate
