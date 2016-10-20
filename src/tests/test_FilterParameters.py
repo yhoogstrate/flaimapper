@@ -36,10 +36,14 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
+
+import flaimapper
+import unittest,logging
+
+logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
+
 from flaimapper.FilterParameters import FilterParameters
 from flaimapper.Data import *
-import unittest,logging
-logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.DEBUG)
 
 
 class TestFilterParameters(unittest.TestCase):
@@ -66,6 +70,7 @@ class TestFilterParameters(unittest.TestCase):
             self.assertTrue(i in keys)
             self.assertTrue(fp.matrix[i] >= 0.0)
             self.assertTrue(fp.matrix[i] <= 100.0)
+
 
 def main():
     unittest.main()

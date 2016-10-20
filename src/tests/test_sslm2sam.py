@@ -36,12 +36,14 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
+
 import flaimapper
+import unittest,subprocess,os,shutil,logging
+
+logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
+
 from flaimapper.CLI import CLI_sslm2sam
 from flaimapper.SSLMParser import SSLMParser
-
-import unittest,subprocess,os,shutil,logging
-logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
 
 
 class TestFlaiMapper(unittest.TestCase):

@@ -36,13 +36,15 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
+
+import flaimapper 
+import unittest,filecmp,os,logging,subprocess
+
+logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
+
 from flaimapper.FlaiMapper import FlaiMapper
 from flaimapper.CLI import CLI
 from flaimapper.Data import *
-
-import unittest,filecmp,os,logging,subprocess
-logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.DEBUG)
-
 
 
 class TestFlaiMapper(unittest.TestCase):
@@ -55,22 +57,22 @@ class TestFlaiMapper(unittest.TestCase):
         flaimapper = FlaiMapper(args)
         
         i = 0
-        for region in flaimapper.regions(args.parameters):
+        for region in flaimapper.regions():
             if i == 0:
-                self.assertEqual(region[0], 'chr1')
+                self.assertEqual(region.region[0], 'chr1')
                 
-                self.assertEqual(region[1], 13-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 13+20+4+args.parameters.right_padding)
+                self.assertEqual(region.region[1], 13-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 13+20+4+args.parameters.right_padding)
             elif i == 1:
-                self.assertEqual(region[0], 'chr1')
+                self.assertEqual(region.region[0], 'chr1')
                 
-                self.assertEqual(region[1], 43-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 43+20+args.parameters.right_padding)
+                self.assertEqual(region.region[1], 43-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 43+20+args.parameters.right_padding)
             elif i == 2:
-                self.assertEqual(region[0], 'chr2')
+                self.assertEqual(region.region[0], 'chr2')
                 
-                self.assertEqual(region[1], 54-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 54+26+args.parameters.right_padding)
+                self.assertEqual(region.region[1], 54-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 54+26+args.parameters.right_padding)
             else:
                 self.asserTrue(False,"Race condition?")
             
@@ -88,17 +90,17 @@ class TestFlaiMapper(unittest.TestCase):
         flaimapper = FlaiMapper(args)
         
         i = 0
-        for region in flaimapper.regions(args.parameters):
+        for region in flaimapper.regions():
             if i == 0:
-                self.assertEqual(region[0], 'chr1')
+                self.assertEqual(region.region[0], 'chr1')
                 
-                self.assertEqual(region[1], 13-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 43+20+args.parameters.right_padding)
+                self.assertEqual(region.region[1], 13-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 43+20+args.parameters.right_padding)
             elif i == 1:
-                self.assertEqual(region[0], 'chr2')
+                self.assertEqual(region.region[0], 'chr2')
                 
-                self.assertEqual(region[1], 54-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 54+26+args.parameters.right_padding)
+                self.assertEqual(region.region[1], 54-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 54+26+args.parameters.right_padding)
             else:
                 self.asserTrue(False,"Race condition?")
             
@@ -115,22 +117,22 @@ class TestFlaiMapper(unittest.TestCase):
         flaimapper = FlaiMapper(args)
         
         i = 0
-        for region in flaimapper.regions(args.parameters):
+        for region in flaimapper.regions():
             if i == 0:
-                self.assertEqual(region[0], 'chr1')
+                self.assertEqual(region.region[0], 'chr1')
                 
-                self.assertEqual(region[1], 13-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 13+20+4+args.parameters.right_padding)
+                self.assertEqual(region.region[1], 13-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 13+20+4+args.parameters.right_padding)
             elif i == 1:
-                self.assertEqual(region[0], 'chr1')
+                self.assertEqual(region.region[0], 'chr1')
                 
-                self.assertEqual(region[1], 43-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 43+20+args.parameters.right_padding)
+                self.assertEqual(region.region[1], 43-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 43+20+args.parameters.right_padding)
             elif i == 2:
-                self.assertEqual(region[0], 'chr2')
+                self.assertEqual(region.region[0], 'chr2')
                 
-                self.assertEqual(region[1], 54-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 54+26+args.parameters.right_padding)
+                self.assertEqual(region.region[1], 54-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 54+26+args.parameters.right_padding)
             else:
                 self.assertTrue(False,"Race condition?")
             i += 1
@@ -146,22 +148,22 @@ class TestFlaiMapper(unittest.TestCase):
         flaimapper = FlaiMapper(args)
         
         i = 0
-        for region in flaimapper.regions(args.parameters):
+        for region in flaimapper.regions():
             if i == 0:
-                self.assertEqual(region[0], 'chr1')
+                self.assertEqual(region.region[0], 'chr1')
                 
-                self.assertEqual(region[1], 13-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 13+20+4+args.parameters.right_padding)
+                self.assertEqual(region.region[1], 13-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 13+20+4+args.parameters.right_padding)
             elif i == 1:
-                self.assertEqual(region[0], 'chr1')
+                self.assertEqual(region.region[0], 'chr1')
                 
-                self.assertEqual(region[1], 43-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 43+20+args.parameters.right_padding)
+                self.assertEqual(region.region[1], 43-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 43+20+args.parameters.right_padding)
             else:
-                self.assertEqual(region[0], 'chr2')
+                self.assertEqual(region.region[0], 'chr2')
                 
-                self.assertEqual(region[1], 54-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 54+26+args.parameters.right_padding)
+                self.assertEqual(region.region[1], 54-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 54+26+args.parameters.right_padding)
             
             i += 1
         
@@ -176,17 +178,17 @@ class TestFlaiMapper(unittest.TestCase):
         flaimapper = FlaiMapper(args)
         
         i = 0
-        for region in flaimapper.regions(args.parameters):
+        for region in flaimapper.regions():
             if i == 0:
-                self.assertEqual(region[0], 'chr1')
+                self.assertEqual(region.region[0], 'chr1')
                 
-                self.assertEqual(region[1], 13-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 43+20+args.parameters.right_padding)
+                self.assertEqual(region.region[1], 13-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 43+20+args.parameters.right_padding)
             else:
-                self.assertEqual(region[0], 'chr2')
+                self.assertEqual(region.region[0], 'chr2')
                 
-                self.assertEqual(region[1], 54-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 54+26+args.parameters.right_padding)
+                self.assertEqual(region.region[1], 54-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 54+26+args.parameters.right_padding)
             
             i += 1
         
@@ -201,17 +203,17 @@ class TestFlaiMapper(unittest.TestCase):
         flaimapper = FlaiMapper(args)
         
         i = 0
-        for region in flaimapper.regions(args.parameters):
+        for region in flaimapper.regions():
             if i == 0:
-                self.assertEqual(region[0], 'chr1')
+                self.assertEqual(region.region[0], 'chr1')
                 
-                self.assertEqual(region[1], 13-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 43+20+args.parameters.right_padding)
+                self.assertEqual(region.region[1], 13-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 43+20+args.parameters.right_padding)
             else:
-                self.assertEqual(region[0], 'chr2')
+                self.assertEqual(region.region[0], 'chr2')
                 
-                self.assertEqual(region[1], 54-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 54+26+args.parameters.right_padding)
+                self.assertEqual(region.region[1], 54-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 54+26+args.parameters.right_padding)
             
             i += 1
         
@@ -226,17 +228,17 @@ class TestFlaiMapper(unittest.TestCase):
         flaimapper = FlaiMapper(args)
         
         i = 0
-        for region in flaimapper.regions(args.parameters):
+        for region in flaimapper.regions():
             if i == 0:
-                self.assertEqual(region[0], 'chr1')
+                self.assertEqual(region.region[0], 'chr1')
                 
-                self.assertEqual(region[1], 13-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 43+20+args.parameters.right_padding)
+                self.assertEqual(region.region[1], 13-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 43+20+args.parameters.right_padding)
             else:
-                self.assertEqual(region[0], 'chr2')
+                self.assertEqual(region.region[0], 'chr2')
                 
-                self.assertEqual(region[1], 54-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 54+26+args.parameters.right_padding)
+                self.assertEqual(region.region[1], 54-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 54+26+args.parameters.right_padding)
             
             i += 1
         
@@ -312,15 +314,15 @@ class TestFlaiMapper(unittest.TestCase):
         
         # First check whether it's looking in the right regions
         i = 0
-        for region in fm.regions(args.parameters):
+        for region in fm:
             if i == 0:
-                self.assertEqual(region[0], 'chr1')
-                self.assertEqual(region[1], max(0, 13-1-args.parameters.left_padding))
-                self.assertEqual(region[2], 43+20+args.parameters.right_padding)
+                self.assertEqual(region.region[0], 'chr1')
+                self.assertEqual(region.region[1], max(0, 13-1-args.parameters.left_padding))
+                self.assertEqual(region.region[2], 43+20+args.parameters.right_padding)
             elif i == 1:
-                self.assertEqual(region[0], 'chr2')
-                self.assertEqual(region[1], 54-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 54+26+args.parameters.right_padding)
+                self.assertEqual(region.region[0], 'chr2')
+                self.assertEqual(region.region[1], 54-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 54+26+args.parameters.right_padding)
             else:
                 self.asserTrue(False,"Race condition?")
             i += 1
@@ -328,18 +330,18 @@ class TestFlaiMapper(unittest.TestCase):
         
         # Then detect the fragments
         i = 0
-        for region in fm.regions(args.parameters):
-            for fragment in region.predict_fragments():
+        for region in fm:
+            for fragment in region:
                 if i == 0:
-                    self.assertEqual(fragment.masked_region[0], 'chr1')
+                    self.assertEqual(fragment.reference, 'chr1')
                     self.assertEqual(fragment.start, 13)
                     self.assertEqual(fragment.stop, 36)
                 elif i == 1:
-                    self.assertEqual(fragment.masked_region[0], 'chr1')
+                    self.assertEqual(fragment.reference, 'chr1')
                     self.assertEqual(fragment.start, 43)
                     self.assertEqual(fragment.stop, 62)
                 elif i == 2:
-                    self.assertEqual(fragment.masked_region[0], 'chr2')
+                    self.assertEqual(fragment.reference, 'chr2')
                     self.assertEqual(fragment.start, 54)
                     self.assertEqual(fragment.stop, 79)
                 else:
@@ -354,17 +356,17 @@ class TestFlaiMapper(unittest.TestCase):
         
         # First check whether it's looking in the right regions
         i = 0
-        for region in fm.regions(args.parameters):
+        for region in fm:
             if i == 0:
-                self.assertEqual(region[0], 'chr1')
+                self.assertEqual(region.region[0], 'chr1')
                 
-                self.assertEqual(region[1], 13-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 43+20+args.parameters.right_padding)
+                self.assertEqual(region.region[1], 13-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 43+20+args.parameters.right_padding)
             elif i == 1:
-                self.assertEqual(region[0], 'chr2')
+                self.assertEqual(region.region[0], 'chr2')
                 
-                self.assertEqual(region[1], 54-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 54+26+args.parameters.right_padding)
+                self.assertEqual(region.region[1], 54-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 54+26+args.parameters.right_padding)
             else:
                 self.asserTrue(False,"Race condition?")
             i += 1
@@ -373,22 +375,24 @@ class TestFlaiMapper(unittest.TestCase):
         
         # Then detect the fragments
         i = 0
-        for fragment in fm.predict_fragments():
-            if i == 0:
-                self.assertEqual(fragment.masked_region[0], 'chr1')
-                self.assertEqual(fragment.start, 13)
-                self.assertEqual(fragment.stop, 36)
-            elif i == 1:
-                self.assertEqual(fragment.masked_region[0], 'chr1')
-                self.assertEqual(fragment.start, 43)
-                self.assertEqual(fragment.stop, 62)
-            elif i == 2:
-                self.assertEqual(fragment.masked_region[0], 'chr2')
-                self.assertEqual(fragment.start, 54)
-                self.assertEqual(fragment.stop, 79)
-            else:
-                self.asserTrue(False,"Race condition?")
-            i += 1
+        for region in fm:
+            for fragment in region:
+                if i == 0:
+                    self.assertEqual(fragment.reference, 'chr1')
+                    self.assertEqual(fragment.start, 13)
+                    self.assertEqual(fragment.stop, 36)
+                elif i == 1:
+                    self.assertEqual(fragment.reference, 'chr1')
+                    self.assertEqual(fragment.start, 43)
+                    self.assertEqual(fragment.stop, 62)
+                elif i == 2:
+                    self.assertEqual(fragment.reference, 'chr2')
+                    self.assertEqual(fragment.start, 54)
+                    self.assertEqual(fragment.stop, 79)
+                else:
+                    self.asserTrue(False,"Race condition?")
+                i += 1
+        
         self.assertEqual(i, 3)
 
     def test_04_c(self):
@@ -401,17 +405,17 @@ class TestFlaiMapper(unittest.TestCase):
         
         # First check whether it's looking in the right regions
         i = 0
-        for region in fm.regions(args.parameters):
+        for region in fm:
             if i == 0:
-                self.assertEqual(region[0], 'chr1')
+                self.assertEqual(region.region[0], 'chr1')
                 
-                self.assertEqual(region[1], max(0, 13-1-args.parameters.left_padding))
-                self.assertEqual(region[2], 43+20+args.parameters.right_padding)
+                self.assertEqual(region.region[1], max(0, 13-1-args.parameters.left_padding))
+                self.assertEqual(region.region[2], 43+20+args.parameters.right_padding)
             elif i == 1:
-                self.assertEqual(region[0], 'chr2')
+                self.assertEqual(region.region[0], 'chr2')
                 
-                self.assertEqual(region[1], 54-1-args.parameters.left_padding)
-                self.assertEqual(region[2], 54+26+args.parameters.right_padding)
+                self.assertEqual(region.region[1], 54-1-args.parameters.left_padding)
+                self.assertEqual(region.region[2], 54+26+args.parameters.right_padding)
             else:
                 self.asserTrue(False,"Race condition?")
             i += 1
@@ -419,19 +423,22 @@ class TestFlaiMapper(unittest.TestCase):
         
         # Then detect the fragments
         i = 0
-        for fragment in fm.predict_fragments():
-            if i == 0:
-                self.assertEqual(fragment.masked_region[0], 'chr1')
-                self.assertEqual(fragment.start, 13)
-                self.assertEqual(fragment.stop, 36)
-            elif i == 1:
-                self.assertEqual(fragment.masked_region[0], 'chr2')
-                self.assertEqual(fragment.start, 54)
-                self.assertEqual(fragment.stop, 79)
-            else:
-                self.asserTrue(False,"Race condition?")
-            i += 1
+        for region in fm:
+            for fragment in region:
+                if i == 0:
+                    self.assertEqual(fragment.reference, 'chr1')
+                    self.assertEqual(fragment.start, 13)
+                    self.assertEqual(fragment.stop, 36)
+                elif i == 1:
+                    self.assertEqual(fragment.reference, 'chr2')
+                    self.assertEqual(fragment.start, 54)
+                    self.assertEqual(fragment.stop, 79)
+                else:
+                    self.asserTrue(False,"Race condition?")
+                i += 1
+        
         self.assertEqual(i, 2)
+
 
 def main():
     unittest.main()

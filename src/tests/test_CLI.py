@@ -36,10 +36,13 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
+import flaimapper
+import unittest,logging
+
+logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
+
 from flaimapper.CLI import CLI
 from flaimapper.Data import *
-
-import unittest
 
 
 class TestCLI(unittest.TestCase):

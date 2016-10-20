@@ -36,10 +36,12 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
+import flaimapper
 import logging,sys
+logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
+
 import pysam
 
-import flaimapper
 from .MaskedRegion import MaskedRegion
 from .FragmentFinder import FragmentFinder
 
