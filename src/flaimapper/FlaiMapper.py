@@ -37,6 +37,7 @@
 """
 
 import logging
+import pysam
 
 import flaimapper
 from .BAMParser import BAMParser
