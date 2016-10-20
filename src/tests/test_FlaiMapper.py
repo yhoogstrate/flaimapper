@@ -245,13 +245,12 @@ class TestFlaiMapper(unittest.TestCase):
     
     def test_02(self):
         fname = 'test_FlaiMapper_test_02_output.gtf'
-        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,'--verbose'])
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,'--verbose','--offset5p','4','--offset3p','4'])
         
         flaimapper = FlaiMapper(args)
         
         # Run analysis
         flaimapper.run()
-        flaimapper.write(args.format, args.output, 4, 4)
         
         # assert Contents:
         self.assertTrue(filecmp.cmp(TESTS_FLAIMAPPER_TEST_02_OUTPUT_GTF, fname),msg="diff '"+TESTS_FLAIMAPPER_TEST_02_OUTPUT_GTF+"' '"+fname+"':\n"+subprocess.Popen(['diff',TESTS_FLAIMAPPER_TEST_02_OUTPUT_GTF,fname], stdout=subprocess.PIPE).stdout.read())
@@ -260,13 +259,12 @@ class TestFlaiMapper(unittest.TestCase):
 
     def test_02b(self):
         fname = 'test_FlaiMapper_test_02b_output.gtf'
-        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,'--verbose'])
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,'--verbose','--offset5p','5','--offset3p','5'])
         
         flaimapper = FlaiMapper(args)
         
         # Run analysis
-        flaimapper.run()#
-        flaimapper.write(args.format, args.output, 5, 5)# Test if changing the offset changes the outcome - should be different result file than the test above
+        flaimapper.run()
         
         # assert Contents:
         assertion = (not filecmp.cmp(fname , TESTS_FLAIMAPPER_TEST_02_OUTPUT_GTF))
@@ -277,13 +275,12 @@ class TestFlaiMapper(unittest.TestCase):
     
     def test_03_a(self):
         fname = 'test_FlaiMapper_test_03_output.txt'
-        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,"-f","1",'--verbose'])
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,"-f","1",'--verbose','--offset5p','4','--offset3p','4'])
         
         flaimapper = FlaiMapper(args)
         
         # Run analysis
         flaimapper.run()
-        flaimapper.write(args.format, args.output, 4, 4)
         
         # assert Contents:
         assertion = filecmp.cmp(fname , TESTS_FLAIMAPPER_TEST_03_a_OUTPUT_TXT)
@@ -294,13 +291,12 @@ class TestFlaiMapper(unittest.TestCase):
     
     def test_03_b(self):
         fname = 'test_FlaiMapper_test_03_fa_output.txt'
-        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,"-f","1","--fasta",TESTS_FLAIMAPPER_FA,'--verbose'])
+        args = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-o",fname,"-f","1","--fasta",TESTS_FLAIMAPPER_FA,'--verbose','--offset5p','4','--offset3p','4'])
         
         flaimapper = FlaiMapper(args)
         
         # Run analysis
         flaimapper.run()
-        flaimapper.write(args.format, args.output, 4, 4)
         
         # assert Contents:
         assertion = filecmp.cmp(fname , TESTS_FLAIMAPPER_TEST_03_b_OUTPUT_TXT)
@@ -332,23 +328,23 @@ class TestFlaiMapper(unittest.TestCase):
         
         # Then detect the fragments
         i = 0
-        fm.run()
-        for fragment in fm:
-            if i == 0:
-                self.assertEqual(fragment.masked_region[0], 'chr1')
-                self.assertEqual(fragment.start, 13)
-                self.assertEqual(fragment.stop, 36)
-            elif i == 1:
-                self.assertEqual(fragment.masked_region[0], 'chr1')
-                self.assertEqual(fragment.start, 43)
-                self.assertEqual(fragment.stop, 62)
-            elif i == 2:
-                self.assertEqual(fragment.masked_region[0], 'chr2')
-                self.assertEqual(fragment.start, 54)
-                self.assertEqual(fragment.stop, 79)
-            else:
-                self.asserTrue(False,"Race condition?")
-            i += 1
+        for region in fm.regions(args.parameters):
+            for fragment in region.predict_fragments():
+                if i == 0:
+                    self.assertEqual(fragment.masked_region[0], 'chr1')
+                    self.assertEqual(fragment.start, 13)
+                    self.assertEqual(fragment.stop, 36)
+                elif i == 1:
+                    self.assertEqual(fragment.masked_region[0], 'chr1')
+                    self.assertEqual(fragment.start, 43)
+                    self.assertEqual(fragment.stop, 62)
+                elif i == 2:
+                    self.assertEqual(fragment.masked_region[0], 'chr2')
+                    self.assertEqual(fragment.start, 54)
+                    self.assertEqual(fragment.stop, 79)
+                else:
+                    self.asserTrue(False,"Race condition?")
+                i += 1
         self.assertEqual(i, 3)
     
     def test_04_b(self):
@@ -377,8 +373,7 @@ class TestFlaiMapper(unittest.TestCase):
         
         # Then detect the fragments
         i = 0
-        fm.run()
-        for fragment in fm:
+        for fragment in fm.predict_fragments():
             if i == 0:
                 self.assertEqual(fragment.masked_region[0], 'chr1')
                 self.assertEqual(fragment.start, 13)
@@ -424,8 +419,7 @@ class TestFlaiMapper(unittest.TestCase):
         
         # Then detect the fragments
         i = 0
-        fm.run()
-        for fragment in fm:
+        for fragment in fm.predict_fragments():
             if i == 0:
                 self.assertEqual(fragment.masked_region[0], 'chr1')
                 self.assertEqual(fragment.start, 13)

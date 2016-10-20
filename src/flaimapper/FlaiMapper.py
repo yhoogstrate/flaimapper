@@ -36,21 +36,22 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-import logging
+import logging,sys
 import pysam
 
 import flaimapper
-from .BAMParser import BAMParser
+from .MaskedRegion import MaskedRegion
 from .FragmentFinder import FragmentFinder
 
 
 class FlaiMapper():
     def __init__(self,settings):
         self.settings = settings
-        self.sequences = {}
         
         logging.info(" - Initiated FlaiMapper Object")
-        
+        self.check_alignment_index()
+    
+    def check_alignment_index(self):
         try:
             self.settings.alignment_file.fetch()
         except:
@@ -62,14 +63,8 @@ class FlaiMapper():
             self.settings.alignment_file.fetch()
         except:
             raise Exception('Couldn\'t indexing BAM file with samtools: '+self.settings.alignment_file.filename+'\nAre you sure samtools is installed?\n')
-
-    def __iter__(self):
-        for uid in sorted(self.sequences.keys()):
-            for reference_sequence in self.sequences[uid]:
-                for fragment in reference_sequence:
-                    yield fragment
     
-    def regions(self,filter_parameters):
+    def regions(self):
         """
         Needs to find chunks of all consequently aligned blocks (+left
         and right padding distance of the filter)
@@ -85,8 +80,8 @@ class FlaiMapper():
         two regions to be yielded
         """
         
-        i_dist_l = abs(filter_parameters.left_padding)
-        i_dist_r = abs(filter_parameters.right_padding)
+        i_dist_l = abs(self.settings.parameters.left_padding)
+        i_dist_r = abs(self.settings.parameters.right_padding)
         i_dist = i_dist_l + i_dist_r
         
         for i in range(self.settings.alignment_file.nreferences):
@@ -103,66 +98,45 @@ class FlaiMapper():
                                 m  = max(ss[1],r.blocks[-1][1]-1)
                                 ss[1] = m
                             else:
-                                yield (s_name, max(0, ss[0] - i_dist_l - 1), max(0, ss[1] + i_dist_r + 1))
+                                yield MaskedRegion((s_name, max(0, ss[0] - i_dist_l - 1), max(0, ss[1] + i_dist_r + 1)),self.settings)
                                 
                                 ss = [r.blocks[0][0],r.blocks[-1][1]-1]
-        
+            
             if ss[0] != None:
-                yield (s_name, max(0, ss[0] - i_dist_l - 1), max(0, ss[1] + i_dist_r + 1))
+                yield MaskedRegion((s_name, max(0, ss[0] - i_dist_l - 1), max(0, ss[1] + i_dist_r + 1)),self.settings)
     
-    def run(self):#,fasta_file,filter_parameters):
-        logging.debug(" - Running fragment detection")
-        
-        i = 0
-        for region in self.regions(self.settings.parameters):#@todo remove argument - it's part of self/settings anyway
-            logging.debug("   - Masked region: "+region[0]+":"+str(region[1])+"-"+str(region[2]))
-            logging.debug("     * Acquiring statistics")
-            
-            # BAM
-            aligned_reads = BAMParser(region,self.settings.alignment_file)
-            aligned_reads.parse_stats()
-            logging.debug("     * Detecting fragments")
-            
-            fragments = FragmentFinder(aligned_reads, self.settings.parameters)
-            fragments.run()
-            self.add_fragments(fragments.results)
-            i += len(fragments.results)
-        
-        logging.info(' - Detected %i fragments' % i)
-
+    def __iter__(self):
+        for region in self.regions():
+            yield region
     
-    #@tofo get rid of inserting fasta_file HERE 
-    def add_fragments(self,fragment_finder_results):
-        #for fragment in fragment_finder_results.results:
-        if len(fragment_finder_results) > 0:
-            region = fragment_finder_results[0].masked_region
-            uid = region[0]+"_"+str(region[1])+"_"+str(region[2])
-            if(uid not in self.sequences.keys()):
-                self.sequences[uid] = []
-            
-            self.sequences[uid].append(fragment_finder_results)
-    
-    def export_table(self):
-        fh = self.open_table()
+    def run(self):
+        if(self.settings.format == 1):
+            fh = self.open_table()
+        elif(self.settings.format == 2):
+            fh = self.open_gtf()
         
-        for uid in sorted(self.sequences.keys()):
-            for result in self.sequences[uid]:
-                if result:
-                    name = result[0].masked_region[0]
-                    fragments_sorted_keys = {}
-                    for fragment in result:
-                        fragments_sorted_keys[fragment.start] = fragment
-                    
-                    i = 0
-                    for key in sorted(fragments_sorted_keys.keys()):	# Walk over i in the for-loop:
-                        i += 1
-                        fragment = fragments_sorted_keys[key]
-                        fragment_uid = 'FM_'+result[0].masked_region[0]+'_'+str(i).zfill(12)
-                        fh.write(fragment.to_table_entry(fragment_uid, result[0].masked_region, self.settings.fasta_handle))
+        logging.debug(" - Starting fragment detection")
+        
+        k = 0
+        for region in self:
+            i = 0
+            for fragment in region:
+                i += 1
+                fragment_uid = 'FM_'+region.region[0]+'_'+str(i).zfill(12)
+                
+                if(self.settings.format == 1):
+                    fh.write(fragment.to_table_entry(fragment_uid, region, self.settings.fasta_handle))
+                elif(self.settings.format == 2):
+                    fh.write(fragment.to_gtf_entry(fragment_uid, self.settings.offset5p, self.settings.offset3p))
+            
+            k += i
         
         fh.close()
+        logging.info(' - Detected %i fragments' % k)
 
     def open_gtf(self):
+        logging.info(" - Exporting results to: "+self.settings.output+" (GTF)")
+        
         if(self.settings.output == "-"):
             fh = sys.stdout
         else:
@@ -171,6 +145,8 @@ class FlaiMapper():
         return fh
     
     def open_table(self):
+        logging.info(" - Exporting results to: "+self.settings.output+" (tab-delimited, per fragment)")
+        
         if(self.settings.output == "-"):
             fh = sys.stdout
         else:
@@ -182,33 +158,3 @@ class FlaiMapper():
             fh.write("Fragment\tSize\tReference sequence\tStart\tEnd\tPrecursor\tStart in precursor\tEnd in precursor\tSequence\tCorresponding-reads (start)\tCorresponding-reads (end)\tCorresponding-reads (total)\n")
         
         return fh
-
-    def export_gtf(self,offset5p,offset3p):
-        fh = self.open_gtf()
-        
-        for uid in sorted(self.sequences.keys()):
-            for result in self.sequences[uid]:
-                if result:
-                    name = result[0].masked_region[0]
-                    fragments_sorted_keys = {}
-                    for fragment in result:
-                        fragments_sorted_keys[fragment.start] = fragment
-                    
-                    i = 0
-                    for key in sorted(fragments_sorted_keys.keys()):# Walk over i in the for-loop:
-                        i += 1
-                        fragment = fragments_sorted_keys[key]
-                        fragment_uid = 'FM_'+result[0].masked_region[0]+'_'+str(i).zfill(12)
-                        fh.write(fragment.to_gtf_entry(fragment_uid, result[0].masked_region, offset5p, offset3p))
-        
-        fh.close()
-    
-    def write(self,export_format,output_filename,offset5p,offset3p):
-        logging.debug(" - Exporting results to: "+output_filename)
-        
-        if(export_format == 1):
-            logging.info("   - Format: tab-delimited, per fragment")
-            self.export_table()
-        elif(export_format == 2):
-            logging.info("   - Format: GTF")
-            self.export_gtf(offset5p,offset3p)

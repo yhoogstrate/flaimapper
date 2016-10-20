@@ -55,7 +55,7 @@ def main():
     
     # Run analysis
     flaimapper.run()#args.fasta_handle,args.parameters)
-    flaimapper.write(args.format,args.output,args.offset5p,args.offset3p)
+    #flaimapper.write(args.format,args.output,args.offset5p,args.offset3p)
     
     return 0
 

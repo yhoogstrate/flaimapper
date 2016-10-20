@@ -47,22 +47,10 @@ class FragmentFinder:
     """
     
     def __init__(self,masked_region,filter_parameters):
-        #@todo Don't save this info indefinitely!!
         self.masked_region = masked_region
         self.filter_parameters = filter_parameters
-        
-        #@todo yield only, disable autorun, incorporate into bamparser or something to get:
-        # for region in ...:
-        #     for fragment in region.find_fragments():
-        #         if output.format == gtf:
-        #         fh.write(fragment.to_gtf())
-        self.results = []
-    
-    def __iter__(self):
-        for result in self.results:
-            yield result
-    
-    def run(self):
+            
+    def predict_fragments(self):
         # Finds peaks
         peaksStart = self.find_peaks(self.masked_region.start_positions+[0])
         peaksStop = self.find_peaks(self.masked_region.stop_positions+[0])
@@ -72,12 +60,13 @@ class FragmentFinder:
         peaksStop = self.smooth_filter_peaks(peaksStop)
         
         # Trace start and stop positions together and obtain actual peaks
-        self.results = self.find_fragments(
+        for fragment in self.find_fragments(
             peaksStart,
             peaksStop,
         
             self.masked_region.start_avg_lengths,
-            self.masked_region.stop_avg_lengths)
+            self.masked_region.stop_avg_lengths):
+                yield fragment
     
     def find_peaks(self,plist,drop_cutoff=0.1):
         # Define variables:
@@ -169,7 +158,7 @@ class FragmentFinder:
                         fragment.supporting_reads_stop = pstop[fragment.stop]
                 
                 if(fragment != False):
-                    fragments.append(fragment)
+                    yield fragment
                     del(pstart[fragment.start])
                     items = []
         else:															# More stop than start positions
@@ -197,9 +186,6 @@ class FragmentFinder:
                         fragment.supporting_reads_stop = pstop[fragment.stop]
                 
                 if(fragment != False):
-                    fragments.append(fragment)
+                    yield fragment
                     del(pstop[fragment.stop])
                     items = []
-        #(counter >= fragment.start) and (counter < fragment.stop)
-        
-        return fragments

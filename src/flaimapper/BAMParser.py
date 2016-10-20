@@ -39,15 +39,13 @@
 
 import pysam
 
-from .MaskedRegion import MaskedRegion
 
-
-class BAMParser(MaskedRegion):
+class BAMParser:
     """parseNcRNA is a class that parses the BAM alignment files using pysam.
     """
     def __init__(self,region,alignment):
+        self.region = region
         self.alignment = alignment
-        MaskedRegion.__init__(self,region)
     
     def parse_reads(self):
         if(self.region[0] in self.alignment.references):
@@ -59,3 +57,7 @@ class BAMParser(MaskedRegion):
                     yield (read.blocks[0][0], read.blocks[-1][1]-1)
         else:
             raise Exception("Call to non-existing region")
+    
+    def __iter__(self):
+        for read in self.parse_reads():
+            yield read

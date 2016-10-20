@@ -65,35 +65,35 @@ class TestFragmentFinder(unittest.TestCase):
         # for the secoond fragment duck5 should work, duck6 should not.
         fp5 = FilterParameters(TESTS_FUNCTIONAL_DUCK5_PARAMS)
         ff5 = FragmentFinder(matrices,fp5)
-        ff5.run()
+        results = [fragment for fragment in ff5.predict_fragments()]
         
-        self.assertEqual(len(ff5.results), 2)
+        self.assertEqual(len(results), 2)
         
-        self.assertEqual(ff5.results[0].start, 1)
-        self.assertEqual(ff5.results[0].stop, 6)
+        self.assertEqual(results[0].start, 1)
+        self.assertEqual(results[0].stop, 6)
 
-        self.assertEqual(ff5.results[1].start, 7)
-        self.assertEqual(ff5.results[1].stop, 12)
+        self.assertEqual(results[1].start, 7)
+        self.assertEqual(results[1].stop, 12)
         
         
         fp6 = FilterParameters(TESTS_FUNCTIONAL_DUCK6_PARAMS)
         ff6 = FragmentFinder(matrices,fp6)
-        ff6.run()
+        results = [fragment for fragment in ff6.predict_fragments()]
 
-        self.assertEqual(len(ff6.results), 1)
+        self.assertEqual(len(results), 1)
         
-        self.assertEqual(ff6.results[0].start, 1)
-        self.assertEqual(ff6.results[0].stop, 6)
+        self.assertEqual(results[0].start, 1)
+        self.assertEqual(results[0].stop, 6)
 
         
         fp7 = FilterParameters(TESTS_FUNCTIONAL_DUCK7_PARAMS)
         ff7 = FragmentFinder(matrices,fp7)
-        ff7.run()
+        results = [fragment for fragment in ff7.predict_fragments()]
         
-        self.assertEqual(len(ff7.results), 1)
+        self.assertEqual(len(results), 1)
         
-        self.assertEqual(ff7.results[0].start, 1)
-        self.assertEqual(ff7.results[0].stop, 6)
+        self.assertEqual(results[0].start, 1)
+        self.assertEqual(results[0].stop, 6)
 
 
 def main():
