@@ -1,3 +1,6 @@
+2016-10-20  Youri Hoogstrate
+	* (v2.1.5) Cleanups and large reduction of memory footprint
+
 2016-10-19  Youri Hoogstrate
 	* (v2.1.4) Cleanups and minor memory improvements
 

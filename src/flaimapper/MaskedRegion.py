@@ -36,28 +36,20 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-import os,re,operator,argparse,sys
-
-
-from flaimapper.Read import Read
-from flaimapper.ncRNAfragment import ncRNAfragment
-
 
 class MaskedRegion:
     """A masked region is a region masked in the reference genome to 
     indicate where ncRNAs are located.
     """
-    def __init__(self,name,start,stop):
-        self.name = name
-        
-        self.start = start
-        self.stop = stop
+    def __init__(self,region):
+        self.region = region
     
     def reset(self):
-        self.sequence = False
-        
         self.start_positions = []
         self.stop_positions = []
+        
+        self.start_avg_lengths = []
+        self.stop_avg_lengths = []
     
     def parse_stats(self):
         self.reset()
@@ -65,31 +57,28 @@ class MaskedRegion:
         start_avg_lengths = []
         stop_avg_lengths = []
         
-        for read in self.parse_reads():#Relies on inherented class, e.g. BAMParser or SSLMParser
-            while(len(self.start_positions) < read.stop+1):				# Fix since 1.1.0: automatically scale  vector up if alignment falls outside range reference annotation
+        for read in self.parse_reads():#read = (start, stop)
+            while(len(self.start_positions) < read[1]+1):				# Fix since 1.1.0: automatically scale  vector up if alignment falls outside range reference annotation
                 self.start_positions.append(0)
                 self.stop_positions.append(0)
                 
                 start_avg_lengths.append({})# Do an aggregated vector {21:10243} for 10243 observations of length 21
                 stop_avg_lengths.append({})
             
-            self.start_positions[read.start] += 1
-            self.stop_positions[read.stop] += 1
+            self.start_positions[read[0]] += 1
+            self.stop_positions[read[1]] += 1
             
-            len_start = read.stop-read.start
-            len_stop = read.start-read.stop
+            len_start = read[1]-read[0]
+            len_stop = read[0]-read[1]
             
-            if not start_avg_lengths[read.start].has_key(len_start):
-                start_avg_lengths[read.start][len_start] = 0
+            if not start_avg_lengths[read[0]].has_key(len_start):
+                start_avg_lengths[read[0]][len_start] = 0
             
-            if not stop_avg_lengths[read.stop].has_key(len_stop):
-                stop_avg_lengths[read.stop][len_stop] = 0
+            if not stop_avg_lengths[read[1]].has_key(len_stop):
+                stop_avg_lengths[read[1]][len_stop] = 0
             
-            start_avg_lengths[read.start][len_start] += 1
-            stop_avg_lengths[read.stop][len_stop] += 1
-        
-        self.start_avg_lengths = []
-        self.stop_avg_lengths = []
+            start_avg_lengths[read[0]][len_start] += 1
+            stop_avg_lengths[read[1]][len_stop] += 1
         
         for i in range(len(stop_avg_lengths)):
             avgLenF = self.get_median_of_map(start_avg_lengths[i])
@@ -100,8 +89,6 @@ class MaskedRegion:
                 avgLenR = round(avgLenR-0.5)							# Why -0.5 -> because of rounding a negative number
             self.start_avg_lengths.append(avgLenF)
             self.stop_avg_lengths.append(avgLenR)
-        
-        return [self.start_positions,self.stop_positions,self.start_avg_lengths,self.stop_avg_lengths]
     
     def get_median_of_map(self,value_map):
         """
@@ -186,12 +173,3 @@ class MaskedRegion:
             return keys[0]
         else:
             return None
-    
-    def count_reads_per_region(self,fragments):							# @TODO change to 'sequencing_depth()'
-        for fragment in fragments:
-            fragment.supporting_reads = 0
-        
-        for read in self.parse_reads():
-            for fragment in fragments:
-                if(fragment.spans_read(read)):
-                    fragment.add_supporting_reads(1)

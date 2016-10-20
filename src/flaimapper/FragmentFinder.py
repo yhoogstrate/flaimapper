@@ -37,35 +37,26 @@
 """
 
 
-import os,re,operator
+import operator
 
-from flaimapper.ncRNAfragment import ncRNAfragment
+from .ncRNAfragment import ncRNAfragment
 
 
 class FragmentFinder:
     """Class Flaimapper Finds fragments in alignment files.
-    
-    @todo merge masked_region
     """
-    def __init__(self,masked_region,readcount,filter_parameters,autorun):
+    
+    def __init__(self,masked_region,filter_parameters):
+        #@todo Don't save this info indefinitely!!
         self.masked_region = masked_region
         self.filter_parameters = filter_parameters
-        self.results = []
         
-        if(autorun):
-            self.positions = {}
-            self.positions['startPositions'] = readcount.start_positions
-            self.positions['stopPositions'] = readcount.stop_positions
-            self.positions['startAvgLengths'] = readcount.start_avg_lengths
-            self.positions['stopAvgLengths'] = readcount.stop_avg_lengths
-            
-            self.peaksStart = False
-            self.peaksStop = False
-            
-            self.correctedPeaksStart = False
-            self.correctedPeaksStop = False
-            
-            self.run()
+        #@todo yield only, disable autorun, incorporate into bamparser or something to get:
+        # for region in ...:
+        #     for fragment in region.find_fragments():
+        #         if output.format == gtf:
+        #         fh.write(fragment.to_gtf())
+        self.results = []
     
     def __iter__(self):
         for result in self.results:
@@ -73,17 +64,20 @@ class FragmentFinder:
     
     def run(self):
         # Finds peaks
-        self.peaksStart = self.find_peaks(self.positions['startPositions']+[0])
-        self.peaksStop = self.find_peaks(self.positions['stopPositions']+[0])
+        peaksStart = self.find_peaks(self.masked_region.start_positions+[0])
+        peaksStop = self.find_peaks(self.masked_region.stop_positions+[0])
         
         # Correct / filter noisy peaks
-        self.correctedPeaksStart = self.smooth_filter_peaks(self.peaksStart)
-        self.correctedPeaksStop = self.smooth_filter_peaks(self.peaksStop)
+        peaksStart = self.smooth_filter_peaks(peaksStart)
+        peaksStop = self.smooth_filter_peaks(peaksStop)
         
         # Trace start and stop positions together and obtain actual peaks
-        self.results = self.find_fragments(self.correctedPeaksStart,self.correctedPeaksStop,self.positions['startAvgLengths'],self.positions['stopAvgLengths'])
+        self.results = self.find_fragments(
+            peaksStart,
+            peaksStop,
         
-        return True
+            self.masked_region.start_avg_lengths,
+            self.masked_region.stop_avg_lengths)
     
     def find_peaks(self,plist,drop_cutoff=0.1):
         # Define variables:
@@ -96,11 +90,11 @@ class FragmentFinder:
         # Walk over list of [start/stop]-position counts:
         for pos in range(len(plist)):
             current = plist[pos]
-            if((current > previous) ):# and (current > (noise_type_alpha_cutoff/100.0*max(plist)))):  
+            if current > previous:# and (current > (noise_type_alpha_cutoff/100.0*max(plist)))):  
                 if current > highest:
                     highest = current
                     highestPos = pos
-            elif (current < previous):
+            elif current < previous:
                 #if (current < (drop_cutoff*highest)) and (highestPos != -1):
                 #if (current < (100.0*drop_cutoff*highest)) and (highestPos != -1):   #
                 #if (current < (10.0*highest)) and (highestPos != -1):   # 
@@ -111,13 +105,14 @@ class FragmentFinder:
                     highest = 0
             
             previous = current
+        
         return peaks
     
     def smooth_filter_peaks(self,plist):
         """Smooth filtering
         """
         
-        psorted = sorted(plist.iteritems(),key=operator.itemgetter(1))[::-1]
+        psorted = sorted(plist.iteritems(),key=operator.itemgetter(1),reverse=True)
         
         # There is a small mistake in the algorithm,
         # it should search not for ALL peaks
@@ -169,8 +164,7 @@ class FragmentFinder:
                     score = pstart[item]*penalty 
                     if(score >= highest):
                         highest = pstart[item]
-                        
-                        fragment = ncRNAfragment(item,pos,None,self.masked_region,genomic_offset_masked_region)
+                        fragment = ncRNAfragment(item,pos,self.masked_region.region)
                         fragment.supporting_reads_start = pstart[fragment.start]
                         fragment.supporting_reads_stop = pstop[fragment.stop]
                 
@@ -198,11 +192,7 @@ class FragmentFinder:
                     if(score >= highest):
                         highest = pstop[item]
                         
-                        #fragment = {'start':pos,'stop':item,'sequence':None}
-                        #fragment['start_supporting_reads'] = pstart[fragment.start]
-                        #fragment['stop_supporting_reads']  = pstop[fragment.stop]
-                        
-                        fragment = ncRNAfragment(pos,item,None,self.masked_region,genomic_offset_masked_region)
+                        fragment = ncRNAfragment(pos,item,self.masked_region.region)
                         fragment.supporting_reads_start = pstart[fragment.start]
                         fragment.supporting_reads_stop = pstop[fragment.stop]
                 

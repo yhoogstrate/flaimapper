@@ -37,12 +37,9 @@
 """
 
 
-import os,re,operator,argparse,sys,logging
+import re,logging
 
-
-from flaimapper.Read import Read
-from flaimapper.ncRNAfragment import ncRNAfragment
-from flaimapper.MaskedRegion import MaskedRegion
+from .Read import Read
 
 
 class SSLMParser():

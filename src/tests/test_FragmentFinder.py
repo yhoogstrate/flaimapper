@@ -54,7 +54,7 @@ class TestFragmentFinder(unittest.TestCase):
          [----]
                [----]
         """
-        matrices = MaskedRegion('chr1',0,100)
+        matrices = MaskedRegion(('chr1',0,100))
 
         matrices.start_positions =   [0,2,0,0,0,0, 0,1,0,0,0,0, 0,0]
         matrices.stop_positions =    [0,0,0,0,0,0, 2,0,0,0,0,0, 1,0]
@@ -64,7 +64,8 @@ class TestFragmentFinder(unittest.TestCase):
         
         # for the secoond fragment duck5 should work, duck6 should not.
         fp5 = FilterParameters(TESTS_FUNCTIONAL_DUCK5_PARAMS)
-        ff5 = FragmentFinder(('chr1',0,100),matrices,fp5,True)
+        ff5 = FragmentFinder(matrices,fp5)
+        ff5.run()
         
         self.assertEqual(len(ff5.results), 2)
         
@@ -76,7 +77,8 @@ class TestFragmentFinder(unittest.TestCase):
         
         
         fp6 = FilterParameters(TESTS_FUNCTIONAL_DUCK6_PARAMS)
-        ff6 = FragmentFinder(('chr1',0,100),matrices,fp6,True)
+        ff6 = FragmentFinder(matrices,fp6)
+        ff6.run()
 
         self.assertEqual(len(ff6.results), 1)
         
@@ -85,7 +87,8 @@ class TestFragmentFinder(unittest.TestCase):
 
         
         fp7 = FilterParameters(TESTS_FUNCTIONAL_DUCK7_PARAMS)
-        ff7 = FragmentFinder(('chr1',0,100),matrices,fp7,True)
+        ff7 = FragmentFinder(matrices,fp7)
+        ff7.run()
         
         self.assertEqual(len(ff7.results), 1)
         
