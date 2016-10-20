@@ -37,6 +37,7 @@
 """
 
 import logging
+import pysam
 
 from .BAMParser import BAMParser
 from .FragmentContainer import FragmentContainer
