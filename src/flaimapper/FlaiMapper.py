@@ -38,12 +38,12 @@
 
 import logging
 
+import flaimapper
 from .BAMParser import BAMParser
-from .FragmentContainer import FragmentContainer
 from .FragmentFinder import FragmentFinder
 
 
-class FlaiMapper(FragmentContainer):
+class FlaiMapper():
     def __init__(self,alignment_file):
         self.alignment = alignment_file
         self.sequences = {}
@@ -61,6 +61,12 @@ class FlaiMapper(FragmentContainer):
             self.alignment.fetch()
         except:
             raise Exception('Couldn\'t indexing BAM file with samtools: '+self.alignment.filename+'\nAre you sure samtools is installed?\n')
+
+    def __iter__(self):
+        for uid in sorted(self.sequences.keys()):
+            for reference_sequence in self.sequences[uid]:
+                for fragment in reference_sequence:
+                    yield fragment
     
     def regions(self,filter_parameters):
         """
@@ -119,3 +125,185 @@ class FlaiMapper(FragmentContainer):
             fragments = FragmentFinder(aligned_reads, filter_parameters)
             fragments.run()
             self.add_fragments(fragments.results)
+
+
+    
+    #@tofo get rid of inserting fasta_file HERE 
+    def add_fragments(self,fragment_finder_results):
+        #for fragment in fragment_finder_results.results:
+        if len(fragment_finder_results) > 0:
+            region = fragment_finder_results[0].masked_region
+            uid = region[0]+"_"+str(region[1])+"_"+str(region[2])
+            if(uid not in self.sequences.keys()):
+                self.sequences[uid] = []
+            
+            self.sequences[uid].append(fragment_finder_results)
+    
+    def export_table(self,filename):
+        """Exports the discovered fragments to a tab-delimited file.
+        
+        The following format is exported:
+        
+        ----
+        @param filename The target file.
+        
+        @return:
+        @rtype:
+        """
+        if(not self.sequences):
+            logging.warning("     * Warning: no fragments detected")
+        else:
+            if(filename == "-"):
+                fh = sys.stdout
+            else:
+                fh = open(filename,'w')
+            
+            
+            if(self.fasta_file):
+                fh.write("Fragment\tSize\tReference sequence\tStart\tEnd\tPrecursor\tStart in precursor\tEnd in precursor\tSequence (no fasta file given)\tCorresponding-reads (start)\tCorresponding-reads (end)\tCorresponding-reads (total)\n")
+            else:
+                fh.write("Fragment\tSize\tReference sequence\tStart\tEnd\tPrecursor\tStart in precursor\tEnd in precursor\tSequence\tCorresponding-reads (start)\tCorresponding-reads (end)\tCorresponding-reads (total)\n")
+            
+            for uid in sorted(self.sequences.keys()):
+                for result in self.sequences[uid]:
+                    if result:
+                        name = result[0].masked_region[0]
+                        fragments_sorted_keys = {}
+                        for fragment in result:
+                            fragments_sorted_keys[fragment.start] = fragment
+                        
+                        i = 0
+                        for key in sorted(fragments_sorted_keys.keys()):	# Walk over i in the for-loop:
+                            i += 1
+                            fragment = fragments_sorted_keys[key]
+                            
+                            # Fragment uid
+                            fh.write('FM_'+ name+'_'+str(i).zfill(12)+"\t")
+                            
+                            # Size
+                            fh.write(str(fragment.stop - fragment.start + 1) + "\t")
+                            
+                            # Reference sequence 
+                            fh.write(name + "\t")
+                            
+                            # Start
+                            fh.write(str(fragment.start) + "\t")
+                            
+                            # End
+                            fh.write(str(fragment.stop)+"\t")
+                            
+                            # Precursor
+                            fh.write(name)
+                            
+                            # Start in precursor
+                            fh.write("\t" + str(fragment.start-fragment.masked_region[1])+ "\t")
+                            
+                            # End in precursor
+                            fh.write(str(fragment.stop-fragment.masked_region[1])+"\t")
+                            
+                            # Sequence 
+                            if(self.fasta_file):
+                                # PySam 0.8.2 claims to use 0-based coordinates pysam.FastaFile.fetch().
+                                # This is only true for the start position, the end-position is 1-based.
+                                fh.write(str(self.fasta_file.fetch(name,fragment.start,fragment.stop+1)))
+                            
+                            # Start supporting reads
+                            fh.write("\t"+str(fragment.supporting_reads_start)+"\t")
+                            
+                            # Stop supporting reads
+                            fh.write(str(fragment.supporting_reads_stop)+"\t")
+                            
+                            # Total supporting reads
+                            fh.write(str(fragment.supporting_reads_stop+fragment.supporting_reads_start) + "\n")
+            
+            fh.close()
+    
+    def export_gtf(self,filename,offset5p,offset3p):
+        if(filename == "-"):
+            fh = sys.stdout
+        else:
+            fh = open(filename,'w')
+        
+        for uid in sorted(self.sequences.keys()):
+            for result in self.sequences[uid]:
+                if result:
+                    name = result[0].masked_region[0]
+                    fragments_sorted_keys = {}
+                    for fragment in result:
+                        fragments_sorted_keys[fragment.start] = fragment
+                    
+                    i = 0
+                    for key in sorted(fragments_sorted_keys.keys()):# Walk over i in the for-loop:
+                        i += 1
+                        fragment = fragments_sorted_keys[key]
+                        
+                        ## Line 1: type sncdRNA
+                        # Seq-name
+                        fh.write(name + "\t")
+                        
+                        # Source
+                        fh.write("flaimapper-v"+flaimapper.__version__+"\t")
+                        
+                        # Feature
+                        fh.write("sncdRNA\t")
+                        
+                        # Start
+                        fh.write(str(fragment.start+1) + "\t")
+                        
+                        # End
+                        fh.write(str(fragment.stop+1)+"\t")
+                        
+                        # Score
+                        fh.write(str(fragment.supporting_reads_stop+fragment.supporting_reads_start) + "\t")
+                        
+                        # Strand and Frame
+                        fh.write(".\t.\t")
+                        
+                        # Attribute
+                        attributes = []
+                        attributes.append('gene_id "FM_'+ name+'_'+str(i).zfill(12)+'"' )
+                        
+                        fh.write(", ".join(attributes)+"\n")
+                        
+                        
+                        ## Line 2: type exon, with offset used for counting in e.g. HTSeq-count / featureCounts
+                        
+                        ## Line 1: type sncdRNA
+                        # Seq-name
+                        fh.write(name + "\t")
+                        
+                        # Source
+                        fh.write("flaimapper-v"+flaimapper.__version__+"\t")
+                        
+                        # Feature
+                        fh.write("exon\t")
+                        
+                        # Start
+                        fh.write(str(max(1,fragment.start+1-offset5p))+"\t")
+                        
+                        # End
+                        fh.write(str(max(1,fragment.stop+1+offset3p))+"\t")
+                        
+                        # Score
+                        fh.write(str(fragment.supporting_reads_stop+fragment.supporting_reads_start) + "\t")
+                        
+                        # Strand and Frame
+                        fh.write(".\t.\t")
+                        
+                        # Attribute
+                        attributes = []
+                        attributes.append('gene_id "FM_'+ name+'_'+str(i).zfill(12)+'"' )
+                        
+                        fh.write(", ".join(attributes)+"\n")
+                        
+        fh.close()
+    
+    def write(self,export_format,output_filename,offset5p,offset3p):
+        logging.debug(" - Exporting results to: "+output_filename)
+        
+        if(export_format == 1):
+            logging.info("   - Format: tab-delimited, per fragment")
+            self.export_table(output_filename)
+        elif(export_format == 2):
+            logging.info("   - Format: GTF")
+            self.export_gtf(output_filename,offset5p,offset3p)
