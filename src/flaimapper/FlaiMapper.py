@@ -43,7 +43,6 @@ logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
 import pysam
 
 from .MaskedRegion import MaskedRegion
-from .FragmentFinder import FragmentFinder
 
 
 class FlaiMapper():

@@ -37,25 +37,21 @@
 """
 
 
-import os,re,operator,argparse,sys,tempfile,textwrap,datetime,logging
+import sys
 import pysam
 
 from flaimapper.CLI import CLI
-from flaimapper.FragmentFinder import FragmentFinder
 from flaimapper.FlaiMapper import FlaiMapper
 from flaimapper.utils import parse_gff
 
+
 def main():
-    import flaimapper
-    
+    import flaimapper,logging
     logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
     args = CLI()
     
-    flaimapper = FlaiMapper(args)
-    
-    # Run analysis
-    flaimapper.run()#args.fasta_handle,args.parameters)
-    #flaimapper.write(args.format,args.output,args.offset5p,args.offset3p)
+    fm = FlaiMapper(args)
+    fm.run()
     
     return 0
 

@@ -50,6 +50,7 @@ setup(name='flaimapper',
         url='https://github.com/yhoogstrate/flaimapper',
         
         scripts=["bin/flaimapper","bin/sslm2sam"],
+        #packages=['flaimapper'],
         packages=find_packages(),
         #package_dir={'flaimapper': 'flaimapper'},
         package_data={'': ['data/*.*','data/tests/*.*']},

@@ -176,6 +176,6 @@ class TestFunctional(unittest.TestCase):
 def main():
     unittest.main()
 
-environment = os.environ.copy()
+#environment = os.environ.copy()
 if __name__ == '__main__':
     main()
