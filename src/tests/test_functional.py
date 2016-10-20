@@ -38,7 +38,7 @@
 
 
 import flaimapper
-import unittest,logging,os,subprocess,shutil,sys
+import unittest,logging,os,subprocess,shutil,sys,filecmp
 
 logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
 
@@ -114,6 +114,8 @@ class TestFunctional(unittest.TestCase):
         
         total_evaluations = m+mm+mm_trna
         success = 1.0 - (1.0*(mm+mm_trna)/(total_evaluations))
+        
+        self.assertTrue(filecmp.cmp(TESTS_FUNCTIONAL_TEST_03_OUTPUT_TXT, output_file),msg="diff '"+TESTS_FUNCTIONAL_TEST_03_OUTPUT_TXT+"' '"+output_file+"':\n"+subprocess.Popen(['diff',TESTS_FUNCTIONAL_TEST_03_OUTPUT_TXT,output_file], stdout=subprocess.PIPE).stdout.read())
         
         assertion1 = (mm <= 1)
         assertion2 = (mm_trna <= 63)
