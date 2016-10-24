@@ -254,22 +254,25 @@ class MaskedRegion:
             logging.debug("     * Detecting fragments")
             fragments = []
             
-            if(len(pstart) >= len(pstop)):									# More start than stop positions
+            if len(pstart) >= len(pstop):									# More start than stop positions
                 pstopSorted = sorted(pstop.iteritems(),key=operator.itemgetter(1))[::-1]
                 for itema in pstopSorted:
                     pos = itema[0]
                     diff = pexpectedStop[pos]
+                    
                     predictedPos = pos+diff+1								# 149 - 50 = 99; 149- 50 + 1 = 100 (example of read aligned to 100,149 (size=50)
                     fragment = False
                     
                     highest = 0
-                    items = [s for s in sorted(pstart.keys()) if ((s >= predictedPos-15) and (s <= predictedPos+15))]
+                    items = [s for s in sorted(pstart.keys()) if ((s >= predictedPos-self.settings.parameters.left_padding) and (s <= predictedPos+self.settings.parameters.right_padding))]
+                    
                     for item in items:
                         distance = abs(predictedPos - item)
                         penalty = 1.0 - (distance * 0.09)
                         score = pstart[item]*penalty 
                         if(score >= highest):
                             highest = pstart[item]
+                            
                             fragment = ncRNAFragment(item,pos)
                             fragment.supporting_reads_start = pstart[fragment.start]
                             fragment.supporting_reads_stop = pstop[fragment.stop]
@@ -289,7 +292,7 @@ class MaskedRegion:
                     fragment = False
                     
                     highest = 0
-                    items = [s for s in sorted(pstop.keys(),reverse=True) if ((s >= predictedPos-15) and (s <= predictedPos+15))]
+                    items = [s for s in sorted(pstop.keys(),reverse=True) if ((s >= predictedPos-self.settings.parameters.left_padding) and (s <= predictedPos+self.settings.parameters.right_padding))]
                     
                     for item in items:
                         distance = abs(predictedPos - item)
