@@ -1,3 +1,9 @@
+2016-10-24  Youri Hoogstrate
+	* (v2.3.0) 
+	  - Fixed behaviour that on multiple optima the result could be randomly one of each
+	  - Fixed issue that increased the memory consumption the further in the genome 
+	    aligned reads were analysed
+
 2016-10-20  Youri Hoogstrate
 	* (v2.2.0) Many extra cleanups, reorganization of classes to get rid of a linear
 	  increase of memory usage with respect to the number of output entities.

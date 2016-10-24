@@ -252,8 +252,8 @@ class MaskedRegion:
             """Assemble by peak reconstruction / traceback
             """
             logging.debug("     * Detecting fragments")
-            
             fragments = []
+            
             if(len(pstart) >= len(pstop)):									# More start than stop positions
                 pstopSorted = sorted(pstop.iteritems(),key=operator.itemgetter(1))[::-1]
                 for itema in pstopSorted:
@@ -263,7 +263,7 @@ class MaskedRegion:
                     fragment = False
                     
                     highest = 0
-                    items = [s for s in pstart if ((s >= predictedPos-15) and (s <= predictedPos+15))]
+                    items = [s for s in sorted(pstart.keys()) if ((s >= predictedPos-15) and (s <= predictedPos+15))]
                     for item in items:
                         distance = abs(predictedPos - item)
                         penalty = 1.0 - (distance * 0.09)
@@ -289,7 +289,7 @@ class MaskedRegion:
                     fragment = False
                     
                     highest = 0
-                    items = [s for s in pstop if ((s >= predictedPos-15) and (s <= predictedPos+15))]
+                    items = [s for s in sorted(pstop.keys(),reverse=True) if ((s >= predictedPos-15) and (s <= predictedPos+15))]
                     
                     for item in items:
                         distance = abs(predictedPos - item)
