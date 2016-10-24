@@ -248,7 +248,7 @@ class MaskedRegion:
             
             return pnew
         
-        def step_04__assemble_fragments(pstart,pstop,pexpectedStart,pexpectedStop,prime_5_ext = 3,prime_3_ext=5,genomic_offset_masked_region=0):
+        def step_04__assemble_fragments(pstart,pstop,pexpectedStart,pexpectedStop):
             """Assemble by peak reconstruction / traceback
             """
             logging.debug("     * Detecting fragments")
