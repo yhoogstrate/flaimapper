@@ -228,27 +228,19 @@ class MaskedRegion:
             # it should search not for ALL peaks
             # but only for ALL peaks except itself; position i can not be a noise product of i itself
             
-            n = range(len(psorted))
-            
-            for i in n:
-                if(psorted[i] != False):
+            for i in range(len(psorted)):
+                if(psorted[i] != None):
                     item = psorted[i]
-                    for j in n:							# Can be limited to size and -size of self.self.settings.parametersmatrix
-                        if((psorted[j] != False) and (j != i)):
+                    for j in range(len(psorted)):							# Can be limited to size and -size of self.self.settings.parametersmatrix
+                        if((psorted[j] != None) and (j != i)):
                             item2 = psorted[j]
                             diff = item2[0]-item[0]
                             if(self.settings.parameters.matrix.has_key(diff)):
                                 perc = self.settings.parameters.matrix[diff]/100.0
                                 if((perc*item[1]) > item2[1]):
-                                    psorted[j] = False
+                                    psorted[j] = None
             
-            pnew = {}
-            
-            for item in psorted:
-                if(item != False):
-                    pnew[item[0]] = item[1]
-            
-            return pnew
+            return {x[0]:x[1] for x in psorted if x != None}
         
         def step_04__assemble_fragments(pstart,pstop,pexpectedStart,pexpectedStop):
             """Assemble by peak reconstruction / traceback
@@ -271,7 +263,7 @@ class MaskedRegion:
                             
                             score = pstart[item]*penalty 
                             if score >= highest_scoring_position[0]:
-                                highest_scoring_position = (pstart[item], item, pos, pstart[item], pstop[pos])# (Highest score -- a bug... should be 'score', Start, Stop, Reads on start, Reads on stop)
+                                highest_scoring_position = (score, item, pos, pstart[item], pstop[pos])# (Highest score -- a bug... should be 'score', Start, Stop, Reads on start, Reads on stop)
                     
                     if highest_scoring_position[0] > 0:
                         del(pstart[highest_scoring_position[1]])
@@ -292,7 +284,7 @@ class MaskedRegion:
                             
                             score = pstop[item]*penalty 
                             if score >= highest_scoring_position[0]:
-                                highest_scoring_position = (pstop[item], pos,item, pstart[pos], pstop[item])# (Highest score -- a bug... should be 'score', Start, Stop, Reads on start, Reads on stop)
+                                highest_scoring_position = (score, pos,item, pstart[pos], pstop[item])# (Highest score -- a bug... should be 'score', Start, Stop, Reads on start, Reads on stop)
                     
                     if highest_scoring_position[0] > 0:
                         del(pstop[highest_scoring_position[2]])
