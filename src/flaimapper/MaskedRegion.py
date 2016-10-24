@@ -228,10 +228,12 @@ class MaskedRegion:
             # it should search not for ALL peaks
             # but only for ALL peaks except itself; position i can not be a noise product of i itself
             
-            for i in range(len(psorted)):
+            n = range(len(psorted))
+            
+            for i in n:
                 if(psorted[i] != False):
                     item = psorted[i]
-                    for j in range(len(psorted)):							# Can be limited to size and -size of self.self.settings.parametersmatrix
+                    for j in n:							# Can be limited to size and -size of self.self.settings.parametersmatrix
                         if((psorted[j] != False) and (j != i)):
                             item2 = psorted[j]
                             diff = item2[0]-item[0]
