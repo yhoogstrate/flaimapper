@@ -279,12 +279,9 @@ class MaskedRegion:
                 for itema in pstartSorted:
                     pos = itema[0]
                     diff = pexpectedStart[pos]
-                    
                     predictedPos = pos+diff#@todo figure out if this requires << + 1
                     
-                    fragment = False
-                    highest = 0
-                    #highest_scoring_position = (0,-1,-1,-1,-1)
+                    highest_scoring_position = (0,-1,-1,-1,-1)
                     
                     for item in sorted(pstop.keys(),reverse=True):
                         if item >= predictedPos-self.settings.parameters.left_padding and item <= predictedPos+self.settings.parameters.right_padding:
@@ -292,14 +289,12 @@ class MaskedRegion:
                             penalty = 1.0 - (distance * 0.09)
                             
                             score = pstop[item]*penalty 
-                            if(score >= highest):
-                                highest = pstop[item]
-                                
-                                fragment = ncRNAFragment(pos,item,pstart[pos],pstop[item])
+                            if score >= highest_scoring_position[0]:
+                                highest_scoring_position = (pstop[item], pos,item, pstart[pos], pstop[item])# (Highest score -- a bug... should be 'score', Start, Stop, Reads on start, Reads on stop)
                     
-                    if fragment != False:
-                        del(pstop[fragment.stop])
-                        yield fragment
+                    if highest_scoring_position[0] > 0:
+                        del(pstop[highest_scoring_position[2]])
+                        yield ncRNAFragment(highest_scoring_position[1],highest_scoring_position[2],highest_scoring_position[3],highest_scoring_position[4])
         
         # Acquire statistics
         start_positions, stop_positions, start_avg_lengths, stop_avg_lengths = step_01__parse_stats()
