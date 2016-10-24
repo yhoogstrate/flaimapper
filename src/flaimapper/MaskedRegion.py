@@ -264,9 +264,8 @@ class MaskedRegion:
                     fragment = False
                     
                     highest = 0
-                    items = [s for s in sorted(pstart.keys()) if ((s >= predictedPos-self.settings.parameters.left_padding) and (s <= predictedPos+self.settings.parameters.right_padding))]
                     
-                    for item in items:
+                    for item in [s for s in sorted(pstart.keys()) if ((s >= predictedPos-self.settings.parameters.left_padding) and (s <= predictedPos+self.settings.parameters.right_padding))]:
                         distance = abs(predictedPos - item)
                         penalty = 1.0 - (distance * 0.09)
                         score = pstart[item]*penalty 
@@ -280,7 +279,6 @@ class MaskedRegion:
                     if(fragment != False):
                         yield fragment
                         del(pstart[fragment.start])
-                        items = []
             else:															# More stop than start positions
                 pstartSorted = sorted(pstart.iteritems(),key=operator.itemgetter(1))[::-1]
                 for itema in pstartSorted:
@@ -292,9 +290,8 @@ class MaskedRegion:
                     fragment = False
                     
                     highest = 0
-                    items = [s for s in sorted(pstop.keys(),reverse=True) if ((s >= predictedPos-self.settings.parameters.left_padding) and (s <= predictedPos+self.settings.parameters.right_padding))]
                     
-                    for item in items:
+                    for item in [s for s in sorted(pstop.keys(),reverse=True) if ((s >= predictedPos-self.settings.parameters.left_padding) and (s <= predictedPos+self.settings.parameters.right_padding))]:
                         distance = abs(predictedPos - item)
                         penalty = 1.0 - (distance * 0.09)
                         score = pstop[item]*penalty 
@@ -308,7 +305,6 @@ class MaskedRegion:
                     if(fragment != False):
                         yield fragment
                         del(pstop[fragment.stop])
-                        items = []
         
         # Acquire statistics
         start_positions, stop_positions, start_avg_lengths, stop_avg_lengths = step_01__parse_stats()
