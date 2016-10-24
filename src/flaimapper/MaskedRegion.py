@@ -222,7 +222,7 @@ class MaskedRegion:
             """Smooth filtering
             """
             
-            psorted = sorted(plist.iteritems(),key=operator.itemgetter(1),reverse=True)
+            psorted = sorted(plist.iteritems(),key=operator.itemgetter(1))[::-1]
             
             # There is a small mistake in the algorithm,
             # it should search not for ALL peaks
