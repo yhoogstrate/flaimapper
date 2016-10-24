@@ -41,13 +41,12 @@ import flaimapper
 
 
 class ncRNAFragment:
-    def __init__(self,start,stop):
+    def __init__(self,start,stop,supporting_reads_start,supporting_reads_stop):
         self.start = start
         self.stop = stop
         
-        self.supporting_reads = 0			# all reads in-between the fragment
-        self.supporting_reads_start = 0		# The reads with the start-position aligned exactly to the 5' of the fragment
-        self.supporting_reads_stop = 0		# The reads with the end-position aligned exactly to the 3' of the fragment
+        self.supporting_reads_start = supporting_reads_start	# The reads with the start-position aligned exactly to the 5' of the fragment
+        self.supporting_reads_stop  = supporting_reads_stop		# The reads with the end-position aligned exactly to the 3' of the fragment
     
     def to_gtf_entry(self, uid, masked_region, type_exon_offset5p, type_exon_offset3p):
         ## Line 1: type sncdRNA

@@ -258,50 +258,44 @@ class MaskedRegion:
                 for itema in pstopSorted:
                     pos = itema[0]
                     diff = pexpectedStop[pos]
-                    
                     predictedPos = pos+diff+1								# 149 - 50 = 99; 149- 50 + 1 = 100 (example of read aligned to 100,149 (size=50)
-                    fragment = False
                     
-                    highest = 0
+                    highest_scoring_position = (0,-1,-1,-1,-1)
                     
                     for item in sorted(pstart.keys()):
                         if item >= predictedPos-self.settings.parameters.left_padding and item <= predictedPos+self.settings.parameters.right_padding:
                             distance = abs(predictedPos - item)
                             penalty = 1.0 - (distance * 0.09)
+                            
                             score = pstart[item]*penalty 
-                            if(score >= highest):
-                                highest = pstart[item]
-                                
-                                fragment = ncRNAFragment(item,pos)
-                                fragment.supporting_reads_start = pstart[fragment.start]
-                                fragment.supporting_reads_stop = pstop[fragment.stop]
+                            if score >= highest_scoring_position[0]:
+                                highest_scoring_position = (pstart[item], item, pos, pstart[item], pstop[pos])# (Highest score -- a bug... should be 'score', Start, Stop, Reads on start, Reads on stop)
                     
-                    if fragment != False:
-                        del(pstart[fragment.start])
-                        yield fragment
+                    if highest_scoring_position[0] > 0:
+                        del(pstart[highest_scoring_position[1]])
+                        yield ncRNAFragment(highest_scoring_position[1],highest_scoring_position[2],highest_scoring_position[3],highest_scoring_position[4])
             else:															# More stop than start positions
                 pstartSorted = sorted(pstart.iteritems(),key=operator.itemgetter(1))[::-1]
                 for itema in pstartSorted:
                     pos = itema[0]
                     diff = pexpectedStart[pos]
                     
-                    #@todo figure out if this requires << + 1
-                    predictedPos = pos+diff
-                    fragment = False
+                    predictedPos = pos+diff#@todo figure out if this requires << + 1
                     
+                    fragment = False
                     highest = 0
+                    #highest_scoring_position = (0,-1,-1,-1,-1)
                     
                     for item in sorted(pstop.keys(),reverse=True):
                         if item >= predictedPos-self.settings.parameters.left_padding and item <= predictedPos+self.settings.parameters.right_padding:
                             distance = abs(predictedPos - item)
                             penalty = 1.0 - (distance * 0.09)
+                            
                             score = pstop[item]*penalty 
                             if(score >= highest):
                                 highest = pstop[item]
                                 
-                                fragment = ncRNAFragment(pos,item)
-                                fragment.supporting_reads_start = pstart[fragment.start]
-                                fragment.supporting_reads_stop = pstop[fragment.stop]
+                                fragment = ncRNAFragment(pos,item,pstart[pos],pstop[item])
                     
                     if fragment != False:
                         del(pstop[fragment.stop])
