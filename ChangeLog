@@ -1,4 +1,10 @@
 2016-10-24  Youri Hoogstrate
+	* (v2.3.3) 
+	  - Fixes a parallelization bug in pysam (#17) by opening as many pysam wrappers
+	    as the number of regions. This should have been a pysam.fetch() object for
+	    each region, but this fails when the results are yielded
+
+2016-10-24  Youri Hoogstrate
 	* (v2.3.2) 
 	  - Catches pysam Exception in rare alignment conditions #2
 

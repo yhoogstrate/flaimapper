@@ -45,7 +45,7 @@ class BAMParser:
     """
     def __init__(self,region,alignment):
         self.region = region
-        self.alignment = alignment
+        self.alignment = pysam.AlignmentFile(alignment,'rb')
     
     def parse_reads(self):
         if(self.region[0] in self.alignment.references):

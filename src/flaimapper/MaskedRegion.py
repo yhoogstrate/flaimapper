@@ -171,7 +171,7 @@ class MaskedRegion:
                     tmp_stop_avg_lengths[pos_stop][len_stop] += 1
                 
                 else:
-                    logging.warn("Pysam picked up a read that aligns out of bound in: %s\nAligned region: %i-%i\nScanned region: %i-%i" % (self.region[0], pos_start, pos_stop, self.region[1], self.region[2]))
+                    logging.error("Alignment out of bound: (%i,%i) %s:%i-%i" % (pos_start, pos_stop, self.region[0], self.region[1], self.region[2]))
             
             # Calc medians
             self_start_avg_lengths = []
