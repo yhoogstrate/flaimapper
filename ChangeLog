@@ -1,4 +1,8 @@
 2016-10-24  Youri Hoogstrate
+	* (v2.3.1) 
+	  - Catches pysam Exception in rare alignment conditions
+
+2016-10-24  Youri Hoogstrate
 	* (v2.3.0) 
 	  - Fixed behaviour that on multiple optima the result could be randomly one of each
 	  - Fixed issue that increased the memory consumption the further in the genome 

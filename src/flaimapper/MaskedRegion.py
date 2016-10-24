@@ -157,14 +157,21 @@ class MaskedRegion:
                 len_start = read[1]-read[0]
                 len_stop = read[0]-read[1]
                 
-                if not tmp_start_avg_lengths[read[0]-self.region[1]].has_key(len_start):
-                    tmp_start_avg_lengths[read[0]-self.region[1]][len_start] = 0
+                pos_start = read[0]-self.region[1]
+                pos_stop = read[1]-self.region[1]
                 
-                if not tmp_stop_avg_lengths[read[1]-self.region[1]].has_key(len_stop):
-                    tmp_stop_avg_lengths[read[1]-self.region[1]][len_stop] = 0
+                if pos_start >= 0 and pos_stop >= 0 and pos_start < n and pos_stop < n:
+                    if not tmp_start_avg_lengths[pos_start].has_key(len_start):
+                        tmp_start_avg_lengths[pos_start][len_start] = 0
+                    
+                    if not tmp_stop_avg_lengths[pos_stop].has_key(len_stop):
+                        tmp_stop_avg_lengths[pos_stop][len_stop] = 0
+                    
+                    tmp_start_avg_lengths[pos_start][len_start] += 1
+                    tmp_stop_avg_lengths[pos_stop][len_stop] += 1
                 
-                tmp_start_avg_lengths[read[0]-self.region[1]][len_start] += 1
-                tmp_stop_avg_lengths[read[1]-self.region[1]][len_stop] += 1
+                else:
+                    logging.warn("Pysam picked up a read that aligns out of bound in: %s\nAligned region: %i-%i\nScanned region: %i-%i" % (self.region[0], pos_start, pos_stop, self.region[1], self.region[2]))
             
             # Calc medians
             self_start_avg_lengths = []
@@ -231,24 +238,18 @@ class MaskedRegion:
             n = range(len(psorted))
             
             for i in n:
-                if(psorted[i] != False):
+                if(psorted[i] != None):
                     item = psorted[i]
                     for j in n:							# Can be limited to size and -size of self.self.settings.parametersmatrix
-                        if((psorted[j] != False) and (j != i)):
+                        if((psorted[j] != None) and (j != i)):
                             item2 = psorted[j]
                             diff = item2[0]-item[0]
                             if(self.settings.parameters.matrix.has_key(diff)):
                                 perc = self.settings.parameters.matrix[diff]/100.0
                                 if((perc*item[1]) > item2[1]):
-                                    psorted[j] = False
+                                    psorted[j] = None
             
-            pnew = {}
-            
-            for item in psorted:
-                if(item != False):
-                    pnew[item[0]] = item[1]
-            
-            return pnew
+            return {x[0]:x[1] for x in psorted if x != None}
         
         def step_04__assemble_fragments(pstart,pstop,pexpectedStart,pexpectedStop):
             """Assemble by peak reconstruction / traceback
