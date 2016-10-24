@@ -147,8 +147,8 @@ class MaskedRegion:
             self_start_positions = [0]*n
             self_stop_positions = [0]*n
             
-            tmp_start_avg_lengths = [{}]*n
-            tmp_stop_avg_lengths = [{}]*n
+            tmp_start_avg_lengths = [{} for x in range(n)]# [{}] * n makes references instead of copies
+            tmp_stop_avg_lengths = [{} for x in range(n)]# [{}] * n makes references instead of copies
             
             for read in BAMParser(self.region,self.settings.alignment_file):
                 self_start_positions[read[0]-self.region[1]] += 1
