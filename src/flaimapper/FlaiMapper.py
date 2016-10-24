@@ -53,15 +53,16 @@ class FlaiMapper():
         self.check_alignment_index()
     
     def check_alignment_index(self):
+        self.alignment_file = pysam.AlignmentFile(self.settings.alignment_file,'rb')
         try:
-            self.settings.alignment_file.fetch()
+            self.alignment_file.fetch()
         except:
-            logging.info(' - Indexing BAM file with samtools: '+self.settings.alignment_file.filename)
-            pysam.index(self.settings.alignment_file.filename)
-            self.settings.alignment_file = pysam.AlignmentFile(self.settings.alignment_file.filename)
+            logging.info(' - Indexing BAM file with samtools: '+self.settings.alignment_file)
+            pysam.index(self.settings.alignment_file)
+            self.alignment_file = pysam.AlignmentFile(self.settings.alignment_file,'rb')
         
         try:
-            self.settings.alignment_file.fetch()
+            self.alignment_file.fetch()
         except:
             raise Exception('Couldn\'t indexing BAM file with samtools: '+self.settings.alignment_file.filename+'\nAre you sure samtools is installed?\n')
     
@@ -85,11 +86,11 @@ class FlaiMapper():
         i_dist_r = abs(self.settings.parameters.right_padding)
         i_dist = i_dist_l + i_dist_r
         
-        for i in range(self.settings.alignment_file.nreferences):
-            s_name = self.settings.alignment_file.references[i]
+        for i in range(self.alignment_file.nreferences):
+            s_name = self.alignment_file.references[i]
             ss = [None,None]
             
-            for r in self.settings.alignment_file.fetch(s_name):
+            for r in self.alignment_file.fetch(s_name):
                 if len(r.blocks) > 0:
                     if ss[0] == None:
                         ss = [r.blocks[0][0],r.blocks[-1][1]-1]

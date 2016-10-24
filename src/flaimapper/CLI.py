@@ -73,7 +73,7 @@ def CLI(argv=None):
     else:# Argumented parameters (only for testing)
         args = parser.parse_args(argv)
     
-    args.alignment_file = pysam.AlignmentFile(args.alignment_file[0])
+    args.alignment_file = args.alignment_file[0]
     
     if args.fasta != None:
         args.fasta_handle = pysam.Fastafile(args.fasta)
