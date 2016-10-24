@@ -1,4 +1,8 @@
 2016-10-24  Youri Hoogstrate
+	* (v2.3.2) 
+	  - Catches pysam Exception in rare alignment conditions #2
+
+2016-10-24  Youri Hoogstrate
 	* (v2.3.1) 
 	  - Catches pysam Exception in rare alignment conditions
 
