@@ -265,16 +265,17 @@ class MaskedRegion:
                     
                     highest = 0
                     
-                    for item in [s for s in sorted(pstart.keys()) if ((s >= predictedPos-self.settings.parameters.left_padding) and (s <= predictedPos+self.settings.parameters.right_padding))]:
-                        distance = abs(predictedPos - item)
-                        penalty = 1.0 - (distance * 0.09)
-                        score = pstart[item]*penalty 
-                        if(score >= highest):
-                            highest = pstart[item]
-                            
-                            fragment = ncRNAFragment(item,pos)
-                            fragment.supporting_reads_start = pstart[fragment.start]
-                            fragment.supporting_reads_stop = pstop[fragment.stop]
+                    for item in sorted(pstart.keys()):
+                        if item >= predictedPos-self.settings.parameters.left_padding and item <= predictedPos+self.settings.parameters.right_padding:
+                            distance = abs(predictedPos - item)
+                            penalty = 1.0 - (distance * 0.09)
+                            score = pstart[item]*penalty 
+                            if(score >= highest):
+                                highest = pstart[item]
+                                
+                                fragment = ncRNAFragment(item,pos)
+                                fragment.supporting_reads_start = pstart[fragment.start]
+                                fragment.supporting_reads_stop = pstop[fragment.stop]
                     
                     if(fragment != False):
                         yield fragment
@@ -291,16 +292,17 @@ class MaskedRegion:
                     
                     highest = 0
                     
-                    for item in [s for s in sorted(pstop.keys(),reverse=True) if ((s >= predictedPos-self.settings.parameters.left_padding) and (s <= predictedPos+self.settings.parameters.right_padding))]:
-                        distance = abs(predictedPos - item)
-                        penalty = 1.0 - (distance * 0.09)
-                        score = pstop[item]*penalty 
-                        if(score >= highest):
-                            highest = pstop[item]
-                            
-                            fragment = ncRNAFragment(pos,item)
-                            fragment.supporting_reads_start = pstart[fragment.start]
-                            fragment.supporting_reads_stop = pstop[fragment.stop]
+                    for item in sorted(pstop.keys(),reverse=True):
+                        if item >= predictedPos-self.settings.parameters.left_padding and item <= predictedPos+self.settings.parameters.right_padding:
+                            distance = abs(predictedPos - item)
+                            penalty = 1.0 - (distance * 0.09)
+                            score = pstop[item]*penalty 
+                            if(score >= highest):
+                                highest = pstop[item]
+                                
+                                fragment = ncRNAFragment(pos,item)
+                                fragment.supporting_reads_start = pstart[fragment.start]
+                                fragment.supporting_reads_stop = pstop[fragment.stop]
                     
                     if(fragment != False):
                         yield fragment
