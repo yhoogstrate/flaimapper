@@ -38,7 +38,7 @@
 
 
 import flaimapper
-import unittest,logging,os,subprocess,shutil,sys
+import unittest,logging,os,subprocess,shutil,sys,filecmp
 
 logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
 
@@ -115,19 +115,19 @@ class TestFunctional(unittest.TestCase):
         total_evaluations = m+mm+mm_trna
         success = 1.0 - (1.0*(mm+mm_trna)/(total_evaluations))
         
+        self.assertTrue(filecmp.cmp(TESTS_FUNCTIONAL_TEST_03_OUTPUT_TXT, output_file),msg="diff '"+TESTS_FUNCTIONAL_TEST_03_OUTPUT_TXT+"' '"+output_file+"':\n"+subprocess.Popen(['diff',TESTS_FUNCTIONAL_TEST_03_OUTPUT_TXT,output_file], stdout=subprocess.PIPE).stdout.read())
+        
         assertion1 = (mm <= 1)
         assertion2 = (mm_trna <= 63)
         assertion3 = (success >= 0.934)
-        #if assertion1 and assertion2 and assertion3:
-        #    os.remove(output_file)
+
+        self.assertTrue(assertion1,"1. Too many discrepancies with original results were found: %i non tRNA mispredictions" % mm)
+        self.assertTrue(assertion2,"2. Too many discrepancies with original results were found: %i tRNA mispredictions" % mm_trna)# Latest versions of FlaiMapper take into account the very last base as well, even if it's longer than the actual sequence length. This in particularly affected the results of tRNAs (due to CCA) 
+        self.assertTrue(assertion3,"3. Too many discrepancies with original results were found; only: %d percent" % success)
         
         os.remove(samplename+".bam")
         os.remove(samplename+".bam.bai")
         shutil.rmtree(samplename)
-        
-        self.assertTrue(assertion1,"Too many discrepancies with original results were found: %i non tRNA mispredictions" % mm)
-        self.assertTrue(assertion2,"Too many discrepancies with original results were found: %i non tRNA mispredictions" % mm)# Latesr versions of FlaiMapper take into account the very last base as well, even if it's longer than the actual sequence length. This in particularly affected the results of tRNAs (due to CCA) 
-        self.assertTrue(assertion3,"Too many discrepancies with original results were found; only: %d percent" % success)
 
     def test_04(self):
         samplename = "SRR207111_HeLa18-30"

@@ -142,36 +142,29 @@ class MaskedRegion:
     def predict_fragments(self):
         def step_01__parse_stats():
             logging.debug("     * Acquiring statistics")
+            n = self.region[2]-self.region[1]+1# both zero based; 0-0=0 while that should be 1, so 0-0+1=1
             
-            self_start_positions = []
-            self_stop_positions = []
+            self_start_positions = [0]*n
+            self_stop_positions = [0]*n
             
-            tmp_start_avg_lengths = []
-            tmp_stop_avg_lengths = []
+            tmp_start_avg_lengths = [{} for x in range(n)]# [{}] * n makes references instead of copies
+            tmp_stop_avg_lengths = [{} for x in range(n)]# [{}] * n makes references instead of copies
             
             for read in BAMParser(self.region,self.settings.alignment_file):
-                while(len(self_start_positions) < read[1]+1):				# Fix since 1.1.0: automatically scale  vector up if alignment falls outside range reference annotation
-                    self_start_positions.append(0)
-                    self_stop_positions.append(0)
-                    
-                    tmp_start_avg_lengths.append({})# Do an aggregated vector {21:10243} for 10243 observations of length 21
-                    tmp_stop_avg_lengths.append({})
-                
-                self_start_positions[read[0]] += 1
-                self_stop_positions[read[1]] += 1
+                self_start_positions[read[0]-self.region[1]] += 1
+                self_stop_positions[read[1]-self.region[1]] += 1
                 
                 len_start = read[1]-read[0]
                 len_stop = read[0]-read[1]
                 
-                if not tmp_start_avg_lengths[read[0]].has_key(len_start):
-                    tmp_start_avg_lengths[read[0]][len_start] = 0
+                if not tmp_start_avg_lengths[read[0]-self.region[1]].has_key(len_start):
+                    tmp_start_avg_lengths[read[0]-self.region[1]][len_start] = 0
                 
-                if not tmp_stop_avg_lengths[read[1]].has_key(len_stop):
-                    tmp_stop_avg_lengths[read[1]][len_stop] = 0
+                if not tmp_stop_avg_lengths[read[1]-self.region[1]].has_key(len_stop):
+                    tmp_stop_avg_lengths[read[1]-self.region[1]][len_stop] = 0
                 
-                tmp_start_avg_lengths[read[0]][len_start] += 1
-                tmp_stop_avg_lengths[read[1]][len_stop] += 1
-            
+                tmp_start_avg_lengths[read[0]-self.region[1]][len_start] += 1
+                tmp_stop_avg_lengths[read[1]-self.region[1]][len_stop] += 1
             
             # Calc medians
             self_start_avg_lengths = []
@@ -182,9 +175,9 @@ class MaskedRegion:
                 avgLenR = self.get_median_of_map(tmp_stop_avg_lengths[i])
                 
                 if(avgLenF):
-                    avgLenF = round(avgLenF+1)
+                    avgLenF = int(round(avgLenF+1))
                 if(avgLenR):
-                    avgLenR = round(avgLenR-0.5)							# Why -0.5 -> because of rounding a negative number
+                    avgLenR = int(round(avgLenR-0.5))							# Why -0.5 -> because of rounding a negative number
                 
                 self_start_avg_lengths.append(avgLenF)
                 self_stop_avg_lengths.append(avgLenR)
@@ -229,16 +222,18 @@ class MaskedRegion:
             """Smooth filtering
             """
             
-            psorted = sorted(plist.iteritems(),key=operator.itemgetter(1),reverse=True)
+            psorted = sorted(plist.iteritems(),key=operator.itemgetter(1))[::-1]
             
             # There is a small mistake in the algorithm,
             # it should search not for ALL peaks
             # but only for ALL peaks except itself; position i can not be a noise product of i itself
             
-            for i in range(len(psorted)):
+            n = range(len(psorted))
+            
+            for i in n:
                 if(psorted[i] != False):
                     item = psorted[i]
-                    for j in range(len(psorted)):							# Can be limited to size and -size of self.self.settings.parametersmatrix
+                    for j in n:							# Can be limited to size and -size of self.self.settings.parametersmatrix
                         if((psorted[j] != False) and (j != i)):
                             item2 = psorted[j]
                             diff = item2[0]-item[0]
@@ -255,64 +250,53 @@ class MaskedRegion:
             
             return pnew
         
-        def step_04__assemble_fragments(pstart,pstop,pexpectedStart,pexpectedStop,prime_5_ext = 3,prime_3_ext=5,genomic_offset_masked_region=0):
+        def step_04__assemble_fragments(pstart,pstop,pexpectedStart,pexpectedStop):
             """Assemble by peak reconstruction / traceback
             """
             logging.debug("     * Detecting fragments")
             
-            fragments = []
-            if(len(pstart) >= len(pstop)):									# More start than stop positions
+            if len(pstart) >= len(pstop):									# More start than stop positions
                 pstopSorted = sorted(pstop.iteritems(),key=operator.itemgetter(1))[::-1]
                 for itema in pstopSorted:
                     pos = itema[0]
                     diff = pexpectedStop[pos]
                     predictedPos = pos+diff+1								# 149 - 50 = 99; 149- 50 + 1 = 100 (example of read aligned to 100,149 (size=50)
-                    fragment = False
                     
-                    highest = 0
-                    items = [s for s in pstart if ((s >= predictedPos-15) and (s <= predictedPos+15))]
-                    for item in items:
-                        distance = abs(predictedPos - item)
-                        penalty = 1.0 - (distance * 0.09)
-                        score = pstart[item]*penalty 
-                        if(score >= highest):
-                            highest = pstart[item]
-                            fragment = ncRNAFragment(self.region[0],item,pos)
-                            fragment.supporting_reads_start = pstart[fragment.start]
-                            fragment.supporting_reads_stop = pstop[fragment.stop]
+                    highest_scoring_position = (0,-1,-1,-1,-1)
                     
-                    if(fragment != False):
-                        yield fragment
-                        del(pstart[fragment.start])
-                        items = []
+                    for item in sorted(pstart.keys()):
+                        if item >= predictedPos-self.settings.parameters.left_padding and item <= predictedPos+self.settings.parameters.right_padding:
+                            distance = abs(predictedPos - item)
+                            penalty = 1.0 - (distance * 0.09)
+                            
+                            score = pstart[item]*penalty 
+                            if score >= highest_scoring_position[0]:
+                                highest_scoring_position = (pstart[item], item, pos, pstart[item], pstop[pos])# (Highest score -- a bug... should be 'score', Start, Stop, Reads on start, Reads on stop)
+                    
+                    if highest_scoring_position[0] > 0:
+                        del(pstart[highest_scoring_position[1]])
+                        yield ncRNAFragment(highest_scoring_position[1],highest_scoring_position[2],highest_scoring_position[3],highest_scoring_position[4])
             else:															# More stop than start positions
                 pstartSorted = sorted(pstart.iteritems(),key=operator.itemgetter(1))[::-1]
                 for itema in pstartSorted:
                     pos = itema[0]
                     diff = pexpectedStart[pos]
+                    predictedPos = pos+diff#@todo figure out if this requires << + 1
                     
-                    #@todo figure out if this requires << + 1
-                    predictedPos = pos+diff
-                    fragment = False
+                    highest_scoring_position = (0,-1,-1,-1,-1)
                     
-                    highest = 0
-                    items = [s for s in pstop if ((s >= predictedPos-15) and (s <= predictedPos+15))]
-                    
-                    for item in items:
-                        distance = abs(predictedPos - item)
-                        penalty = 1.0 - (distance * 0.09)
-                        score = pstop[item]*penalty 
-                        if(score >= highest):
-                            highest = pstop[item]
+                    for item in sorted(pstop.keys(),reverse=True):
+                        if item >= predictedPos-self.settings.parameters.left_padding and item <= predictedPos+self.settings.parameters.right_padding:
+                            distance = abs(predictedPos - item)
+                            penalty = 1.0 - (distance * 0.09)
                             
-                            fragment = ncRNAFragment(self.region[0],pos,item)
-                            fragment.supporting_reads_start = pstart[fragment.start]
-                            fragment.supporting_reads_stop = pstop[fragment.stop]
+                            score = pstop[item]*penalty 
+                            if score >= highest_scoring_position[0]:
+                                highest_scoring_position = (pstop[item], pos,item, pstart[pos], pstop[item])# (Highest score -- a bug... should be 'score', Start, Stop, Reads on start, Reads on stop)
                     
-                    if(fragment != False):
-                        yield fragment
-                        del(pstop[fragment.stop])
-                        items = []
+                    if highest_scoring_position[0] > 0:
+                        del(pstop[highest_scoring_position[2]])
+                        yield ncRNAFragment(highest_scoring_position[1],highest_scoring_position[2],highest_scoring_position[3],highest_scoring_position[4])
         
         # Acquire statistics
         start_positions, stop_positions, start_avg_lengths, stop_avg_lengths = step_01__parse_stats()
