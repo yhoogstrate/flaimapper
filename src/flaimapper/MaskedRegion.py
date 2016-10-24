@@ -151,16 +151,16 @@ class MaskedRegion:
             tmp_stop_avg_lengths = [{} for x in range(n)]# [{}] * n makes references instead of copies
             
             for read in BAMParser(self.region,self.settings.alignment_file):
-                self_start_positions[read[0]-self.region[1]] += 1
-                self_stop_positions[read[1]-self.region[1]] += 1
-                
-                len_start = read[1]-read[0]
-                len_stop = read[0]-read[1]
-                
                 pos_start = read[0]-self.region[1]
                 pos_stop = read[1]-self.region[1]
                 
                 if pos_start >= 0 and pos_stop >= 0 and pos_start < n and pos_stop < n:
+                    len_start = read[1]-read[0]
+                    len_stop = read[0]-read[1]
+                    
+                    self_start_positions[read[0]-self.region[1]] += 1
+                    self_stop_positions[read[1]-self.region[1]] += 1
+                    
                     if not tmp_start_avg_lengths[pos_start].has_key(len_start):
                         tmp_start_avg_lengths[pos_start][len_start] = 0
                     
