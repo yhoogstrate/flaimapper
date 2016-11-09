@@ -88,11 +88,11 @@ represents the percentage of reduction. The zero value is excluded.
         pos.sort()
         neg.sort()
         
-        for i in range(1,len(pos)):
+        for i in xrange(1,len(pos)):
             if pos[i] - pos[i-1] != 1:
                 raise ValueError("missing positive values in parameters file")
 
-        for i in range(1,len(neg)):
+        for i in xrange(1,len(neg)):
             if neg[i] - neg[i-1] != 1:
                 raise ValueError("missing negative values in parameters file")
         

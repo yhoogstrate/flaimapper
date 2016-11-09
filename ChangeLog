@@ -1,3 +1,7 @@
+2016-11-09  Youri Hoogstrate
+	* (v2.3.4) 
+	  - Use `xrange` over `range` to improve both mem and cpu consumption
+
 2016-10-24  Youri Hoogstrate
 	* (v2.3.3) 
 	  - Fixes a parallelization bug in pysam (#17) by opening as many pysam wrappers

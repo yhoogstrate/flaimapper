@@ -54,7 +54,7 @@ class TestFilterParameters(unittest.TestCase):
         self.assertEqual(fp.right_padding, 15)
 
         keys = fp.matrix.keys()
-        for i in range(-15,0):
+        for i in xrange(-15,0):
             self.assertTrue(i in keys)
             self.assertTrue(fp.matrix[i] >= 0.0)
             self.assertTrue(fp.matrix[i] <= 100.0)
@@ -66,7 +66,7 @@ class TestFilterParameters(unittest.TestCase):
         self.assertEqual(fp.right_padding, 7)
         
         keys = fp.matrix.keys()
-        for i in range(-7,0):
+        for i in xrange(-7,0):
             self.assertTrue(i in keys)
             self.assertTrue(fp.matrix[i] >= 0.0)
             self.assertTrue(fp.matrix[i] <= 100.0)
