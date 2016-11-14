@@ -86,7 +86,7 @@ class FlaiMapper():
         i_dist_r = abs(self.settings.parameters.right_padding)
         i_dist = i_dist_l + i_dist_r
         
-        for i in range(self.alignment_file.nreferences):
+        for i in xrange(self.alignment_file.nreferences):
             s_name = self.alignment_file.references[i]
             ss = [None,None]
             

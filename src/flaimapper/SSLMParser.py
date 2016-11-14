@@ -98,7 +98,7 @@ class SSLMParser():
                         start_pos = self.get_start_position(line)
                         stop_pos = self.get_stop_position(line)
                         
-                        for j in range(numberofhits):
+                        for j in xrange(numberofhits):
                             yield Read(start_pos,stop_pos,name,line[start_pos:stop_pos])
                 else:
                     previous_line = line

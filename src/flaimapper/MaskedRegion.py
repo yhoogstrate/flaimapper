@@ -147,8 +147,8 @@ class MaskedRegion:
             self_start_positions = [0]*n
             self_stop_positions = [0]*n
             
-            tmp_start_avg_lengths = [{} for x in range(n)]# [{}] * n makes references instead of copies
-            tmp_stop_avg_lengths = [{} for x in range(n)]# [{}] * n makes references instead of copies
+            tmp_start_avg_lengths = [{} for x in xrange(n)]# [{}] * n makes references instead of copies
+            tmp_stop_avg_lengths = [{} for x in xrange(n)]# [{}] * n makes references instead of copies
             
             for read in BAMParser(self.region,self.settings.alignment_file):
                 pos_start = read[0]-self.region[1]
@@ -177,7 +177,7 @@ class MaskedRegion:
             self_start_avg_lengths = []
             self_stop_avg_lengths = []
             
-            for i in range(len(tmp_stop_avg_lengths)):
+            for i in xrange(len(tmp_stop_avg_lengths)):
                 avgLenF = self.get_median_of_map(tmp_start_avg_lengths[i])
                 avgLenR = self.get_median_of_map(tmp_stop_avg_lengths[i])
                 
@@ -205,7 +205,7 @@ class MaskedRegion:
             highestPos = -1
             
             # Walk over list of [start/stop]-position counts:
-            for pos in range(len(plist)):
+            for pos in xrange(len(plist)):
                 current = plist[pos]
                 if current > previous:# and (current > (noise_type_alpha_cutoff/100.0*max(plist)))):  
                     if current > highest:
@@ -235,7 +235,7 @@ class MaskedRegion:
             # it should search not for ALL peaks
             # but only for ALL peaks except itself; position i can not be a noise product of i itself
             
-            n = range(len(psorted))
+            n = xrange(len(psorted))
             
             for i in n:
                 if(psorted[i] != None):
