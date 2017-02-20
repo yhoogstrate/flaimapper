@@ -94,7 +94,7 @@ class MaskedRegion:
             23: 5
          }
          
-         median = 5
+         median = 23
         
         
         ******
