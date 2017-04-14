@@ -56,3 +56,6 @@ TESTS_FUNCTIONAL_DUCK6_PARAMS = resource_filename("flaimapper","data/tests/test_
 TESTS_FUNCTIONAL_DUCK7_PARAMS = resource_filename("flaimapper","data/tests/test_functional.parameters.duck7.txt")
 TESTS_FUNCTIONAL_DUCK15_PARAMS = resource_filename("flaimapper","data/tests/test_functional.parameters.duck15.txt")
 TESTS_FUNCTIONAL_DUCK26_PARAMS = resource_filename("flaimapper","data/tests/test_functional.parameters.duck26.txt")
+
+TESTS_FUNCTIONAL_TEST_05 = resource_filename("flaimapper","data/tests/test_complex_issue.bam")
+TESTS_FUNCTIONAL_TEST_05_OUTPUT_TXT = resource_filename("flaimapper","data/tests/test_complex_issue.flaimapper.txt")

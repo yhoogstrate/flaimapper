@@ -263,18 +263,18 @@ class MaskedRegion:
                     diff = pexpectedStop[pos]
                     predictedPos = pos+diff+1								# 149 - 50 = 99; 149- 50 + 1 = 100 (example of read aligned to 100,149 (size=50)
                     
-                    highest_scoring_position = (0,-1,-1,-1,-1)
+                    highest_scoring_position = (0,-1,-1,-1,-1,99999)
                     
                     for item in sorted(pstart.keys()):
                         if item >= predictedPos-self.settings.parameters.left_padding and item <= predictedPos+self.settings.parameters.right_padding:
                             distance = abs(predictedPos - item)
                             penalty = 1.0 - (distance * 0.09)
                             
-                            score = pstart[item]*penalty 
-                            if score >= highest_scoring_position[0]:
-                                highest_scoring_position = (pstart[item], item, pos, pstart[item], pstop[pos])# (Highest score -- a bug... should be 'score', Start, Stop, Reads on start, Reads on stop)
+                            score = pstart[item]*penalty
+                            if (score > highest_scoring_position[0]) or (score == highest_scoring_position[0] and distance < highest_scoring_position[5]):
+                                highest_scoring_position = (score, item, pos, pstart[item], pstop[pos], distance)
                     
-                    if highest_scoring_position[0] > 0:
+                    if highest_scoring_position[0] > 0.0:
                         del(pstart[highest_scoring_position[1]])
                         yield ncRNAFragment(highest_scoring_position[1],highest_scoring_position[2],highest_scoring_position[3],highest_scoring_position[4])
             else:															# More stop than start positions
@@ -284,18 +284,18 @@ class MaskedRegion:
                     diff = pexpectedStart[pos]
                     predictedPos = pos+diff#@todo figure out if this requires << + 1
                     
-                    highest_scoring_position = (0,-1,-1,-1,-1)
+                    highest_scoring_position = (0,-1,-1,-1,-1,99999)
                     
                     for item in sorted(pstop.keys(),reverse=True):
                         if item >= predictedPos-self.settings.parameters.left_padding and item <= predictedPos+self.settings.parameters.right_padding:
                             distance = abs(predictedPos - item)
                             penalty = 1.0 - (distance * 0.09)
                             
-                            score = pstop[item]*penalty 
-                            if score >= highest_scoring_position[0]:
-                                highest_scoring_position = (pstop[item], pos,item, pstart[pos], pstop[item])# (Highest score -- a bug... should be 'score', Start, Stop, Reads on start, Reads on stop)
+                            score = pstop[item]*penalty
+                            if (score > highest_scoring_position[0]) or (score == highest_scoring_position[0] and distance < highest_scoring_position[5]):
+                                highest_scoring_position = (score, pos,item, pstart[pos], pstop[item], distance)# (Highest score -- a bug... should be 'score', Start, Stop, Reads on start, Reads on stop)
                     
-                    if highest_scoring_position[0] > 0:
+                    if highest_scoring_position[0] > 0.0:
                         del(pstop[highest_scoring_position[2]])
                         yield ncRNAFragment(highest_scoring_position[1],highest_scoring_position[2],highest_scoring_position[3],highest_scoring_position[4])
         

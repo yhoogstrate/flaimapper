@@ -1,3 +1,8 @@
+2017-04-14  Youri Hoogstrate
+	* (v2.4.0) 
+	  - Improves behavior when an identical number of supporting reads result in
+	    multiple optimal solutions (+ test-case).
+
 2016-11-09  Youri Hoogstrate
 	* (v2.3.4) 
 	  - Use `xrange` over `range` to improve both mem and cpu consumption
