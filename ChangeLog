@@ -1,3 +1,8 @@
+2017-08-15 Youri Hoogstrate
+	* (v2.5.0) 
+	  - Fixed issue that caused not unique uids for fragments (bug
+        reported by E. Martens - thanks).
+
 2017-04-14  Youri Hoogstrate
 	* (v2.4.0) 
 	  - Improves behavior when an identical number of supporting reads result in

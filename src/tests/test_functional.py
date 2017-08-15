@@ -77,7 +77,7 @@ class TestFunctional(unittest.TestCase):
         sampledir = '../share/small_RNA-seq_alignments/SRP006788/'
         
         subprocess.call(["tar","-xzf",sampledir+samplename+".tar.gz"], env=os.environ.copy())
-        output_file = 'test.tabular.txt'
+        output_file = 'test_fuctional_03.tabular.txt'
         
         pipe = subprocess.Popen(["flaimapper","-o",output_file,"-f","1",'-r','../share/annotations/ncRNA_annotation/ncrnadb09.fa',samplename+".bam"])
         pipe.wait()
@@ -125,9 +125,9 @@ class TestFunctional(unittest.TestCase):
         self.assertTrue(assertion2,"2. Too many discrepancies with original results were found: %i tRNA mispredictions" % mm_trna)# Latest versions of FlaiMapper take into account the very last base as well, even if it's longer than the actual sequence length. This in particularly affected the results of tRNAs (due to CCA) 
         self.assertTrue(assertion3,"3. Too many discrepancies with original results were found; only: %f percent (m=%s, mm=%d, mm_trna=%d)" % (success, m, mm, mm_trna))
         
-        os.remove(samplename+".bam")
-        os.remove(samplename+".bam.bai")
-        shutil.rmtree(samplename)
+        #os.remove(samplename+".bam")
+        #os.remove(samplename+".bam.bai")
+        #shutil.rmtree(samplename)
 
     def test_04(self):
         samplename = "SRR207111_HeLa18-30"
@@ -141,7 +141,7 @@ class TestFunctional(unittest.TestCase):
         exit_code = pipe.poll()
         
         self.assertEqual(exit_code, 0)
-        data = parse_gff('test.gtf')
+        data = parse_gff(output_file)
         u81_14 = False
         u81_46 = False
         u81_54 = False
@@ -168,9 +168,9 @@ class TestFunctional(unittest.TestCase):
         self.assertTrue(u81_54, "The third of the three SNORD81 fragments was not detected")
         self.assertTrue(k == (3*2), "More than 3 fragments (%i) of SNORD81 were detected" % k)#*2 because every entry generates two GTF lines
         
-        os.remove(samplename+".bam")
-        os.remove(samplename+".bam.bai")
-        shutil.rmtree(samplename)
+        #os.remove(samplename+".bam")
+        #os.remove(samplename+".bam.bai")
+        #shutil.rmtree(samplename)
 
     def test_05(self):
         output_file = 'test.tabular.txt'
