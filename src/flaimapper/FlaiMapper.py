@@ -120,8 +120,12 @@ class FlaiMapper():
         logging.debug(" - Starting fragment detection")
         
         k = 0
+        previous_seq = ''
         for region in self:
-            i = 0
+            if region.region[0] != previous_seq:
+                i = 0
+            previous_seq = region.region[0]
+            
             for fragment in region:
                 i += 1
                 fragment_uid = 'FM_'+region.region[0]+'_'+str(i).zfill(12)
