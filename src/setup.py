@@ -57,8 +57,8 @@ setup(name='flaimapper',
         include_package_data=True,
         
         # Very severe backwards incompatibility in 0.9 and above
-        setup_requires=['pysam >= 0.8.0,<0.9','nose2'],
-        install_requires=['pysam >= 0.8.0,<0.9'],
+        setup_requires=['pysam >= 0.14.1','nose2'],
+        install_requires=['pysam >= 0.14.1'],
         
         test_suite="tests",
         
