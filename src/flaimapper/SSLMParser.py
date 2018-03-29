@@ -40,8 +40,9 @@
 import re
 import os
 import logging
+import sys
 
-from .Read import Read
+from flaimapper.Read import Read
 
 
 class SSLMParser():
@@ -52,18 +53,17 @@ class SSLMParser():
     def __init__(self, sslm_directory):
         self.sslm_directory = sslm_directory
 
-    def get_length(self,filename):
+    def get_length(self, filename):
         i = 0
-        with open(filename,"rU") as fh:
+        with open(filename, "rU") as fh:
             for line in fh:
                 if i == 1:
-                    line = line.strip()
-                    return len(line)
+                    return len(line.strip())
                 i += 1
 
-        raise Exception("File "+filename+" did not contain a seuqence that can be used to estimate length")
+        raise Exception("File " + filename + " did not contain a seuqence that can be used to estimate length")
 
-    def parse_reads(self,filename):
+    def parse_reads(self, filename):
         """parse the reads from a SSLM (FASTA) file and return each read
         as an iterator object
         """
@@ -71,9 +71,9 @@ class SSLMParser():
         previous_line = ""
 
         i = 0
-        with open(filename,'r') as fh:
+        with open(filename, 'r') as fh:
             for line in fh:
-                line = line.strip().replace('revcomp','')
+                line = line.strip().replace('revcomp', '')
 
                 if(i % 2 == 1):
                     if(i == 1):
@@ -86,9 +86,9 @@ class SSLMParser():
 
                         if(k > -1):
                             name = previous_line[1:k]
-                            numberofhits = int(previous_line[k+5::])
+                            numberofhits = int(previous_line[k + 5::])
                         else:
-                            m = self.regex1.search(name)			# For the "_x123" suffix
+                            m = self.regex1.search(name)  # For the "_x123" suffix
 
                             if(m):
                                 name = m.group(1)
@@ -101,7 +101,7 @@ class SSLMParser():
                         stop_pos = self.get_stop_position(line)
 
                         for j in range(numberofhits):
-                            yield Read(start_pos,stop_pos,name,line[start_pos:stop_pos])
+                            yield Read(start_pos, stop_pos, name, line[start_pos:stop_pos])
                 else:
                     previous_line = line
 
@@ -109,17 +109,17 @@ class SSLMParser():
 
     def get_alignment_files(self):
         idx = {}
-        with open(self.sslm_directory+"/idreadable.txt",'rU') as fh:
+        with open(self.sslm_directory + "/idreadable.txt", 'rU') as fh:
             for line in fh:
                 line = line.strip()
-                if line not in ["","sequence\tfilename"]:
+                if line not in ["", "sequence\tfilename"]:
                     line = line.split("\t")
-                    idx[line[0][1:]] = self.sslm_directory+"/validated/"+line[1]+".fa"
+                    idx[line[0][1:]] = self.sslm_directory + "/validated/" + line[1] + ".fa"
 
         for key in sorted(idx.keys()):
-            yield key,idx[key]
+            yield key, idx[key]
 
-    def get_start_position(self,read,extention='-'):
+    def get_start_position(self, read, extention='-'):
         """
         Finds start-position of a read according to lines of the following format:
         -----TACCCTGTAGAGCCGAATTTGT-----
@@ -132,9 +132,9 @@ class SSLMParser():
         @rtype: integer
         """
 
-        return len(read)-len(read.lstrip(extention))
+        return len(read) - len(read.lstrip(extention))
 
-    def get_stop_position(self,read,extention='-'):
+    def get_stop_position(self, read, extention='-'):
         """
         Finds stop-position of a read according to lines of the following format:
         -----TACCCTGTAGAGCCGAATTTGT-----
@@ -151,10 +151,10 @@ class SSLMParser():
 
     def parse_regions(self):
         for region in self.get_alignment_files():
-            yield region[0],0,self.get_length(region[1])-1,region[1]# zero based: if len == 1, coord will be [0, 0]
+            yield region[0], 0, self.get_length(region[1]) - 1, region[1]  # zero based: if len == 1, coord will be [0, 0]
 
-    def convert_to_sam(self,output):
-        logging.debug("   - Converting to SAM: "+output)
+    def convert_to_sam(self, output):
+        logging.debug("Converting to SAM: " + output)
 
         if(output == "-"):
             fh = sys.stdout
@@ -162,29 +162,29 @@ class SSLMParser():
             outdir = os.path.dirname(output)
             if outdir != '' and not os.path.exists(outdir):
                 os.makedirs(outdir)
-            fh = open(output,"w")
+            fh = open(output, "w")
 
         i = 0
 
         # 1: write header
         fh.write("@HD	VN:1.0	SO:unsorted\n")
         for region in self.parse_regions():
-            fh.write("@SQ	SN:"+region[0]+"	LN:"+str(region[2] - region[1] + 1)+"\n")
+            fh.write("@SQ	SN:" + region[0] + "	LN:" + str(region[2] - region[1] + 1) + "\n")
 
         fh.write("@PG	ID:0	PN:FlaiMapper_SSLM_to_SAM_conversion_script	VN:0.0\n")
 
         # 2: write alignment
         for region in self.get_alignment_files():
-            logging.debug("   - Masked region: "+region[0])
+            logging.debug("Masked region: " + region[0])
 
             for read in self.parse_reads(region[1]):
                 if(read.name):
                     fh.write(read.name)
                 else:
-                    fh.write("unknown_read_"+str(i))
+                    fh.write("unknown_read_" + str(i))
                     i += 1
 
                 strand = "60"
-                fh.write("\t0\t"+region[0]+"\t"+str(read.start+1)+"\t"+strand+"\t"+str(read.stop - read.start)+"M\t*\t0\t0\t"+read.sequence+"\t*\tNH:i:1\n")
+                fh.write("\t0\t" + region[0] + "\t" + str(read.start + 1) + "\t" + strand + "\t" + str(read.stop - read.start) + "M\t*\t0\t0\t" + read.sequence + "\t*\tNH:i:1\n")
 
         fh.close()
