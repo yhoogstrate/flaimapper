@@ -41,7 +41,7 @@ class Read:
     """
     Describes an aligned read as part of SSLM data
     """
-    def __init__(self,start,stop,name,sequence):
+    def __init__(self, start, stop, name, sequence):
         self.start = start
         self.stop = stop
         self.name = name
