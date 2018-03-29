@@ -13,17 +13,17 @@
  - Youri Hoogstrate
  - Elena S. Martens-Uzunova
  - Guido Jenster
- 
- 
+
+
  [License: GPL3]
- 
+
  This file is part of flaimapper.
- 
+
  flaimapper is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  flaimapper is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
@@ -36,7 +36,7 @@
  <http://epydoc.sourceforge.net/manual-fields.html#fields-synonyms>
 """
 
-import os,re,random,operator,argparse,sys
+import sys
 
 
 from flaimapper.FlaiMapper import FlaiMapper
@@ -49,15 +49,15 @@ def main():
     article (SSLM) to the SAM format.
     """
     args = CLI_sslm2sam()
-    
-    sslm2bed_converter = FlaiMapperObject('sslm',args.verbosity)
+
+    sslm2bed_converter = FlaiMapper('sslm', args.verbosity)
     for alignment_directory in args.alignment_directories:
         sslm2bed_converter.add_alignment(alignment_directory)
-    
+
     regions = parse_gff(args.mask)
-    
-    sslm2bed_converter.convert_to_sam(regions,args.output)
+
+    sslm2bed_converter.convert_to_sam(regions, args.output)
 
 
 if __name__ == "__main__":
-	sys.exit(main())
+    sys.exit(main())
