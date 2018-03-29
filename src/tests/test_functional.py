@@ -120,8 +120,8 @@ class TestFunctional(unittest.TestCase):
                     else:
                         mm_trna += 1
 
-            total_evaluations = m+mm+mm_trna
-            success = 1.0 - (1.0*(mm+mm_trna)/(total_evaluations))
+            total_evaluations = m + mm + mm_trna
+            success = 1.0 - (1.0 * (mm + mm_trna) / total_evaluations)
 
             self.assertTrue(filecmp.cmp(TESTS_FUNCTIONAL_TEST_03_OUTPUT_TXT, output_file), msg="diff '" + TESTS_FUNCTIONAL_TEST_03_OUTPUT_TXT + "' '" + output_file + "':\n" + get_file_diff(TESTS_FUNCTIONAL_TEST_03_OUTPUT_TXT, output_file))
 
@@ -144,7 +144,7 @@ class TestFunctional(unittest.TestCase):
         subprocess.call(['tar', '-xzf', sampledir + samplename + '.tar.gz'])
         output_file = 'test.gtf'
 
-        command = ['flaimapper', '-o', output_file, '-f', '2', samplename+'.bam']
+        command = ['flaimapper', '-o', output_file, '-f', '2', samplename + '.bam']
         with subprocess.Popen(command) as pipe:
             pipe.wait()
             exit_code = pipe.poll()
@@ -175,7 +175,7 @@ class TestFunctional(unittest.TestCase):
             self.assertTrue(u81_14, "The first of the three SNORD81 fragments was not detected")
             self.assertTrue(u81_46, "The second of the three SNORD81 fragments was not detected")
             self.assertTrue(u81_54, "The third of the three SNORD81 fragments was not detected")
-            self.assertTrue(k == (3*2), "More than 3 fragments (%i) of SNORD81 were detected" % k)  # *2 because every entry generates two GTF lines
+            self.assertTrue(k == (3 * 2), "More than 3 fragments (%i) of SNORD81 were detected" % k)  # *2 because every entry generates two GTF lines
 
             # os.remove(samplename+".bam")
             # os.remove(samplename+".bam.bai")
