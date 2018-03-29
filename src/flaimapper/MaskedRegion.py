@@ -37,29 +37,31 @@
 """
 
 import flaimapper
-import operator,logging
+import operator
+import logging
+
+from flaimapper.BAMParser import BAMParser
+from flaimapper.ncRNAFragment import ncRNAFragment
+from flaimapper.utils import sort_frequency_dict
+from flaimapper.utils import py2_round
+
+
 logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
 
 
-from .BAMParser import BAMParser
-from .ncRNAFragment import ncRNAFragment
-from .utils import sort_frequency_dict
-from .utils import py2_round
-
-
 class MaskedRegion:
-    """A masked region is a region masked in the reference genome to 
+    """A masked region is a region masked in the reference genome to
     indicate where ncRNAs are located.
     """
-    def __init__(self,region,settings):
-        logging.debug("   - Masked region: "+region[0]+":"+str(region[1])+"-"+str(region[2]))
+    def __init__(self, region, settings):
+        logging.debug("Masked region: " + region[0] + ":" + str(region[1]) + "-" + str(region[2]))
 
         self.region = region
         self.settings = settings
 
-    def get_median_of_map(self,value_map):
+    def get_median_of_map(self, value_map):
         """
-        input: 
+        input:
         {
             21: 2
             23: 6
@@ -86,13 +88,13 @@ class MaskedRegion:
 
         iter2:
 
-        {   
+        {
             23: 6  -- key: 6
             24: 1  -- key: 1
          }
 
         remove lowest key:
-        {   
+        {
             23: 5
          }
 
@@ -132,7 +134,7 @@ class MaskedRegion:
                 if len(keys) == 2:
                     return (float(keys[0] + keys[1])) / 2
                 else:
-                    del(value_map[key_l],value_map[key_t])
+                    del(value_map[key_l], value_map[key_t])
                     keys.remove(key_l)
                     keys.remove(key_t)
 
@@ -143,30 +145,30 @@ class MaskedRegion:
 
     def predict_fragments(self):
         def step_01__parse_stats():
-            logging.debug("     * Acquiring statistics")
-            n = self.region[2]-self.region[1]+1# both zero based; 0-0=0 while that should be 1, so 0-0+1=1
+            logging.debug("Acquiring statistics")
+            n = self.region[2] - self.region[1] + 1  # both zero based; 0-0=0 while that should be 1, so 0-0+1=1
 
-            self_start_positions = [0]*n
-            self_stop_positions = [0]*n
+            self_start_positions = [0] * n
+            self_stop_positions = [0] * n
 
-            tmp_start_avg_lengths = [{} for x in range(n)]# [{}] * n makes references instead of copies
-            tmp_stop_avg_lengths = [{} for x in range(n)]# [{}] * n makes references instead of copies
+            tmp_start_avg_lengths = [{} for x in range(n)]  # [{}] * n makes references instead of copies
+            tmp_stop_avg_lengths = [{} for x in range(n)]  # [{}] * n makes references instead of copies
 
-            for read in BAMParser(self.region,self.settings.alignment_file):
-                pos_start = read[0]-self.region[1]
-                pos_stop = read[1]-self.region[1]
+            for read in BAMParser(self.region, self.settings.alignment_file):
+                pos_start = read[0] - self.region[1]
+                pos_stop = read[1] - self.region[1]
 
                 if pos_start >= 0 and pos_stop >= 0 and pos_start < n and pos_stop < n:
-                    len_start = read[1]-read[0]
-                    len_stop = read[0]-read[1]
+                    len_start = read[1] - read[0]
+                    len_stop = read[0] - read[1]
 
-                    self_start_positions[read[0]-self.region[1]] += 1
-                    self_stop_positions[read[1]-self.region[1]] += 1
+                    self_start_positions[read[0] - self.region[1]] += 1
+                    self_stop_positions[read[1] - self.region[1]] += 1
 
-                    if not len_start in tmp_start_avg_lengths[pos_start]:
+                    if len_start not in tmp_start_avg_lengths[pos_start]:
                         tmp_start_avg_lengths[pos_start][len_start] = 0
 
-                    if not len_stop in tmp_stop_avg_lengths[pos_stop]:
+                    if len_stop not in tmp_stop_avg_lengths[pos_stop]:
                         tmp_stop_avg_lengths[pos_stop][len_stop] = 0
 
                     tmp_start_avg_lengths[pos_start][len_start] += 1
@@ -184,21 +186,19 @@ class MaskedRegion:
                 avgLenR = self.get_median_of_map(tmp_stop_avg_lengths[i])
 
                 if(avgLenF):
-                    avgLenF = int(py2_round(avgLenF+1))
+                    avgLenF = int(py2_round(avgLenF + 1))
                 if(avgLenR):
-                    avgLenR = int(py2_round(avgLenR-0.5))							# Why -0.5 -> because of rounding a negative number
+                    avgLenR = int(py2_round(avgLenR - 0.5))							# Why -0.5 -> because of rounding a negative number
 
                 self_start_avg_lengths.append(avgLenF)
                 self_stop_avg_lengths.append(avgLenR)
 
-            return (
-                    self_start_positions,
+            return (self_start_positions,
                     self_stop_positions,
                     self_start_avg_lengths,
-                    self_stop_avg_lengths
-                )
+                    self_stop_avg_lengths)
 
-        def step_02__find_peaks(plist,drop_cutoff=0.1):
+        def step_02__find_peaks(plist, drop_cutoff=0.1):
             # Define variables:
             peaks = {}
 
@@ -209,18 +209,17 @@ class MaskedRegion:
             # Walk over list of [start/stop]-position counts:
             for pos in range(len(plist)):
                 current = plist[pos]
-                if current > previous:# and (current > (noise_type_alpha_cutoff/100.0*max(plist)))):  
+                if current > previous:  # and (current > (noise_type_alpha_cutoff/100.0*max(plist)))):
                     if current > highest:
                         highest = current
                         highestPos = pos
                 elif current < previous:
-                    #if (current < (drop_cutoff*highest)) and (highestPos != -1):
-                    #if (current < (100.0*drop_cutoff*highest)) and (highestPos != -1):   #
-                    #if (current < (10.0*highest)) and (highestPos != -1):   # 
+                    # if (current < (drop_cutoff*highest)) and (highestPos != -1):
+                    # if (current < (100.0*drop_cutoff*highest)) and (highestPos != -1):
+                    # if (current < (10.0*highest)) and (highestPos != -1):
                     if (drop_cutoff * current < highest) and (highestPos != -1):
                         peaks[highestPos] = highest
-
-                        #highestPos = -1
+                        # highestPos = -1
                         highest = 0
 
                 previous = current
@@ -231,7 +230,7 @@ class MaskedRegion:
             """Smooth filtering
             """
 
-            psorted = sorted(plist.items(),key=operator.itemgetter(1), reverse=True)
+            psorted = sorted(plist.items(), key=operator.itemgetter(1, 0), reverse=True)
 
             # There is a small mistake in the algorithm,
             # it should search not for ALL peaks
@@ -240,20 +239,20 @@ class MaskedRegion:
             n = range(len(psorted))
 
             for i in n:
-                if(psorted[i] != None):
+                if(psorted[i] is not None):
                     item = psorted[i]
                     for j in n:							# Can be limited to size and -size of self.self.settings.parametersmatrix
-                        if((psorted[j] != None) and (j != i)):
+                        if((psorted[j] is not None) and (j != i)):
                             item2 = psorted[j]
-                            diff = item2[0]-item[0]
+                            diff = item2[0] - item[0]
                             if diff in self.settings.parameters.matrix:
-                                perc = self.settings.parameters.matrix[diff]/100.0
-                                if((perc*item[1]) > item2[1]):
+                                perc = self.settings.parameters.matrix[diff] / 100.0
+                                if((perc * item[1]) > item2[1]):
                                     psorted[j] = None
 
-            return {x[0]:x[1] for x in psorted if x != None}
+            return {x[0]: x[1] for x in psorted if x is not None}
 
-        def step_04__assemble_fragments(pstart,pstop,pexpectedStart,pexpectedStop):
+        def step_04__assemble_fragments(pstart, pstop, pexpectedStart, pexpectedStop):
             """Assemble by peak reconstruction / traceback
             """
             logging.debug("Assembling fragments")
@@ -263,57 +262,57 @@ class MaskedRegion:
                 for itema in pstopSorted:
                     pos = itema[0]
                     diff = pexpectedStop[pos]
-                    predictedPos = pos+diff+1								# 149 - 50 = 99; 149- 50 + 1 = 100 (example of read aligned to 100,149 (size=50)
+                    predictedPos = pos + diff + 1							# 149 - 50 = 99; 149- 50 + 1 = 100 (example of read aligned to 100,149 (size=50)
 
-                    highest_scoring_position = (0,-1,-1,-1,-1,99999)
+                    highest_scoring_position = (0, -1, -1, -1, -1, 99999)
 
                     for item in sorted(pstart.keys()):
-                        if item >= predictedPos-self.settings.parameters.left_padding and item <= predictedPos+self.settings.parameters.right_padding:
+                        if item >= predictedPos - self.settings.parameters.left_padding and item <= predictedPos + self.settings.parameters.right_padding:
                             distance = abs(predictedPos - item)
                             penalty = 1.0 - (distance * 0.09)
 
-                            score = pstart[item]*penalty
+                            score = pstart[item] * penalty
                             if (score > highest_scoring_position[0]) or (score == highest_scoring_position[0] and distance < highest_scoring_position[5]):
                                 highest_scoring_position = (score, item, pos, pstart[item], pstop[pos], distance)
 
                     if highest_scoring_position[0] > 0.0:
                         del(pstart[highest_scoring_position[1]])
-                        yield ncRNAFragment(highest_scoring_position[1],highest_scoring_position[2],highest_scoring_position[3],highest_scoring_position[4])
+                        yield ncRNAFragment(highest_scoring_position[1], highest_scoring_position[2], highest_scoring_position[3], highest_scoring_position[4])
             else:															# More stop than start positions
                 pstartSorted = sort_frequency_dict(pstart)
                 for itema in pstartSorted:
                     pos = itema[0]
                     diff = pexpectedStart[pos]
-                    predictedPos = pos+diff#@todo figure out if this requires << + 1
+                    predictedPos = pos + diff  # @todo figure out if this requires << + 1
 
-                    highest_scoring_position = (0,-1,-1,-1,-1,99999)
+                    highest_scoring_position = (0, -1, -1, -1, -1, 99999)
 
                     for item in sorted(pstop.keys(), reverse=True):
-                        if item >= predictedPos-self.settings.parameters.left_padding and item <= predictedPos+self.settings.parameters.right_padding:
+                        if item >= predictedPos - self.settings.parameters.left_padding and item <= predictedPos + self.settings.parameters.right_padding:
                             distance = abs(predictedPos - item)
                             penalty = 1.0 - (distance * 0.09)
 
-                            score = pstop[item]*penalty
+                            score = pstop[item] * penalty
                             if (score > highest_scoring_position[0]) or (score == highest_scoring_position[0] and distance < highest_scoring_position[5]):
-                                highest_scoring_position = (score, pos,item, pstart[pos], pstop[item], distance)# (Highest score -- a bug... should be 'score', Start, Stop, Reads on start, Reads on stop)
+                                highest_scoring_position = (score, pos, item, pstart[pos], pstop[item], distance)  # (Highest score -- a bug... should be 'score', Start, Stop, Reads on start, Reads on stop)
 
                     if highest_scoring_position[0] > 0.0:
                         del(pstop[highest_scoring_position[2]])
-                        yield ncRNAFragment(highest_scoring_position[1],highest_scoring_position[2],highest_scoring_position[3],highest_scoring_position[4])
+                        yield ncRNAFragment(highest_scoring_position[1], highest_scoring_position[2], highest_scoring_position[3], highest_scoring_position[4])
 
         # Acquire statistics
         start_positions, stop_positions, start_avg_lengths, stop_avg_lengths = step_01__parse_stats()
 
         # Finds peaks
-        start_positions = step_02__find_peaks(start_positions+[0])
-        stop_positions = step_02__find_peaks(stop_positions+[0])
+        start_positions = step_02__find_peaks(start_positions + [0])
+        stop_positions = step_02__find_peaks(stop_positions + [0])
 
         # Correct / filter noisy peaks
         start_positions = step_03__smooth_filter_peaks(start_positions)
         stop_positions = step_03__smooth_filter_peaks(stop_positions)
 
         # Trace start and stop positions together and obtain actual peaks
-        for fragment in step_04__assemble_fragments(start_positions,stop_positions,start_avg_lengths,stop_avg_lengths):
+        for fragment in step_04__assemble_fragments(start_positions, stop_positions, start_avg_lengths, stop_avg_lengths):
             yield fragment
 
     def __iter__(self):
