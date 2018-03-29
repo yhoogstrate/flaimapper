@@ -13,17 +13,17 @@
  - Youri Hoogstrate
  - Elena S. Martens-Uzunova
  - Guido Jenster
- 
- 
+
+
  [License: GPL3]
- 
+
  This file is part of flaimapper.
- 
+
  flaimapper is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  flaimapper is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
@@ -44,10 +44,10 @@ class ncRNAFragment:
     def __init__(self,start,stop,supporting_reads_start,supporting_reads_stop):
         self.start = start
         self.stop = stop
-        
+
         self.supporting_reads_start = supporting_reads_start	# The reads with the start-position aligned exactly to the 5' of the fragment
         self.supporting_reads_stop  = supporting_reads_stop		# The reads with the end-position aligned exactly to the 3' of the fragment
-    
+
     def to_gtf_entry(self, uid, masked_region, type_exon_offset5p, type_exon_offset3p):
         ## Line 1: type sncdRNA
         out_str = ("%s\t" # Reference
@@ -64,7 +64,7 @@ class ncRNAFragment:
                         masked_region.region[1] + self.stop  + 1,
                         self.supporting_reads_stop+self.supporting_reads_start,
                         uid)
-        
+
         ## Line 2: type exon, with offset used for counting in e.g. HTSeq-count / featureCounts
         out_str += ("%s\t" # Reference
                     "flaimapper-v%s\t" # Source
@@ -80,9 +80,9 @@ class ncRNAFragment:
                          max(1,masked_region.region[1] + self.stop  + 1 + type_exon_offset3p),
                          self.supporting_reads_stop+self.supporting_reads_start,
                          uid)
-        
+
         return out_str
-    
+
     def to_table_entry(self, uid, masked_region, fasta_file):
         return ("%s\t"
                    "%i\t"
