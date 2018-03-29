@@ -38,24 +38,24 @@
 
 from pkg_resources import resource_filename
 
-PARAMETERS_DEFAULT = resource_filename("flaimapper","data/parameters.default.txt")
+PARAMETERS_DEFAULT = resource_filename("flaimapper", "data/parameters.default.txt")
 
-TESTS_EXAMPLE_ALIGNMENT_01 = resource_filename("flaimapper","data/tests/alignment_gap_6bp.bam")
+TESTS_EXAMPLE_ALIGNMENT_01 = resource_filename("flaimapper", "data/tests/alignment_gap_6bp.bam")
 
-TESTS_FLAIMAPPER_TEST_02_OUTPUT_GTF = resource_filename("flaimapper","data/tests/test_FlaiMapper_test_02_output.gtf")
+TESTS_FLAIMAPPER_TEST_02_OUTPUT_GTF = resource_filename("flaimapper", "data/tests/test_FlaiMapper_test_02_output.gtf")
 
-TESTS_FLAIMAPPER_TEST_03_a_OUTPUT_TXT = resource_filename("flaimapper","data/tests/test_FlaiMapper_test_03_output.txt")
-TESTS_FLAIMAPPER_TEST_03_b_OUTPUT_TXT = resource_filename("flaimapper","data/tests/test_FlaiMapper_test_03_fa_output.txt")
+TESTS_FLAIMAPPER_TEST_03_a_OUTPUT_TXT = resource_filename("flaimapper", "data/tests/test_FlaiMapper_test_03_output.txt")
+TESTS_FLAIMAPPER_TEST_03_b_OUTPUT_TXT = resource_filename("flaimapper", "data/tests/test_FlaiMapper_test_03_fa_output.txt")
 
-TESTS_FLAIMAPPER_FA = resource_filename("flaimapper","data/tests/test_FlaiMapper.fa")
+TESTS_FLAIMAPPER_FA = resource_filename("flaimapper", "data/tests/test_FlaiMapper.fa")
 
-TESTS_FUNCTIONAL_TEST_03_OUTPUT_TXT = resource_filename("flaimapper","data/tests/test_functional.test_03.output.txt")
+TESTS_FUNCTIONAL_TEST_03_OUTPUT_TXT = resource_filename("flaimapper", "data/tests/test_functional.test_03.output.txt")
 
-TESTS_FUNCTIONAL_DUCK5_PARAMS = resource_filename("flaimapper","data/tests/test_functional.parameters.duck5.txt")
-TESTS_FUNCTIONAL_DUCK6_PARAMS = resource_filename("flaimapper","data/tests/test_functional.parameters.duck6.txt")
-TESTS_FUNCTIONAL_DUCK7_PARAMS = resource_filename("flaimapper","data/tests/test_functional.parameters.duck7.txt")
-TESTS_FUNCTIONAL_DUCK15_PARAMS = resource_filename("flaimapper","data/tests/test_functional.parameters.duck15.txt")
-TESTS_FUNCTIONAL_DUCK26_PARAMS = resource_filename("flaimapper","data/tests/test_functional.parameters.duck26.txt")
+TESTS_FUNCTIONAL_DUCK5_PARAMS = resource_filename("flaimapper", "data/tests/test_functional.parameters.duck5.txt")
+TESTS_FUNCTIONAL_DUCK6_PARAMS = resource_filename("flaimapper", "data/tests/test_functional.parameters.duck6.txt")
+TESTS_FUNCTIONAL_DUCK7_PARAMS = resource_filename("flaimapper", "data/tests/test_functional.parameters.duck7.txt")
+TESTS_FUNCTIONAL_DUCK15_PARAMS = resource_filename("flaimapper", "data/tests/test_functional.parameters.duck15.txt")
+TESTS_FUNCTIONAL_DUCK26_PARAMS = resource_filename("flaimapper", "data/tests/test_functional.parameters.duck26.txt")
 
-TESTS_FUNCTIONAL_TEST_05 = resource_filename("flaimapper","data/tests/test_complex_issue.bam")
-TESTS_FUNCTIONAL_TEST_05_OUTPUT_TXT = resource_filename("flaimapper","data/tests/test_complex_issue.flaimapper.txt")
+TESTS_FUNCTIONAL_TEST_05 = resource_filename("flaimapper", "data/tests/test_complex_issue.bam")
+TESTS_FUNCTIONAL_TEST_05_OUTPUT_TXT = resource_filename("flaimapper", "data/tests/test_complex_issue.flaimapper.txt")
