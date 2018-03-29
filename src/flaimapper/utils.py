@@ -37,7 +37,6 @@
 """
 
 
-import os
 import sys
 import re
 import csv
@@ -56,9 +55,11 @@ def fasta_entry_names(fasta_file):
 
     return list(sorted(names))
 
-def parse_gff_annotation_name(string,gid="gene_id"):
-    matches = re.findall(re.escape(gid)+'=[\'" ]?([^\'";]+)',string)
+
+def parse_gff_annotation_name(string, gid="gene_id"):
+    matches = re.findall(re.escape(gid) + '=[\'" ]?([^\'";]+)', string)
     return matches[0] if len(matches) > 0 else None
+
 
 def parse_gff(gff_file):
     """2015-mar-20: Removed the Tabix library because of incompatibility
@@ -67,36 +68,37 @@ def parse_gff(gff_file):
 
     regions = []
 
-    with open(gff_file,'r') as fh:
+    with open(gff_file, 'r') as fh:
         for line in fh:
             line = line.strip()
             if(len(line) > 0 and line[0] != '#'):
                 region = line.split('\t')
 
-                start_pos = int(region[3])-1
+                start_pos = int(region[3]) - 1
 
                 if(start_pos < 0):
-                    sys.stderr.write('Masked regions (GTF/GFF) file "' + gff_file + '" is currupt:\n\n'+line+'\n\nThis format must have 1-based coordinates.\n')
+                    sys.stderr.write('Masked regions (GTF/GFF) file "' + gff_file + '" is currupt:\n\n' + line + '\n\nThis format must have 1-based coordinates.\n')
                     sys.exit()
 
-                #@todo -> additional info column should just be the name column (1st column)
+                #  @todo -> additional info column should just be the name column (1st column)
                 name = None
                 if(len(region) >= 9):
                     name = parse_gff_annotation_name(region[8])
 
                 # GTF uses 1-based coordinates - convert them to 0-based
                 regions.append((
-                    region[0],			# chr
-                    start_pos,			# start (0-based)
-                    int(region[4])-1,	# end   (0-based)
-                    0,					# score
-                    name,				# name of precursor
-                    len(regions)		# id in regions (0, 1, ...)
+                    region[0],			 # chr
+                    start_pos,			 # start (0-based)
+                    int(region[4]) - 1,	 # end   (0-based)
+                    0,					 # score
+                    name,				 # name of precursor
+                    len(regions)		 # id in regions (0, 1, ...)
                 ))
 
     return regions
 
-def parse_table(filename,column_reference=2,column_start=3, column_end=4, column_sequence=8):
+
+def parse_table(filename, column_reference=2, column_start=3, column_end=4, column_sequence=8):
     idx = {}
     k = 0
     with open(filename, 'r') as fh:
@@ -107,15 +109,14 @@ def parse_table(filename,column_reference=2,column_start=3, column_end=4, column
                     row[column_reference],
                     int(row[column_start]),
                     int(row[column_end]),
-                    row[column_sequence]
-                    )
+                    row[column_sequence])
 
                 key1 = data[0].lstrip('>')
 
-                if not key1 in idx:
+                if key1 not in idx:
                     idx[key1] = {}
 
-                if not data[1] in idx[key1]:
+                if data[1] not in idx[key1]:
                     idx[key1][data[1]] = []
 
                 idx[key1][data[1]].append(data)
@@ -124,11 +125,13 @@ def parse_table(filename,column_reference=2,column_start=3, column_end=4, column
 
     return idx
 
+
 def get_file_diff(f1, f2):
     out = ''
     with subprocess.Popen(['diff', f1, f2], stdout=subprocess.PIPE) as pipe:
         out = pipe.stdout.read().decode("utf-8")
     return out
+
 
 def sort_frequency_dict(some_dict):
     # from pseudo random dict:
@@ -136,13 +139,14 @@ def sort_frequency_dict(some_dict):
     #
     # sort on key (this case alignment position):
     # [(32, 6), (33, 6), (34, 6), (35, 12), (36, 6), (38, 6), (39, 6)]
-    sorted_list = sorted(some_dict.items(), key=operator.itemgetter(0),reverse=False)
+    sorted_list = sorted(some_dict.items(), key=operator.itemgetter(0), reverse=False)
 
     # sort on value (this case frequency) which preserves ordering on key/position if values are identical (called 'stable sorting;):
     # [(35, 12), (32, 6), (33, 6), (34, 6), (36, 6), (38, 6), (39, 6)]
-    sorted_list.sort(key=operator.itemgetter(1),reverse=True)
+    sorted_list.sort(key=operator.itemgetter(1), reverse=True)
     return sorted_list
+
 
 def py2_round(x, d=0):
     p = 10 ** d
-    return float(math.floor((x * p) + math.copysign(0.5, x)))/p
+    return float(math.floor((x * p) + math.copysign(0.5, x))) / p
