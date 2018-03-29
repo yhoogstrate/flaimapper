@@ -37,12 +37,15 @@
 """
 
 import flaimapper
-import unittest,logging
-
-logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
+import unittest
+import logging
 
 from flaimapper.CLI import CLI
-from flaimapper.Data import *
+from flaimapper.Data import TESTS_EXAMPLE_ALIGNMENT_01
+from flaimapper.Data import PARAMETERS_DEFAULT
+
+
+logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
 
 
 class TestCLI(unittest.TestCase):
@@ -53,9 +56,7 @@ class TestCLI(unittest.TestCase):
         self.assertTrue(cli.parameters.right_padding, 15)
 
     def test_02(self):
-        param_file = PARAMETERS_DEFAULT
-
-        cli = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-p",param_file])
+        cli = CLI([TESTS_EXAMPLE_ALIGNMENT_01, "-p", PARAMETERS_DEFAULT])
 
         self.assertTrue(cli.parameters.left_padding, 15)
         self.assertTrue(cli.parameters.right_padding, 15)
@@ -63,6 +64,7 @@ class TestCLI(unittest.TestCase):
 
 def main():
     unittest.main()
+
 
 if __name__ == '__main__':
     main()
