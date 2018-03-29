@@ -38,12 +38,14 @@
 
 
 import flaimapper
-import unittest,logging
-
-logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
+import unittest
+import logging
 
 from flaimapper.FilterParameters import FilterParameters
-from flaimapper.Data import *
+from flaimapper.Data import TESTS_FUNCTIONAL_DUCK7_PARAMS
+
+
+logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
 
 
 class TestFilterParameters(unittest.TestCase):
@@ -54,7 +56,7 @@ class TestFilterParameters(unittest.TestCase):
         self.assertEqual(fp.right_padding, 15)
 
         keys = fp.matrix.keys()
-        for i in range(-15,0):
+        for i in range(-15, 0):
             self.assertTrue(i in keys)
             self.assertTrue(fp.matrix[i] >= 0.0)
             self.assertTrue(fp.matrix[i] <= 100.0)
@@ -66,7 +68,7 @@ class TestFilterParameters(unittest.TestCase):
         self.assertEqual(fp.right_padding, 7)
 
         keys = fp.matrix.keys()
-        for i in range(-7,0):
+        for i in range(-7, 0):
             self.assertTrue(i in keys)
             self.assertTrue(fp.matrix[i] >= 0.0)
             self.assertTrue(fp.matrix[i] <= 100.0)
@@ -74,6 +76,7 @@ class TestFilterParameters(unittest.TestCase):
 
 def main():
     unittest.main()
+
 
 if __name__ == '__main__':
     main()
