@@ -13,17 +13,17 @@
  - Youri Hoogstrate
  - Elena S. Martens-Uzunova
  - Guido Jenster
- 
- 
+
+
  [License: GPL3]
- 
+
  This file is part of flaimapper.
- 
+
  flaimapper is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  flaimapper is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
@@ -38,36 +38,33 @@
 
 import flaimapper
 
-#from distutils.core import setup
+# from distutils.core import setup
 from setuptools import setup, find_packages
 
 setup(name='flaimapper',
-        version=flaimapper.__version__,
-        description='Fragment Location Annotation Identification Mapper',
-        author=flaimapper.__author__,
-        author_email='not-for@public.use',
-        maintainer=flaimapper.__author__,
-        url='https://github.com/yhoogstrate/flaimapper',
-        
-        scripts=["bin/flaimapper","bin/sslm2sam"],
-        #packages=['flaimapper'],
-        packages=find_packages(),
-        #package_dir={'flaimapper': 'flaimapper'},
-        package_data={'': ['data/*.*','data/tests/*.*']},
-        include_package_data=True,
-        
-        # Very severe backwards incompatibility in 0.9 and above
-        setup_requires=['pysam >= 0.14.1','nose2'],
-        install_requires=['pysam >= 0.14.1'],
-        
-        test_suite="tests",
-        
-        classifiers=[
-            'Environment :: Console',
-            'Intended Audience :: Science/Research',
-            'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
-            'Operating System :: OS Independent',
-            'Topic :: Scientific/Engineering',
-            'Topic :: Scientific/Engineering :: Bio-Informatics',
-            ],
-    )
+      version=flaimapper.__version__,
+      description='Fragment Location Annotation Identification Mapper',
+      author=flaimapper.__author__,
+      author_email='not-for@public.use',
+      maintainer=flaimapper.__author__,
+      url='https://github.com/yhoogstrate/flaimapper',
+
+      scripts=["bin/flaimapper", "bin/sslm2sam"],
+
+      packages=find_packages(),
+      # package_dir={'flaimapper': 'flaimapper'},
+      package_data={'': ['data/*.*', 'data/tests/*.*']},
+      include_package_data=True,
+
+      # Very severe backwards incompatibility in 0.9 and above
+      setup_requires=['pysam >= 0.14.1', 'nose2'],
+      install_requires=['pysam >= 0.14.1'],
+
+      test_suite="tests",
+
+      classifiers=['Environment :: Console',
+                   'Intended Audience :: Science/Research',
+                   'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+                   'Operating System :: OS Independent',
+                   'Topic :: Scientific/Engineering',
+                   'Topic :: Scientific/Engineering :: Bio-Informatics'])
