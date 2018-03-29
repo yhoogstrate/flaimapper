@@ -37,7 +37,8 @@
 """
 
 import logging
-from flaimapper.Data import *
+from flaimapper.Data import PARAMETERS_DEFAULT
+
 
 class FilterParameters:
     """
@@ -53,10 +54,10 @@ class FilterParameters:
 Every line represents an offset from a peak, and the second column
 represents the percentage of reduction. The zero value is excluded.
     """
-    def __init__(self,filename=None):
-        self.parse(filename if filename != None else PARAMETERS_DEFAULT)
+    def __init__(self, filename=None):
+        self.parse(filename if filename is not None else PARAMETERS_DEFAULT)
 
-    def parse(self,filename):
+    def parse(self, filename):
         matrix = {}
 
         with open(filename, "r") as fh:
@@ -67,7 +68,7 @@ represents the percentage of reduction. The zero value is excluded.
                     if len(params) != 2:
                         raise ValueError("inappropriate line detected in parameters file: %s:\n%s" % (filename, line))
 
-                    params = (int(params[0]),float(params[1]))
+                    params = (int(params[0]), float(params[1]))
                     if params[0] != 0 and params[1] >= 0.0 and params[1] <= 100.0:
                         matrix[params[0]] = params[1]
                     else:
@@ -75,7 +76,7 @@ represents the percentage of reduction. The zero value is excluded.
 
         self.set_matrix(matrix)
 
-    def set_matrix(self,matrix):
+    def set_matrix(self, matrix):
         pos = []
         neg = []
 
@@ -88,16 +89,16 @@ represents the percentage of reduction. The zero value is excluded.
         pos.sort()
         neg.sort()
 
-        for i in range(1,len(pos)):
-            if pos[i] - pos[i-1] != 1:
+        for i in range(1, len(pos)):
+            if pos[i] - pos[i - 1] != 1:
                 raise ValueError("missing positive values in parameters file")
 
-        for i in range(1,len(neg)):
-            if neg[i] - neg[i-1] != 1:
+        for i in range(1, len(neg)):
+            if neg[i] - neg[i - 1] != 1:
                 raise ValueError("missing negative values in parameters file")
 
         self.left_padding = len(pos)
         self.right_padding = len(neg)
 
         self.matrix = matrix
-        logging.debug("Parsed filter parameters: [-"+str(self.left_padding)+","+str(self.right_padding)+"]")
+        logging.debug("Parsed filter parameters: [-" + str(self.left_padding) + "," + str(self.right_padding) + "]")
