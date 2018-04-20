@@ -38,31 +38,27 @@
 
 import flaimapper
 import unittest
-import filecmp
 import os
 import logging
 import pysam
 
 from flaimapper.FlaiMapper import FlaiMapper
 from flaimapper.CLI import CLI
-from flaimapper.utils import get_file_diff
-
 
 
 logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
-
 
 
 class TestFlaiMapper3(unittest.TestCase):
     def test_01(self):
         basename = 'multilength_fragments_per_position_001'
 
-        if not os.path.exists('tmp/'+basename+'.bam'):
-            fhq = open('tmp/'+basename+'.bam', "wb")
-            fhq.write(pysam.view('-bS', 'tests/data/'+basename + ".sam"))
+        if not os.path.exists('tmp/' + basename + '.bam'):
+            fhq = open('tmp/' + basename + '.bam', "wb")
+            fhq.write(pysam.view('-bS', 'tests/data/' + basename + ".sam"))
             fhq.close()
 
-        args = CLI(['tmp/'+basename+'.bam', '--verbose'])
+        args = CLI(['tmp/' + basename + '.bam', '--verbose'])
 
         args.parameters.left_padding = 0
         args.parameters.right_padding = 0
@@ -70,12 +66,16 @@ class TestFlaiMapper3(unittest.TestCase):
         flaimapper = FlaiMapper(args)
         i = 0
         for region in flaimapper.regions():
+            self.assertEqual(region.region[0], 'SNORD78')
             for result in region:
-                    print(result)
-                    i += 1
-
+                if i == 0:
+                    self.assertEqual(region.region[1] + result.start, 11)
+                    self.assertEqual(region.region[1] + result.stop, 11 + 61)
+                elif i == 1:
+                    self.assertEqual(region.region[1] + result.start, 44)
+                    self.assertEqual(region.region[1] + result.stop, 44 + 28)
+                i += 1
         self.assertEqual(i, 2)
-
 
 
 def main():
