@@ -117,7 +117,8 @@ class MaskedRegion:
         -> median([22,26]) == return (float(k1 + k2)) / 2
         """
 
-        value_map = {key: value for key, value in value_map_ref.items()}
+        #value_map = {key: value for key, value in value_map_ref.items()}
+        value_map = value_map_ref.copy()# shallow? copy seems to also work since integers are deep copied
 
         keys = sorted(value_map.keys())
         while len(keys) > 1:
@@ -141,11 +142,51 @@ class MaskedRegion:
                     keys.remove(key_t)
 
         if len(keys) > 0:
-            print(keys[0])
             return keys[0]
         else:
             return None
+    def get_medians_of_map(self, value_map, window=15):
+        """
+        input:
+        {
+            -62: 5,
+            -61: 63,
+            -58: 7,
+            -28: 23,
+            -27: 21
+        }
+        
+        needs to return TWO medians: [median({-62: 5, -61: 63, -58: 7}), median({-28: 23, -27: 21})]
+        """
 
+        ordered_keys = sorted(value_map.keys())
+        frame_medians = []
+        
+        while len(ordered_keys) > 0:
+            max_element = {'median': None, 'reads':-1, 'key': None, 'remove': []}
+            for key in ordered_keys:
+                other_keys = [_ for _ in ordered_keys if (_ >= (key - window) and _ <= (key + window))]
+                subset = {_: value_map[_] for _ in other_keys}
+                valsum = sum(subset.values())
+                element = {'median': self.get_median_of_map(subset), 'reads':valsum, 'key': key, 'remove': other_keys}
+
+                # order: valsum, len, key itself just for persistance
+                if element['reads'] > max_element['reads']:
+                    max_element = element
+                elif element['reads'] == max_element['reads'] and len(element['remove']) > len(max_element['remove']):
+                    max_element = element
+                elif element['reads'] == max_element['reads'] and len(element['remove']) == len(max_element['remove']) and element['key'] < max_element['key']:
+                    max_element = element
+            
+            frame_medians.append(max_element['median'])
+            
+            for val in max_element['remove']:
+                ordered_keys.remove(val)
+            
+        if len(frame_medians) > 0:
+            print(value_map, '=>', frame_medians)
+        
+        
     def predict_fragments(self):
         def step_01__parse_stats():
             logging.debug("Acquiring statistics")
@@ -186,11 +227,9 @@ class MaskedRegion:
 
             for i in range(len(tmp_stop_avg_lengths)):
                 avgLenF = self.get_median_of_map(tmp_start_avg_lengths[i])
-                if i in [63]:
-                    print (i, tmp_stop_avg_lengths[i])
                 avgLenR = self.get_median_of_map(tmp_stop_avg_lengths[i])
-                if i in [63]:
-                    print (i, tmp_stop_avg_lengths[i])
+                #if i == 63:
+                self.get_medians_of_map(tmp_stop_avg_lengths[i], 15)
 
                 if avgLenF is not None:
                     avgLenF = int(py2_round(avgLenF + 1))
