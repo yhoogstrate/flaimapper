@@ -13,17 +13,17 @@
  - Youri Hoogstrate
  - Elena S. Martens-Uzunova
  - Guido Jenster
- 
- 
+
+
  [License: GPL3]
- 
+
  This file is part of flaimapper.
- 
+
  flaimapper is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  flaimapper is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
@@ -38,28 +38,34 @@
 
 
 import flaimapper
-import unittest,subprocess,os,shutil,logging
-
-logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
+import unittest
+import subprocess
+import os
+import shutil
+import logging
 
 from flaimapper.CLI import CLI_sslm2sam
 from flaimapper.SSLMParser import SSLMParser
 
 
+logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
+
+
 class TestFlaiMapper(unittest.TestCase):
     def test_01_a(self):
-        subprocess.call(["tar","-xzf","../share/small_RNA-seq_alignments/SRP028959/SRR954958.tar.gz"])
-        
-        args = CLI_sslm2sam(['-o','test.sam','SRR954958'])
+        command = ['tar', '-xzf', '../share/small_RNA-seq_alignments/SRP028959/SRR954958.tar.gz']
+        subprocess.call(command)
+
+        args = CLI_sslm2sam(['-o', 'tmp/tests/test.sam', 'SRR954958'])
         sslm2bed_converter = SSLMParser(args.sslm_directory)
         sslm2bed_converter.convert_to_sam(args.output)
-        
-        assertion = (os.stat("test.sam").st_size == 46985661)
-        self.assertTrue(assertion, "Incorrect ../share/small_RNA-seq_alignments/SRP028959/test.sam")# Assume file size is sufficient :)
-        
+
+        assertion = (os.stat("tmp/tests/test.sam").st_size == 46985661)
+        self.assertTrue(assertion, "Incorrect ../share/small_RNA-seq_alignments/SRP028959/test.sam")  # Assume file size is sufficient :)
+
         if assertion:
-            os.remove("test.sam")
-        
+            os.remove("tmp/tests/test.sam")
+
         os.remove("SRR954958.bam")
         os.remove("SRR954958.bam.bai")
         shutil.rmtree("SRR954958")
@@ -67,6 +73,7 @@ class TestFlaiMapper(unittest.TestCase):
 
 def main():
     unittest.main()
+
 
 # Tests fall outside __main__
 if __name__ == '__main__':

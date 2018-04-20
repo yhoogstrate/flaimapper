@@ -9,7 +9,7 @@
  Using small RNA-seq read alignments, FlaiMapper is able to annotate
  fragments primarily by peak-detection on the start and  end position
  densities followed by filtering and a reconstruction processes.
- Copyright (C) 2011-2014:
+ Copyright (C) 2011-2018:
  - Youri Hoogstrate
  - Elena S. Martens-Uzunova
  - Guido Jenster
@@ -37,34 +37,50 @@
 """
 
 import flaimapper
+import unittest
+import os
+import logging
+import pysam
 
-# from distutils.core import setup
-from setuptools import setup, find_packages
+from flaimapper.FlaiMapper import FlaiMapper
+from flaimapper.CLI import CLI
 
-setup(name='flaimapper',
-      version=flaimapper.__version__,
-      description='Fragment Location Annotation Identification Mapper',
-      author=flaimapper.__author__,
-      author_email='not-for@public.use',
-      maintainer=flaimapper.__author__,
-      url='https://github.com/yhoogstrate/flaimapper',
 
-      scripts=["bin/flaimapper", "bin/sslm2sam"],
+logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
 
-      packages=find_packages(),
-      # package_dir={'flaimapper': 'flaimapper'},
-      package_data={'': ['data/*.*', 'data/tests/*.*']},
-      include_package_data=True,
 
-      # Very severe backwards incompatibility in 0.9 and above
-      setup_requires=['pysam >= 0.14.1', 'nose', 'flake8'],
-      install_requires=['pysam >= 0.14.1'],
+class TestFlaiMapper3(unittest.TestCase):
+    def test_01(self):
+        basename = 'multilength_fragments_per_position_001'
 
-      test_suite="tests",
+        if not os.path.exists('tmp/' + basename + '.bam'):
+            fhq = open('tmp/' + basename + '.bam', "wb")
+            fhq.write(pysam.view('-bS', 'tests/data/' + basename + ".sam"))
+            fhq.close()
 
-      classifiers=['Environment :: Console',
-                   'Intended Audience :: Science/Research',
-                   'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
-                   'Operating System :: OS Independent',
-                   'Topic :: Scientific/Engineering',
-                   'Topic :: Scientific/Engineering :: Bio-Informatics'])
+        args = CLI(['tmp/' + basename + '.bam', '--verbose'])
+
+        args.parameters.left_padding = 0
+        args.parameters.right_padding = 0
+
+        flaimapper = FlaiMapper(args)
+        i = 0
+        for region in flaimapper.regions():
+            self.assertEqual(region.region[0], 'SNORD78')
+            for result in region:
+                if i == 0:
+                    self.assertEqual(region.region[1] + result.start, 11)
+                    self.assertEqual(region.region[1] + result.stop, 11 + 61)
+                elif i == 1:
+                    self.assertEqual(region.region[1] + result.start, 44)
+                    self.assertEqual(region.region[1] + result.stop, 44 + 28)
+                i += 1
+        self.assertEqual(i, 2)
+
+
+def main():
+    unittest.main()
+
+
+if __name__ == '__main__':
+    main()

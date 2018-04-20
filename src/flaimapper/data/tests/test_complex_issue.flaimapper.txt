@@ -1,3 +1,3 @@
 Fragment	Size	Reference sequence	Start	End	Precursor	Start in precursor	End in precursor	Sequence	Corresponding-reads (start)	Corresponding-reads (end)	Corresponding-reads (total)
-FM_chr1_000000000001	23	chr1	158	180	chr1	16	38		6	6	12
-FM_chr1_000000000002	18	chr1	160	177	chr1	18	35		6	6	12
+FM_chr1_000000000001	18	chr1	160	177	chr1	18	35		6	6	12
+FM_chr1_000000000002	23	chr1	158	180	chr1	16	38		6	6	12

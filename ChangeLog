@@ -1,3 +1,12 @@
+2018-04-20 Youri Hoogstrate
+	* (v3.0.0)
+	 - Complete port to python3
+	 - Ability to detect  multiple fragments from a single location,
+	   with length differences of more than 15bp as requested by
+	   E. Martens.
+	 - Flake for syntax checking
+	 - Order of output is more consistent with re-runs
+
 2017-08-15 Youri Hoogstrate
 	* (v2.5.0) 
 	  - Fixed issue that caused not unique uids for fragments (bug

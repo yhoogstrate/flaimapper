@@ -1,0 +1,1 @@
+sequence	filename>HGNC=10218&HUGO-Symbol=SNORD61&HUGO-Name=small_nucleolar_RNA,_C/D_box_61&LOCI=[chrX:135961348-135961440:strand=-]&SOURCE=RefSeq&SOURCE-ACCESSION=NR_002735&GENOME=hg19	file621

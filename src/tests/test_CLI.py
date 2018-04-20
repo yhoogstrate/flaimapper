@@ -13,17 +13,17 @@
  - Youri Hoogstrate
  - Elena S. Martens-Uzunova
  - Guido Jenster
- 
- 
+
+
  [License: GPL3]
- 
+
  This file is part of flaimapper.
- 
+
  flaimapper is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  flaimapper is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
@@ -37,32 +37,34 @@
 """
 
 import flaimapper
-import unittest,logging
-
-logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
+import unittest
+import logging
 
 from flaimapper.CLI import CLI
-from flaimapper.Data import *
+from flaimapper.Data import TESTS_EXAMPLE_ALIGNMENT_01
+from flaimapper.Data import PARAMETERS_DEFAULT
+
+
+logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
 
 
 class TestCLI(unittest.TestCase):
     def test_01(self):
         cli = CLI([TESTS_EXAMPLE_ALIGNMENT_01])
-        
+
         self.assertTrue(cli.parameters.left_padding, 15)
         self.assertTrue(cli.parameters.right_padding, 15)
 
     def test_02(self):
-        param_file = PARAMETERS_DEFAULT
-        
-        cli = CLI([TESTS_EXAMPLE_ALIGNMENT_01,"-p",param_file])
-        
+        cli = CLI([TESTS_EXAMPLE_ALIGNMENT_01, "-p", PARAMETERS_DEFAULT])
+
         self.assertTrue(cli.parameters.left_padding, 15)
         self.assertTrue(cli.parameters.right_padding, 15)
 
 
 def main():
     unittest.main()
+
 
 if __name__ == '__main__':
     main()

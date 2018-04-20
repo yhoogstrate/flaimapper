@@ -13,17 +13,17 @@
  - Youri Hoogstrate
  - Elena S. Martens-Uzunova
  - Guido Jenster
- 
- 
+
+
  [License: GPL3]
- 
+
  This file is part of flaimapper.
- 
+
  flaimapper is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  flaimapper is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
@@ -41,11 +41,11 @@ class Read:
     """
     Describes an aligned read as part of SSLM data
     """
-    def __init__(self,start,stop,name,sequence):
+    def __init__(self, start, stop, name, sequence):
         self.start = start
         self.stop = stop
         self.name = name
         self.sequence = sequence
-    
+
     def size(self):
         return (self.stop - self.start) - 1

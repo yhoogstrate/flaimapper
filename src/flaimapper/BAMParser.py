@@ -13,17 +13,17 @@
  - Youri Hoogstrate
  - Elena S. Martens-Uzunova
  - Guido Jenster
- 
- 
+
+
  [License: GPL3]
- 
+
  This file is part of flaimapper.
- 
+
  flaimapper is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  flaimapper is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
@@ -43,21 +43,21 @@ import pysam
 class BAMParser:
     """parseNcRNA is a class that parses the BAM alignment files using pysam.
     """
-    def __init__(self,region,alignment):
+    def __init__(self, region, alignment):
         self.region = region
-        self.alignment = pysam.AlignmentFile(alignment,'rb')
-    
+        self.alignment = pysam.AlignmentFile(alignment, 'rb')
+
     def parse_reads(self):
         if(self.region[0] in self.alignment.references):
             for read in self.alignment.fetch(self.region[0], self.region[1], self.region[2]):
-                
-                if len(read.blocks) > 0:# ensure the read is acutally aligned
+
+                if len(read.blocks) > 0:  # ensure the read is acutally aligned
                     # First coordinate is given at 0 base, the second as 1
                     # Therefore the second is converted with "-1"
-                    yield (read.blocks[0][0], read.blocks[-1][1]-1)
+                    yield (read.blocks[0][0], read.blocks[-1][1] - 1)
         else:
             raise Exception("Call to non-existing region")
-    
+
     def __iter__(self):
         for read in self.parse_reads():
             yield read

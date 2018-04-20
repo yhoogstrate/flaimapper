@@ -1,10 +1,10 @@
 language: python
 python:
-  - "2.7"
+  - "3.6"
 # HTSeq is not compatible with python3
 
-install: "chmod 700 /home/travis/.python-eggs; mkdir $HOME/.python-eggs; chmod og-w $HOME/.python-eggs; cd src; virtualenv -p python2 .venv; source .venv/bin/activate; python setup.py install; pip install nose2 -I"
-script: "nose2"
+install: "chmod 700 /home/travis/.python-eggs; mkdir $HOME/.python-eggs; chmod og-w $HOME/.python-eggs; cd src; virtualenv -p python3 .venv; source .venv/bin/activate; python setup.py install; pip install nose flake8 -I"
+script: "nosetests; ./scripts/flake8.sh"
 
 notifications:
   email: false

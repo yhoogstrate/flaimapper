@@ -13,17 +13,17 @@
  - Youri Hoogstrate
  - Elena S. Martens-Uzunova
  - Guido Jenster
- 
- 
+
+
  [License: GPL3]
- 
+
  This file is part of flaimapper.
- 
+
  flaimapper is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  flaimapper is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
@@ -38,35 +38,37 @@
 
 
 import flaimapper
-import unittest,logging
-
-logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
+import unittest
+import logging
 
 from flaimapper.FilterParameters import FilterParameters
-from flaimapper.Data import *
+from flaimapper.Data import TESTS_FUNCTIONAL_DUCK7_PARAMS
+
+
+logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
 
 
 class TestFilterParameters(unittest.TestCase):
     def test_01(self):
         fp = FilterParameters()
-        
+
         self.assertEqual(fp.left_padding, 15)
         self.assertEqual(fp.right_padding, 15)
 
         keys = fp.matrix.keys()
-        for i in xrange(-15,0):
+        for i in range(-15, 0):
             self.assertTrue(i in keys)
             self.assertTrue(fp.matrix[i] >= 0.0)
             self.assertTrue(fp.matrix[i] <= 100.0)
-            
+
     def test_02(self):
         fp = FilterParameters(TESTS_FUNCTIONAL_DUCK7_PARAMS)
-        
+
         self.assertEqual(fp.left_padding, 7)
         self.assertEqual(fp.right_padding, 7)
-        
+
         keys = fp.matrix.keys()
-        for i in xrange(-7,0):
+        for i in range(-7, 0):
             self.assertTrue(i in keys)
             self.assertTrue(fp.matrix[i] >= 0.0)
             self.assertTrue(fp.matrix[i] <= 100.0)
@@ -74,6 +76,7 @@ class TestFilterParameters(unittest.TestCase):
 
 def main():
     unittest.main()
+
 
 if __name__ == '__main__':
     main()
