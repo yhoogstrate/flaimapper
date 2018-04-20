@@ -59,7 +59,7 @@ class MaskedRegion:
         self.region = region
         self.settings = settings
 
-    def get_median_of_map(self, value_map):
+    def get_median_of_map(self, value_map_ref):
         """
         input:
         {
@@ -117,6 +117,8 @@ class MaskedRegion:
         -> median([22,26]) == return (float(k1 + k2)) / 2
         """
 
+        value_map = {key: value for key, value in value_map_ref.items()}
+
         keys = sorted(value_map.keys())
         while len(keys) > 1:
             key_l = keys[0]
@@ -139,6 +141,7 @@ class MaskedRegion:
                     keys.remove(key_t)
 
         if len(keys) > 0:
+            print(keys[0])
             return keys[0]
         else:
             return None
@@ -183,12 +186,20 @@ class MaskedRegion:
 
             for i in range(len(tmp_stop_avg_lengths)):
                 avgLenF = self.get_median_of_map(tmp_start_avg_lengths[i])
+                if i in [63]:
+                    print (i, tmp_stop_avg_lengths[i])
                 avgLenR = self.get_median_of_map(tmp_stop_avg_lengths[i])
+                if i in [63]:
+                    print (i, tmp_stop_avg_lengths[i])
 
-                if(avgLenF):
+                if avgLenF is not None:
                     avgLenF = int(py2_round(avgLenF + 1))
-                if(avgLenR):
+                if avgLenR is not None:
                     avgLenR = int(py2_round(avgLenR - 0.5))							# Why -0.5 -> because of rounding a negative number
+                    #print(i)
+                    #print(" ",tmp_stop_avg_lengths[i])
+                    #print(" ", avgLenR)
+                    #print("")
 
                 self_start_avg_lengths.append(avgLenF)
                 self_stop_avg_lengths.append(avgLenR)
