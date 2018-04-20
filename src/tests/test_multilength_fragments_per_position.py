@@ -53,13 +53,14 @@ logging.basicConfig(format=flaimapper.__log_format__, level=logging.DEBUG)
 
 
 
-class TestFlaiMapper(unittest.TestCase):
+class TestFlaiMapper3(unittest.TestCase):
     def test_01(self):
         basename = 'multilength_fragments_per_position_001'
 
-        fhq = open('tmp/'+basename+'.bam', "wb")
-        fhq.write(pysam.view('-bS', 'tests/data/'+basename + ".sam"))
-        fhq.close()
+        if not os.path.exists('tmp/'+basename+'.bam'):
+            fhq = open('tmp/'+basename+'.bam', "wb")
+            fhq.write(pysam.view('-bS', 'tests/data/'+basename + ".sam"))
+            fhq.close()
 
         args = CLI(['tmp/'+basename+'.bam', '--verbose'])
 
@@ -67,11 +68,11 @@ class TestFlaiMapper(unittest.TestCase):
         args.parameters.right_padding = 0
 
         flaimapper = FlaiMapper(args)
-
         i = 0
         for region in flaimapper.regions():
-            print(region.region)
-            i += 1
+            for result in region:
+                    print(result)
+                    i += 1
 
         self.assertEqual(i, 2)
 

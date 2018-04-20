@@ -302,6 +302,14 @@ class MaskedRegion:
 
         # Acquire statistics
         start_positions, stop_positions, start_avg_lengths, stop_avg_lengths = step_01__parse_stats()
+        
+        print (start_positions)
+        print (stop_positions)
+        print ("")
+        print (start_avg_lengths)
+        print (stop_avg_lengths)
+        print ("")
+
 
         # Finds peaks
         start_positions = step_02__find_peaks(start_positions + [0])
