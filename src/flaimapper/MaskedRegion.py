@@ -163,7 +163,7 @@ class MaskedRegion:
         frame_medians = []
         
         while len(ordered_keys) > 0:
-            max_element = {'median': None, 'reads':-1, 'key': None, 'remove': []}
+            max_element = {'median': None, 'reads': -1, 'key': None, 'remove': []}
             for key in ordered_keys:
                 other_keys = [_ for _ in ordered_keys if (_ >= (key - window) and _ <= (key + window))]
                 subset = {_: value_map[_] for _ in other_keys}
@@ -184,9 +184,11 @@ class MaskedRegion:
                 ordered_keys.remove(val)
             
         if len(frame_medians) > 0:
-            print(value_map, '=>', frame_medians)
-        
-        
+            #print(value_map, '=>', frame_medians, ' :: ',self.get_median_of_map(value_map))
+            return frame_medians
+        else:
+            return None
+
     def predict_fragments(self):
         def step_01__parse_stats():
             logging.debug("Acquiring statistics")
@@ -226,19 +228,16 @@ class MaskedRegion:
             self_stop_avg_lengths = []
 
             for i in range(len(tmp_stop_avg_lengths)):
-                avgLenF = self.get_median_of_map(tmp_start_avg_lengths[i])
-                avgLenR = self.get_median_of_map(tmp_stop_avg_lengths[i])
-                #if i == 63:
-                self.get_medians_of_map(tmp_stop_avg_lengths[i], 15)
+                #avgLenF = self.get_median_of_map(tmp_start_avg_lengths[i])
+                #avgLenR = self.get_median_of_map(tmp_stop_avg_lengths[i])
+                
+                avgLenF = self.get_medians_of_map(tmp_start_avg_lengths[i],15)
+                avgLenR = self.get_medians_of_map(tmp_stop_avg_lengths[i],15)
 
                 if avgLenF is not None:
-                    avgLenF = int(py2_round(avgLenF + 1))
+                    avgLenF = [int(py2_round(_ + 1)) for _ in avgLenF]
                 if avgLenR is not None:
-                    avgLenR = int(py2_round(avgLenR - 0.5))							# Why -0.5 -> because of rounding a negative number
-                    #print(i)
-                    #print(" ",tmp_stop_avg_lengths[i])
-                    #print(" ", avgLenR)
-                    #print("")
+                    avgLenR = [int(py2_round(_ - 0.5))for _ in avgLenR]							# Why -0.5 -> because of rounding a negative number
 
                 self_start_avg_lengths.append(avgLenF)
                 self_stop_avg_lengths.append(avgLenR)
@@ -311,54 +310,54 @@ class MaskedRegion:
                 pstopSorted = sort_frequency_dict(pstop)
                 for itema in pstopSorted:
                     pos = itema[0]
-                    diff = pexpectedStop[pos]
-                    predictedPos = pos + diff + 1							# 149 - 50 = 99; 149- 50 + 1 = 100 (example of read aligned to 100,149 (size=50)
+                    for diff in pexpectedStop[pos]:
+                        predictedPos = pos + diff + 1							# 149 - 50 = 99; 149- 50 + 1 = 100 (example of read aligned to 100,149 (size=50)
 
-                    highest_scoring_position = (0, -1, -1, -1, -1, 99999)
+                        highest_scoring_position = (0, -1, -1, -1, -1, 99999)
 
-                    for item in sorted(pstart.keys()):
-                        if item >= predictedPos - self.settings.parameters.left_padding and item <= predictedPos + self.settings.parameters.right_padding:
-                            distance = abs(predictedPos - item)
-                            penalty = 1.0 - (distance * 0.09)
+                        for item in sorted(pstart.keys()):
+                            if item >= predictedPos - self.settings.parameters.left_padding and item <= predictedPos + self.settings.parameters.right_padding:
+                                distance = abs(predictedPos - item)
+                                penalty = 1.0 - (distance * 0.09)
 
-                            score = pstart[item] * penalty
-                            if (score > highest_scoring_position[0]) or (score == highest_scoring_position[0] and distance < highest_scoring_position[5]):
-                                highest_scoring_position = (score, item, pos, pstart[item], pstop[pos], distance)
+                                score = pstart[item] * penalty
+                                if (score > highest_scoring_position[0]) or (score == highest_scoring_position[0] and distance < highest_scoring_position[5]):
+                                    highest_scoring_position = (score, item, pos, pstart[item], pstop[pos], distance)
 
-                    if highest_scoring_position[0] > 0.0:
-                        del(pstart[highest_scoring_position[1]])
-                        yield ncRNAFragment(highest_scoring_position[1], highest_scoring_position[2], highest_scoring_position[3], highest_scoring_position[4])
+                        if highest_scoring_position[0] > 0.0:
+                            del(pstart[highest_scoring_position[1]])
+                            yield ncRNAFragment(highest_scoring_position[1], highest_scoring_position[2], highest_scoring_position[3], highest_scoring_position[4])
             else:															# More stop than start positions
                 pstartSorted = sort_frequency_dict(pstart)
                 for itema in pstartSorted:
                     pos = itema[0]
-                    diff = pexpectedStart[pos]
-                    predictedPos = pos + diff  # @todo figure out if this requires << + 1
+                    for diff in pexpectedStart[pos]:
+                        predictedPos = pos + diff  # @todo figure out if this requires << + 1
 
-                    highest_scoring_position = (0, -1, -1, -1, -1, 99999)
+                        highest_scoring_position = (0, -1, -1, -1, -1, 99999)
 
-                    for item in sorted(pstop.keys(), reverse=True):
-                        if item >= predictedPos - self.settings.parameters.left_padding and item <= predictedPos + self.settings.parameters.right_padding:
-                            distance = abs(predictedPos - item)
-                            penalty = 1.0 - (distance * 0.09)
+                        for item in sorted(pstop.keys(), reverse=True):
+                            if item >= predictedPos - self.settings.parameters.left_padding and item <= predictedPos + self.settings.parameters.right_padding:
+                                distance = abs(predictedPos - item)
+                                penalty = 1.0 - (distance * 0.09)
 
-                            score = pstop[item] * penalty
-                            if (score > highest_scoring_position[0]) or (score == highest_scoring_position[0] and distance < highest_scoring_position[5]):
-                                highest_scoring_position = (score, pos, item, pstart[pos], pstop[item], distance)  # (Highest score -- a bug... should be 'score', Start, Stop, Reads on start, Reads on stop)
+                                score = pstop[item] * penalty
+                                if (score > highest_scoring_position[0]) or (score == highest_scoring_position[0] and distance < highest_scoring_position[5]):
+                                    highest_scoring_position = (score, pos, item, pstart[pos], pstop[item], distance)  # (Highest score -- a bug... should be 'score', Start, Stop, Reads on start, Reads on stop)
 
-                    if highest_scoring_position[0] > 0.0:
-                        del(pstop[highest_scoring_position[2]])
-                        yield ncRNAFragment(highest_scoring_position[1], highest_scoring_position[2], highest_scoring_position[3], highest_scoring_position[4])
+                        if highest_scoring_position[0] > 0.0:
+                            del(pstop[highest_scoring_position[2]])
+                            yield ncRNAFragment(highest_scoring_position[1], highest_scoring_position[2], highest_scoring_position[3], highest_scoring_position[4])
 
         # Acquire statistics
         start_positions, stop_positions, start_avg_lengths, stop_avg_lengths = step_01__parse_stats()
         
-        print (start_positions)
-        print (stop_positions)
-        print ("")
-        print (start_avg_lengths)
-        print (stop_avg_lengths)
-        print ("")
+        #print (start_positions)
+        #print (stop_positions)
+        #print ("")
+        #print (start_avg_lengths)
+        #print (stop_avg_lengths)
+        #print ("")
 
 
         # Finds peaks
