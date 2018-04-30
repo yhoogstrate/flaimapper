@@ -145,7 +145,7 @@ class MaskedRegion:
         else:
             return None
 
-    def get_medians_of_map(self, value_map, window=15):
+    def get_medians_of_map(self, value_map, window):
         """
         input:
         {
@@ -227,8 +227,8 @@ class MaskedRegion:
                 # avgLenF = self.get_median_of_map(tmp_start_avg_lengths[i])
                 # avgLenR = self.get_median_of_map(tmp_stop_avg_lengths[i])
 
-                avgLenF = self.get_medians_of_map(tmp_start_avg_lengths[i], 15)
-                avgLenR = self.get_medians_of_map(tmp_stop_avg_lengths[i], 15)
+                avgLenF = self.get_medians_of_map(tmp_start_avg_lengths[i], self.settings.min_dist_same_pos)
+                avgLenR = self.get_medians_of_map(tmp_stop_avg_lengths[i], self.settings.min_dist_same_pos)
 
                 if avgLenF is not None:
                     avgLenF = [int(py2_round(_ + 1)) for _ in avgLenF]

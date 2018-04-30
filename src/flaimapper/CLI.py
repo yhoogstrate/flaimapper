@@ -65,6 +65,8 @@ def CLI(argv=None):
 
     parser.add_argument("-r", "--fasta", help="Single reference FASTA file (+faid index) containing all genomic reference sequences")
 
+    parser.add_argument("-m", "--min-dist-same-pos", help="Mimimal distance to separate full length & fragments, when aligned to the same position (>= 0). Be careful with low values (<= 10)", type=int, default=15)
+
     parser.add_argument("--offset5p", help="Offset in bp added to the exon-type annotations in the GTF file. This offset is used in tools estimating the expression levels (default=4)", type=int, default=4)
     parser.add_argument("--offset3p", help="Offset in bp added to the exon-type annotations in the GTF file. This offset is used in tools estimating the expression levels (default=4)", type=int, default=4)
 
@@ -93,6 +95,15 @@ def CLI(argv=None):
         logging.basicConfig(format=flaimapper.__log_format__, level=logging.CRITICAL)
     else:
         logging.basicConfig(format=flaimapper.__log_format__, level=logging.INFO)
+
+    if args.min_dist_same_pos < 0:
+        err_msg = "Minimum min-dist-same-pos = 0"
+        logging.error(err_msg)
+        raise ValueError(err_msg)
+
+    logging.debug("Parameters [min-dist-same-pos]: " + str(args.min_dist_same_pos))
+    logging.debug("Parameters [offset5p         ]: " + str(args.offset5p))
+    logging.debug("Parameters [offset3p         ]: " + str(args.offset3p))
 
     return args
 

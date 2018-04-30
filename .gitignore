@@ -44,3 +44,5 @@ nosetests.xml
 *.swp
 *.bai
 *.fai
+
+tmp/
