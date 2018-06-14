@@ -192,26 +192,23 @@ class MaskedRegion:
 
             self_start_positions = [0] * n
             self_stop_positions = [0] * n
-            
+
             for read in BAMParser(self.region, self.settings.alignment_file):
                 pos_start = read[0] - self.region[1]
                 pos_stop = read[1] - self.region[1]
 
                 if pos_start >= 0 and pos_stop >= 0 and pos_start < n and pos_stop < n:
-                    #len_start = read[1] - read[0]
-                    #len_stop = read[0] - read[1]
-
                     self_start_positions[read[0] - self.region[1]] += 1
                     self_stop_positions[read[1] - self.region[1]] += 1
                 else:
                     logging.error("Alignment out of bound: (%i,%i) %s:%i-%i" % (pos_start, pos_stop, self.region[0], self.region[1], self.region[2]))
 
             mutex_groups = {}
-            self_start_positions_ft = {i:self_start_positions[i] for i in range(len(self_start_positions)) if self_start_positions[i] > 0}
-            self_stop_positions_ft = {i:self_stop_positions[i] for i in range(len(self_stop_positions)) if self_stop_positions[i] > 0}
-            
-            self_start_medians = sorted(self.get_medians_of_map(self_start_positions_ft, n+2 if self.settings.min_dist_same_pos == 0 else self.settings.min_dist_same_pos))
-            self_stop_medians = sorted(self.get_medians_of_map(self_stop_positions_ft, n+2 if self.settings.min_dist_same_pos == 0 else self.settings.min_dist_same_pos))
+            self_start_positions_ft = {i: self_start_positions[i] for i in range(len(self_start_positions)) if self_start_positions[i] > 0}
+            self_stop_positions_ft = {i: self_stop_positions[i] for i in range(len(self_stop_positions)) if self_stop_positions[i] > 0}
+
+            self_start_medians = sorted(self.get_medians_of_map(self_start_positions_ft, n + 2 if self.settings.dist_separation_filter_free == 0 else self.settings.dist_separation_filter_free))
+            self_stop_medians = sorted(self.get_medians_of_map(self_stop_positions_ft, n + 2 if self.settings.dist_separation_filter_free == 0 else self.settings.dist_separation_filter_free))
 
             for read in BAMParser(self.region, self.settings.alignment_file):
                 pos_start = read[0] - self.region[1]
@@ -220,32 +217,30 @@ class MaskedRegion:
                 if pos_start >= 0 and pos_stop >= 0 and pos_start < n and pos_stop < n:
                     len_start = read[1] - read[0]
                     len_stop = read[0] - read[1]
-                    
-                    closest_start = [None,9999999999]
-                    closest_stop = [None,9999999999]
+
+                    closest_start = [None, 9999999999]
+                    closest_stop = [None, 9999999999]
 
                     for _ in self_start_medians:
                         d = abs(_ - pos_start)
                         if d < closest_start[1]:
                             closest_start = [_, d]
-                    
-                    #print(pos_stop)
+
                     for _ in self_stop_medians:
                         d = abs(_ - pos_stop)
                         if d < closest_stop[1]:
                             closest_stop = [_, d]
-                    
+
                     if closest_start[0] is None or closest_stop[0] is None:
                         raise Exception("unexpected error")
-                    
-                    mutex_group = (closest_start[0], closest_stop[0])#str(closest_start[0])+'.'+str(closest_stop[0])
-                    if not mutex_group in mutex_groups:
-                        mutex_groups[mutex_group] = {  
+
+                    mutex_group = (closest_start[0], closest_stop[0])
+                    if mutex_group not in mutex_groups:
+                        mutex_groups[mutex_group] = {
                             'self_start_positions': [0] * n,
                             'self_stop_positions': [0] * n,
                             'tmp_start_avg_lengths': [{} for x in range(n)],
                             'tmp_stop_avg_lengths': [{} for x in range(n)]}
-                    #print('-> MUTEX GROUP:: ' + mutex_group)
 
                     mutex_groups[mutex_group]['self_start_positions'][read[0] - self.region[1]] += 1
                     mutex_groups[mutex_group]['self_stop_positions'][read[1] - self.region[1]] += 1
@@ -263,8 +258,6 @@ class MaskedRegion:
                     logging.error("Alignment out of bound: (%i,%i) %s:%i-%i" % (pos_start, pos_stop, self.region[0], self.region[1], self.region[2]))
 
             for mutex_group in sorted(mutex_groups):
-                print(mutex_group)
-
                 mutex_groups[mutex_group]['self_start_avg_lengths'] = []
                 mutex_groups[mutex_group]['self_stop_avg_lengths'] = []
 
@@ -284,9 +277,9 @@ class MaskedRegion:
                     mutex_groups[mutex_group]['self_stop_avg_lengths'].append(avgLenR)
 
                 yield (mutex_groups[mutex_group]['self_start_positions'],
-                        mutex_groups[mutex_group]['self_stop_positions'],
-                        mutex_groups[mutex_group]['self_start_avg_lengths'],
-                        mutex_groups[mutex_group]['self_stop_avg_lengths'])
+                       mutex_groups[mutex_group]['self_stop_positions'],
+                       mutex_groups[mutex_group]['self_start_avg_lengths'],
+                       mutex_groups[mutex_group]['self_stop_avg_lengths'])
 
         def step_02__find_peaks(plist, drop_cutoff=0.1):
             # Define variables:
@@ -321,8 +314,6 @@ class MaskedRegion:
             """
 
             psorted = sorted(plist.items(), key=operator.itemgetter(1, 0), reverse=True)
-            print("In: ")
-            print(psorted)
 
             # There is a small mistake in the algorithm,
             # it should search not for ALL peaks
@@ -342,11 +333,6 @@ class MaskedRegion:
                                 if((perc * item[1]) > item2[1]):
                                     psorted[j] = None
 
-            print("out:")
-            print({x[0]: x[1] for x in psorted if x is not None})
-            print("\n")
-            return {x[0]: x[1] for x in psorted if x is not None}
-
         def step_04__assemble_fragments(pstart, pstop, pexpectedStart, pexpectedStop):
             """Assemble by peak reconstruction / traceback
             """
@@ -356,7 +342,6 @@ class MaskedRegion:
                 pstopSorted = sort_frequency_dict(pstop)
                 for itema in pstopSorted:
                     pos = itema[0]
-                    print (itema)
                     for diff in pexpectedStop[pos]:
                         predictedPos = pos + diff + 1							# 149 - 50 = 99; 149- 50 + 1 = 100 (example of read aligned to 100,149 (size=50)
 

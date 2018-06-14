@@ -66,6 +66,7 @@ def CLI(argv=None):
     parser.add_argument("-r", "--fasta", help="Single reference FASTA file (+faid index) containing all genomic reference sequences")
 
     parser.add_argument("-m", "--min-dist-same-pos", help="Mimimal distance to separate full length & fragments, when aligned to the same position (>= 0). Be careful with low values (<= 10)", type=int, default=15)
+    parser.add_argument("-s", "--dist-separation-filter-free", help="Be careful with low values lower than filter bandwidth - keep larger than --min-dist-same-pos (<= 16)", type=int, default=16)
 
     parser.add_argument("--offset5p", help="Offset in bp added to the exon-type annotations in the GTF file. This offset is used in tools estimating the expression levels (default=4)", type=int, default=4)
     parser.add_argument("--offset3p", help="Offset in bp added to the exon-type annotations in the GTF file. This offset is used in tools estimating the expression levels (default=4)", type=int, default=4)
