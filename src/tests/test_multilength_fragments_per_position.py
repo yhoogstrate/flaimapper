@@ -141,6 +141,37 @@ class TestFlaiMapper3(unittest.TestCase):
                 i += 1
         self.assertEqual(i, 1)
 
+    def test_04(self):
+        #  test -m parameter effects
+        basename = 'multilength_fragments_per_position_002'
+
+        if not os.path.exists('tmp/' + basename + '.bam'):
+            fhq = open('tmp/' + basename + '.bam', "wb")
+            fhq.write(pysam.view('-bS', 'tests/data/' + basename + ".sam"))
+            fhq.close()
+
+        args = CLI(['-m', '10', 'tmp/' + basename + '.bam', '--verbose'])
+
+        args.parameters.left_padding = 0
+        args.parameters.right_padding = 0
+
+        flaimapper = FlaiMapper(args)
+        i = 0
+        for region in flaimapper.regions():
+            self.assertEqual(region.region[0], 'chr1')
+            for result in region:
+                if i == 0:
+                    self.assertEqual(region.region[1] + result.start, 4)
+                    self.assertEqual(region.region[1] + result.stop, 4 + 15 + 15 + 15 - 1)
+                elif i == 1:
+                    self.assertEqual(region.region[1] + result.start, 4 + 15)
+                    self.assertEqual(region.region[1] + result.stop, 4 + 15 + 15 + 15 - 1)
+                elif i == 2:
+                    self.assertEqual(region.region[1] + result.start, 23)
+                    self.assertEqual(region.region[1] + result.stop, 23 + 49)
+                i += 1
+        self.assertEqual(i, 3)
+
 
 def main():
     unittest.main()
