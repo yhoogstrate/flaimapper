@@ -120,7 +120,7 @@ class FlaiMapper():
         elif(self.settings.format == 2):
             fh = self.open_gtf()
 
-        logging.debug(" - Starting fragment detection")
+        logging.debug("Starting fragment detection")
 
         k = 0
         previous_seq = ''
@@ -141,10 +141,10 @@ class FlaiMapper():
             k += i
 
         fh.close()
-        logging.info(' - Detected %i fragments' % k)
+        logging.info('Detected %i fragments' % k)
 
     def open_gtf(self):
-        logging.info(" - Exporting results to: " + self.settings.output + " (GTF)")
+        logging.info("Exporting results to: " + self.settings.output + " (GTF)")
 
         if(self.settings.output == "-"):
             fh = sys.stdout
@@ -154,7 +154,7 @@ class FlaiMapper():
         return fh
 
     def open_table(self):
-        logging.info(" - Exporting results to: " + self.settings.output + " (tab-delimited, per fragment)")
+        logging.info("Exporting results to: " + self.settings.output + " (tab-delimited, per fragment)")
 
         if(self.settings.output == "-"):
             fh = sys.stdout
