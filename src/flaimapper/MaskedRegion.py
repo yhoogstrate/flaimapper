@@ -193,10 +193,6 @@ class MaskedRegion:
             self_start_positions = [0] * n
             self_stop_positions = [0] * n
             
-            #tmp_start_avg_lengths = [{} for x in range(n)]  # [{}] * n makes references instead of copies
-            #tmp_stop_avg_lengths = [{} for x in range(n)]  # [{}] * n makes references instead of copies
-
-
             for read in BAMParser(self.region, self.settings.alignment_file):
                 pos_start = read[0] - self.region[1]
                 pos_stop = read[1] - self.region[1]
@@ -207,16 +203,6 @@ class MaskedRegion:
 
                     self_start_positions[read[0] - self.region[1]] += 1
                     self_stop_positions[read[1] - self.region[1]] += 1
-
-                    # if len_start not in tmp_start_avg_lengths[pos_start]:
-                        # tmp_start_avg_lengths[pos_start][len_start] = 0
-
-                    # if len_stop not in tmp_stop_avg_lengths[pos_stop]:
-                        # tmp_stop_avg_lengths[pos_stop][len_stop] = 0
-
-                    # tmp_start_avg_lengths[pos_start][len_start] += 1
-                    # tmp_stop_avg_lengths[pos_stop][len_stop] += 1
-
                 else:
                     logging.error("Alignment out of bound: (%i,%i) %s:%i-%i" % (pos_start, pos_stop, self.region[0], self.region[1], self.region[2]))
 
@@ -224,16 +210,8 @@ class MaskedRegion:
             self_start_positions_ft = {i:self_start_positions[i] for i in range(len(self_start_positions)) if self_start_positions[i] > 0}
             self_stop_positions_ft = {i:self_stop_positions[i] for i in range(len(self_stop_positions)) if self_stop_positions[i] > 0}
             
-            self_start_medians = sorted(self.get_medians_of_map(self_start_positions_ft, self.settings.min_dist_same_pos))
-            self_stop_medians = sorted(self.get_medians_of_map(self_stop_positions_ft, self.settings.min_dist_same_pos))
-            
-            print()
-            print(self_start_positions)
-            print (self_start_medians)
-            print()
-            print(self_stop_positions)
-            print (self_stop_medians)
-            print("searching")
+            self_start_medians = sorted(self.get_medians_of_map(self_start_positions_ft, n+2 if self.settings.min_dist_same_pos == 0 else self.settings.min_dist_same_pos))
+            self_stop_medians = sorted(self.get_medians_of_map(self_stop_positions_ft, n+2 if self.settings.min_dist_same_pos == 0 else self.settings.min_dist_same_pos))
 
             for read in BAMParser(self.region, self.settings.alignment_file):
                 pos_start = read[0] - self.region[1]
@@ -243,7 +221,6 @@ class MaskedRegion:
                     len_start = read[1] - read[0]
                     len_stop = read[0] - read[1]
                     
-                    #print(pos_start)
                     closest_start = [None,9999999999]
                     closest_stop = [None,9999999999]
 
@@ -260,14 +237,15 @@ class MaskedRegion:
                     
                     if closest_start[0] is None or closest_stop[0] is None:
                         raise Exception("unexpected error")
-                    mutex_group = str(closest_start[0])+'.'+str(closest_stop[0])
+                    
+                    mutex_group = (closest_start[0], closest_stop[0])#str(closest_start[0])+'.'+str(closest_stop[0])
                     if not mutex_group in mutex_groups:
                         mutex_groups[mutex_group] = {  
                             'self_start_positions': [0] * n,
                             'self_stop_positions': [0] * n,
-                            'tmp_start_avg_lengths': [{} for x in range(n)] ,
+                            'tmp_start_avg_lengths': [{} for x in range(n)],
                             'tmp_stop_avg_lengths': [{} for x in range(n)]}
-                    print('-> MUTEX GROUP:: ' + mutex_group)
+                    #print('-> MUTEX GROUP:: ' + mutex_group)
 
                     mutex_groups[mutex_group]['self_start_positions'][read[0] - self.region[1]] += 1
                     mutex_groups[mutex_group]['self_stop_positions'][read[1] - self.region[1]] += 1
@@ -285,6 +263,8 @@ class MaskedRegion:
                     logging.error("Alignment out of bound: (%i,%i) %s:%i-%i" % (pos_start, pos_stop, self.region[0], self.region[1], self.region[2]))
 
             for mutex_group in sorted(mutex_groups):
+                print(mutex_group)
+
                 mutex_groups[mutex_group]['self_start_avg_lengths'] = []
                 mutex_groups[mutex_group]['self_stop_avg_lengths'] = []
 
